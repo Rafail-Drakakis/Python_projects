@@ -7,12 +7,6 @@ import docx
 from bs4 import BeautifulSoup
 import time
 
-# Function to print the elapsed time
-def print_elapsed_time(start_time):
-    end_time = time.time()
-    elapsed_time = round(end_time - start_time, 2)
-    print(f"Elapsed time: {elapsed_time} seconds")
-
 def main():
     # Ask the user for the URL and filename input
     url = input("Enter the URL: ")
