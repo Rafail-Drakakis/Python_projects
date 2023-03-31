@@ -1,4 +1,12 @@
 #searching.py
+from timing import finish_time
+
+def search_array(array, target_number, search_algorithm):
+    algorithm_map = {'1': ('Binary Search', binary_search), '2': ('Linear Search', linear_search)}
+    algorithm_name, algorithm_func = algorithm_map.get(search_algorithm, (None, None))
+    if algorithm_name:
+        finish_time(algorithm_func, algorithm_name, array, target_number)
+
 def binary_search(array, target_number):
     # Return -1 if the list is empty
     if len(array) == 0:

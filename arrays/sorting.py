@@ -1,4 +1,22 @@
 #sorting.py
+import time
+from timing import finish_time
+
+def sort_array(array, sort_algorithm, display_sorted_list):
+    algorithm_map = {'1': ('Bubble Sort', bubble_sort), '2': ('Quick Sort', quick_sort),
+                     '3': ('Insertion Sort', insertion_sort), '4': ('Merge Sort', merge_sort),
+                     '5': ('Selection Sort', selection_sort)}
+    algorithm_name, algorithm_func = algorithm_map.get(sort_algorithm, (None, None))
+    if algorithm_name:
+        if display_sorted_list:
+            finish_time(algorithm_func, algorithm_name, array)
+        else:
+            start_time = time.time()
+            algorithm_func(array)
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f"The {algorithm_name} algorithm took {execution_time:.6f} seconds for an array of length {len(array)}")
+
 def bubble_sort(array):
   # Set a flag to True to start the loop
   flag = True
