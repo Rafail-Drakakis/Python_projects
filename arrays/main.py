@@ -10,12 +10,12 @@ def main():
     if user_choice == '1':
         array = fill_list()
         target_number = int(input("Give the target number: "))
-        search_algorithm = input("Enter 1 for binary search, 2 for linear search: ")
+        search_algorithm = input("Enter \n1 for binary search\n2 for linear search: ")
         search_array(array, target_number, search_algorithm)
 
     elif user_choice == '2':
         array = fill_list()
-        sort_algorithm = input("Enter 1 for bubble sort, 2 for quick sort, 3 for insertion sort, 4 for merge sort, 5 for selection sort: ")
+        sort_algorithm = input("Enter \n1 for bubble sort\n2 for quick sort\n3 for insertion sort\n4 for merge sort\n5 for selection sort: ")
         display_sorted_list = input("Display sorted array? [y/n]: ").lower() == "y"
         sort_array(array, sort_algorithm, display_sorted_list)
 
@@ -24,7 +24,7 @@ def main():
         array = [random.randint(0, 1000) for _ in range(array_length)]
         print(f"Sorting a random array of {array_length} elements")
 
-        sort_algorithm = input("Enter 1 for bubble sort, 2 for quick sort, 3 for insertion sort, 4 for merge sort, 5 for selection sort: ")
+        sort_algorithm = input("Enter \n1 for bubble sort\n2 for quick sort\n3 for insertion sort\n4 for merge sort\n5 for selection sort: ")
         display_sorted_list = input("Display sorted array? [y/n]: ").lower() == "y"
         sort_array(array, sort_algorithm, display_sorted_list)
 
