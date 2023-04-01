@@ -9,7 +9,7 @@ Here's a list of the games implemented in this repository:
 4.tic_tac_toe.py: Implements the game of Tic Tac Toe.
 
 How to Play
-To play any of the games, simply run the corresponding Python file using a Python interpreter. For example, to play Hangman, run the following command: python main.py
+To play any of the games, simply run the following command: python main.py
 Each game has its own set of rules and instructions, which are displayed when the game is run. Follow the instructions to play the game.
 
 Dependencies
