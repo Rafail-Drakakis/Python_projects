@@ -17,5 +17,7 @@ def main():
         pong_game()
     elif choice == 5:
         labyrinth()
+    else:
+    	print ("Invalid input! ")
 
 main()
