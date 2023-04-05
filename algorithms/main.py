@@ -7,9 +7,10 @@ from timing import time_function_execution
 from image_converter import convert_image
 from audio_converter import convert_audio
 from mp3_downloader import download_video_as_mp3, download_playlist_as_mp3
+from words import words
 
 def main():
-    choice = int(input("Enter \n1.To count lines in a file \n2.To write all the lotto numbers in a text file \n3.To get a fact To a number \n4.To print the plot in Fibonacci sequence \n5.To print the plot To collatz function \n6.To convert an image \n7.To convert an audio file \n8.To download videos as mp3: "))
+    choice = int(input("Enter \n1.To count lines in a file \n2.To write all the lotto numbers in a text file \n3.To get a fact To a number \n4.To print the plot in Fibonacci sequence \n5.To print the plot To collatz function \n6.To convert an image \n7.To convert an audio file \n8.To download videos as mp3 \n9.To count all the words in a file: "))
     if choice == 1:
         file_name = input("Enter the file name: ")
         num_lines = count_lines(file_name)
@@ -46,6 +47,8 @@ def main():
             time_function_execution(download_playlist_as_mp3, filename)
         else:
             print ("Invalid input!")
+    elif choice == 9:
+    	time_function_execution(words)
     else:
         print("Invalid input")
 main()
