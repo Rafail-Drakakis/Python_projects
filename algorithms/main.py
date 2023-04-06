@@ -4,13 +4,13 @@ from fibonacci import show_fibonacci_range
 from get_fact import get_fact
 from lotto_numbers import write_combinations_to_file
 from timing import time_function_execution
-from image_converter import convert_image
 from audio_converter import convert_audio
 from mp3_downloader import download_video_as_mp3, download_playlist_as_mp3
 from words import words
+from image_module import image_processing_menu
 
 def main():
-    choice = int(input("Enter \n1.To count lines in a file \n2.To write all the lotto numbers in a text file \n3.To get a fact To a number \n4.To print the plot in Fibonacci sequence \n5.To print the plot To collatz function \n6.To convert an image \n7.To convert an audio file \n8.To download videos as mp3 \n9.To count all the words in a file: "))
+    choice = int(input("Enter \n1.To count lines in a file \n2.To write all the lotto numbers in a text file \n3.To get a fact To a number \n4.To print the plot in Fibonacci sequence \n5.To print the plot To collatz function \n6.To convert an audio file \n7.To download videos as mp3 \n8.To count all the words in a file \n9.To perform operations in an image: "))
     if choice == 1:
         file_name = input("Enter the file name: ")
         num_lines = count_lines(file_name)
@@ -30,14 +30,10 @@ def main():
         collatz_plot(sequence, number)
         time_function_execution(collatz_function, number)
     elif choice == 6:
-        input_path = input("Enter the file path To the input image: ")
-        output_path = input("Enter the file path To the output image: ")
-        time_function_execution(convert_image, input_path, output_path)
-    elif choice == 7:
         input_path = input("Enter the file path To the input audio file: ")
         output_path = input("Enter the file path To the output audio file: ")
         time_function_execution(convert_audio, input_path, output_path)
-    elif choice == 8:
+    elif choice == 7:
         video_or_playlist = int(input('Enter \n1.To download a single video or \n2.To download a playlist: '))
         if video_or_playlist == 1:
             url = input('Enter the URL of the video: ')
@@ -47,8 +43,10 @@ def main():
             time_function_execution(download_playlist_as_mp3, filename)
         else:
             print ("Invalid input!")
-    elif choice == 9:
+    elif choice == 8:
     	time_function_execution(words)
+    elif choice == 9:
+        time_function_execution(image_processing_menu)
     else:
         print("Invalid input")
 main()
