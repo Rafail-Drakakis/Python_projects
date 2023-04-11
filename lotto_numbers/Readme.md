@@ -5,3 +5,6 @@ To measure the execution time of the function write_combinations_to_file, the ti
 To run the script, simply execute it using a Python interpreter with the required libraries installed. The script will automatically create a file named combinations.txt and write all the possible combinations of 6 numbers to it. The execution time of the function will also be printed to the console.
 
 It should be noted that generating all possible combinations of 6 numbers from a range of 1 to 49 is computationally intensive and may take some time to complete, depending on the hardware being used.
+
+License
+This project is licensed under the MIT License.

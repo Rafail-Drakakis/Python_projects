@@ -13,6 +13,9 @@ This program uses the following Python libraries:
 3.python-docx: Used for creating Word documents from text files.
 4.time: Used for measuring elapsed time in the program.
 
+To install them, type the following command in the terminal:
+pip install requests beautifulsoup4 python-docx time
+
 Usage
 To use this program, follow these steps:
 Clone or download this repository to your local machine.
@@ -22,4 +25,5 @@ Enter the URL of the web page you want to scrape and the desired filename when p
 Wait for the program to complete. The elapsed time will be displayed when the program finishes.
 Check the output directory for the cleaned text file, Word document, and image files.
 
-Note: The program requires Python 3 and the following libraries: requests, beautifulsoup4, and python-docx. You may need to install these libraries using pip before running the program.
+License
+This project is licensed under the MIT License.

@@ -15,3 +15,6 @@ For searching, you will be prompted to enter a list of numbers, a target number 
 
 Requirements
 This project requires Python 3.x to be installed on your system and the time library.
+
+License
+This project is licensed under the MIT License.

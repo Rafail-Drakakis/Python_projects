@@ -1,6 +1,8 @@
 import random
 import sys
 
+#labyrinth.py
+
 UP, DOWN, LEFT, RIGHT = range(4)
 
 def input_number(prompt):
