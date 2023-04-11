@@ -20,6 +20,7 @@ Usage
 To use this program, follow these steps:
 Clone or download this repository to your local machine.
 Open a terminal or command prompt and navigate to the directory where you downloaded the files.
+Run the command pip install re docx bs4 time urllib.request sys requests os
 Run the main.py script using the command python main.py.
 Enter the URL of the web page you want to scrape and the desired filename when prompted.
 Wait for the program to complete. The elapsed time will be displayed when the program finishes.

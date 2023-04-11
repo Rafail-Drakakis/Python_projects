@@ -28,7 +28,7 @@ This file provides various image processing operations. The user is prompted to 
 main.py
 This file serves as the main menu for the program. The user is prompted to choose from the available options to perform a specific task.
 
-To run this program, simply execute the main.py file in the terminal.
+To run this program, run pip install pydub matplotlib requests pytesseract PIL rembg os time pytube moviepy sys and execute the main.py file in the terminal.
 
 License
 This project is licensed under the MIT License.
