@@ -52,7 +52,8 @@ def quick_sort(array):
         array[i+1], array[high] = array[high], array[i+1]
         stack.append((low, i))
         stack.append((i+2, high))
-
+    return array
+    
 def insertion_sort(array):
   # Traverse through 1 to len(array)
   for i in range(1, len(array)):
