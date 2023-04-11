@@ -28,7 +28,7 @@ def convert_image(input_path: str, output_path: str) -> None:
         rgb_im.save(output_path)
     print(f"Conversion from {os.path.splitext(input_path)[1]} to {os.path.splitext(output_path)[1]} successful!")
 
-#image processing (baground reoval and mirroring)
+#image processing (baground removal and mirroring)
 def image_processing(choice):
     input_path = input("Enter the input file name: ")
     if not os.path.isfile(input_path):
@@ -60,17 +60,34 @@ def remove_background(input_path, output_path):
         print(f"Error: {e}")
 
 def mirror_image(input_path, output_path):
+    direction = int(input("Enter \n1.For horizontal flip \n2.For vertical flip: "))
     try:
         with Image.open(input_path) as img:
-            mirror_img = img.transpose(Image.FLIP_LEFT_RIGHT)
+            if direction == 1:
+                mirror_img = img.transpose(Image.FLIP_LEFT_RIGHT)
+            elif direction == 2:
+                mirror_img = img.transpose(Image.FLIP_TOP_BOTTOM)
+            else:
+                print("Invalid direction specified")
             mirror_img.save(output_path)
         print("Image mirrored successfully")
+        return True
     except OSError as e:
         print(f"Error: {e}")
     except Exception as e:
         print(f"Error: {e}")
+    return False
 
 #extract text from image
+def extract_image_text():
+    choice = int(input("Enter \n1.For extract a single image to text or \n2.To extract multiple images to text: "))
+    if choice == 1:
+        one_image()
+    elif choice == 2:
+        # Prompt the user to enter the number of images
+        num_images = int(input("Enter the number of images: "))
+        multiple_images(num_images)
+        
 def one_image():
     # Prompt the user to enter the name of the image
     image_name = input("Enter the name of the image file: ")
@@ -121,11 +138,3 @@ def clean_up_output_file():
     with open("output.txt", "w") as f:
         f.write(file_contents)
 
-def extract_image_text():
-    choice = int(input("Enter \n1.For extract a single image to text or \n2.To extract multiple images to text: "))
-    if choice == 1:
-        one_image()
-    elif choice == 2:
-        # Prompt the user to enter the number of images
-        num_images = int(input("Enter the number of images: "))
-        multiple_images(num_images)

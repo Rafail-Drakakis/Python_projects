@@ -1,17 +1,31 @@
-This repository contains a collection of Python scripts related to various tasks.
+README
+This program consists of various files to perform different tasks. Below is a brief description of each file:
 
-collatz.py: This script defines two functions collatz_function and collatz_plot to generate and plot the Collatz sequence for a given number. The collatz_function function uses a while loop to generate the sequence, while the collatz_plot function uses the matplotlib library to plot the sequence.
+convert_audio.py
+This file converts an audio file from one format to another. It uses the Pydub library to load and export audio files. The user is prompted to enter the input and output file paths.
 
-count_lines.py: This script defines a function count_lines to count the number of lines in a file. The function uses the open function and the readlines method to read the file and count the lines.
+collatz.py
+This file generates a Collatz sequence for a given input number and plots the sequence using Matplotlib. The user is prompted to enter the input number.
 
-fibonacci.py: This script defines a function show_fibonacci_range to generate and plot the Fibonacci sequence in a given range. The function uses recursion to generate the sequence and the matplotlib library to plot it.
+count_lines.py
+This file counts the number of lines in a file. The user is prompted to enter the file name.
 
-get_fact.py: This script defines a function get_fact to fetch a fact about a number from an online API. The function uses the requests library to send a GET request to the API and retrieve the fact.
+fibonacci.py
+This file generates the Fibonacci sequence within a given range and plots the sequence using Matplotlib. The user is prompted to enter the last number of the range.
 
-lotto_numbers.py: This script defines a function write_combinations_to_file to generate all possible combinations of 6 numbers from the range of integers between 1 and 49 inclusive, and write them to a file. The function uses the combinations function from the itertools library to generate the combinations and the write method of the file object to write them to the file.
+get_fact.py
+This file retrieves a fact for a given number using the Numbers API. The user is prompted to enter the input number.
 
-timing.py: This script defines a function time_function_execution to measure the execution time of any given function in Python. The function uses the time library to record the start and end times of the function execution and calculates the execution time by subtracting the start time from the end time.
+mp3_downloader.py
+This file downloads videos from YouTube as mp3 files using the Pytube and MoviePy libraries. The user is prompted to enter the URL of a single video or the name of a file containing URLs for a playlist.
 
-main.py: This script defines a main function that allows the user to select from a menu of options to perform various tasks related to the Collatz conjecture, file processing, number facts, and Fibonacci sequence. The function calls the appropriate functions from the other scripts based on the user's choice and also measures the execution time of each function using the time_function_execution function.
+words.py
+This file counts all the words in a file, prints the number of unique words, and prints the number of times each unique word appears in the file. The user is prompted to enter the file name.
 
-Overall, these scripts can be used for various tasks related to the Collatz conjecture, file processing, number facts, and Fibonacci sequence, and can also be used to measure the execution time of functions for profiling and optimization purposes.
+image_processing.py
+This file provides various image processing operations. The user is prompted to choose from extracting text from an image, removing the background from an image, mirroring an image, or converting an image from one format to another.
+
+main.py
+This file serves as the main menu for the program. The user is prompted to choose from the available options to perform a specific task.
+
+To run this program, simply execute the main.py file in the terminal.

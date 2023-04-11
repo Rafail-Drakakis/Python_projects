@@ -1,6 +1,10 @@
 #convert_audio.py
 from pydub import AudioSegment
 
+def convert_audio_menu():
+  input_path = input("Enter the file path To the input audio file: ")
+  output_path = input("Enter the file path To the output audio file: ")
+
 def convert_audio(input_file: str, output_file: str) -> None:
     # Get the input file extension
     input_file_ext = input_file.split(".")[-1]

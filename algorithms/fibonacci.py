@@ -32,7 +32,9 @@ def show_fibonacci_range(start, end):
     plt.ylabel("Fibonacci(n)")
     # Show the plot
     plt.show()
-
+  
+  last = int(input("Give the last number of the range: "))
+  
   # Generate the Fibonacci numbers in the given range
   fib_range = generate_fibonacci_range(start, end)
   

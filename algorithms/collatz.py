@@ -20,3 +20,8 @@ def collatz_plot(sequence, number):
     plt.ylabel('Value')
     plt.title(f'Collatz sequence for n = {number}')
     plt.show()
+    
+def collatz_function_menu():
+    number = int(input("Give a number: "))
+    sequence, count = collatz_function(number)
+    collatz_plot(sequence, number)

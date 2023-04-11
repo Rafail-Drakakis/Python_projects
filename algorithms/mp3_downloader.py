@@ -3,6 +3,15 @@ import os
 import pytube
 import moviepy.editor as mp
 
+def download_video_menu():
+    video_or_playlist = int(input('Enter \n1.To download a single video or \n2.To download a playlist: '))
+    if video_or_playlist == 1:
+        url = input('Enter the URL of the video: ')
+        download_video_as_mp3 (url)
+    elif video_or_playlist == 2:
+        filename = input('Enter the name of the file containing the URLs: ')
+        download_playlist_as_mp3 (filename)
+
 def download_video_as_mp3(url): # function to download a single video as mp3
     youtube = pytube.YouTube(url)
     video = youtube.streams.filter(only_audio=True).first()

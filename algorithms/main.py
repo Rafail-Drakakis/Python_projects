@@ -1,52 +1,30 @@
-from collatz import collatz_function, collatz_plot
-from count_lines import count_lines
-from fibonacci import show_fibonacci_range
+from audio_converter import convert_audio_menu
+from count_lines import count_lines_menu
 from get_fact import get_fact
-from lotto_numbers import write_combinations_to_file
-from timing import time_function_execution
-from audio_converter import convert_audio
-from mp3_downloader import download_video_as_mp3, download_playlist_as_mp3
+from fibonacci import show_fibonacci_range
+from collatz import collatz_function_menu
 from words import words
 from image_module import image_processing_menu
+from mp3_downloader import download_video_menu
 
 def main():
-    choice = int(input("Enter \n1.To count lines in a file \n2.To write all the lotto numbers in a text file \n3.To get a fact To a number \n4.To print the plot in Fibonacci sequence \n5.To print the plot To collatz function \n6.To convert an audio file \n7.To download videos as mp3 \n8.To count all the words in a file \n9.To perform operations in an image: "))
+    choice = int(input("Enter \n1.To convert an audio file  \n2.To count lines in a file \n3.To get a fact for a number \n4.To print the plot in Fibonacci sequence \n5.To print the plot for collatz function  \n6.To count all the words in a file \n7.To perform operations in an image \n8.To download videos as mp3: "))
     if choice == 1:
-        file_name = input("Enter the file name: ")
-        num_lines = count_lines(file_name)
-        print(f"Number of lines in the file: {num_lines}")
-        time_function_execution(count_lines, file_name)
+        convert_audio_menu()
     elif choice == 2:
-        time_function_execution(write_combinations_to_file, "combinations.txt")
+        count_lines_menu()
     elif choice == 3:
-        number = int(input("Enter a number: "))
-        time_function_execution(get_fact, number)
+        get_fact()
     elif choice == 4:
-        last = int(input("Give the last number of the range: "))
-        time_function_execution(show_fibonacci_range, 2, last + 1)
+        show_fibonacci_range(2, last + 1)
     elif choice == 5:
-        number = int(input("Give a number: "))
-        sequence, count = collatz_function(number)
-        collatz_plot(sequence, number)
-        time_function_execution(collatz_function, number)
+        collatz_function_menu(number)
     elif choice == 6:
-        input_path = input("Enter the file path To the input audio file: ")
-        output_path = input("Enter the file path To the output audio file: ")
-        time_function_execution(convert_audio, input_path, output_path)
+    	words()
     elif choice == 7:
-        video_or_playlist = int(input('Enter \n1.To download a single video or \n2.To download a playlist: '))
-        if video_or_playlist == 1:
-            url = input('Enter the URL of the video: ')
-            time_function_execution(download_video_as_mp3, url)
-        elif video_or_playlist == 2:
-            filename = input('Enter the name of the file containing the URLs: ')
-            time_function_execution(download_playlist_as_mp3, filename)
-        else:
-            print ("Invalid input!")
+        image_processing_menu()
     elif choice == 8:
-    	time_function_execution(words)
-    elif choice == 9:
-        time_function_execution(image_processing_menu)
+        download_video_menu()
     else:
         print("Invalid input")
 main()
