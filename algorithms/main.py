@@ -1,8 +1,7 @@
 from audio_converter import convert_audio_menu
 from count_lines import count_lines_menu
 from get_fact import get_fact
-from fibonacci import show_fibonacci_range
-from collatz import collatz_function_menu
+from collatz_fibonacci.py import collatz_fibonacci_menu
 from words import words
 from image_module import image_processing_menu
 from mp3_downloader import download_video_menu
@@ -15,10 +14,8 @@ def main():
         count_lines_menu()
     elif choice == 3:
         get_fact()
-    elif choice == 4:
-        show_fibonacci_range(2, last + 1)
     elif choice == 5:
-        collatz_function_menu(number)
+        collatz_fibonacci_menu()
     elif choice == 6:
     	words()
     elif choice == 7:
