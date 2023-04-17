@@ -36,4 +36,3 @@ for file in files:
     shutil.move(src_path, dst_path)
 
 print("Files have been organized!")
-
