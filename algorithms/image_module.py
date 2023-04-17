@@ -137,4 +137,3 @@ def clean_up_output_file():
     # Write the cleaned up contents back to the file
     with open("output.txt", "w") as f:
         f.write(file_contents)
-
