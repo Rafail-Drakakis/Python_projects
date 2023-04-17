@@ -1,5 +1,3 @@
-import requests 
-
 #get_fact.py
 def get_fact():
     number = int(input("Enter a number: "))

@@ -1,0 +1,1 @@
+This will prompt the user to choose which sequence to generate and then call the appropriate function based on their choice
