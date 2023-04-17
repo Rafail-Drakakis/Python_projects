@@ -1,82 +1,20 @@
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageOps
 from rembg import remove
 import os
 import time
 
 #main menu
 def image_processing_menu():
-    option = int(input("Enter: \n1.To extract text from an image \n2.To remove baground from an image \n3.To mirror an image \n4.To convert an image: "))
+    option = int(input("Enter: \n1.To extract text from an image \n2.To remove background from an image \n3.To mirror an image \n4.To convert an image: "))
     if option == 1:
         extract_image_text()
-    elif option == 2 or option == 3:
-        image_processing(option)
+    elif option == 2: 
+        remove_background()
+    elif option == 3:
+        mirror_image()
     elif option == 4:
         convert_image_format()
-
-#convert image
-def convert_image_format():
-    input_path = input("Enter the input file name: ")
-    output_dir = os.path.dirname(input_path)
-    output_filename = os.path.splitext(os.path.basename(input_path))[0]
-    convert_output_path = os.path.join(output_dir, f"{output_filename}.jpg")
-    convert_image(input_path, convert_output_path)
-
-def convert_image(input_path: str, output_path: str) -> None:
-    with Image.open(input_path) as im:
-        rgb_im = im.convert('RGB')  # Convert to RGB mode
-        rgb_im.save(output_path)
-    print(f"Conversion from {os.path.splitext(input_path)[1]} to {os.path.splitext(output_path)[1]} successful!")
-
-#image processing (baground removal and mirroring)
-def image_processing(choice):
-    input_path = input("Enter the input file name: ")
-    if not os.path.isfile(input_path):
-        print("Error: Input file does not exist")
-        return
-    if not input_path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp')):
-        print("Error: Invalid file format. Only JPG, PNG, and BMP files are supported")
-        return
-	
-    output_dir = os.path.dirname(input_path)
-    output_filename = os.path.splitext(os.path.basename(input_path))[0]
-    
-    if choice == 2:
-        remove_output_path = os.path.join(output_dir, f"not_{output_filename}.png")
-        remove_background(input_path, remove_output_path)
-    elif choice == 3:	
-        mirror_output_path = os.path.join(output_dir, f"{output_filename}_mirror.png")
-        mirror_image(input_path, mirror_output_path)
-
-def remove_background(input_path, output_path):
-    try:
-        with Image.open(input_path) as image_input:
-            output = remove(image_input)
-            output.save(output_path)
-        print("Background removed successfully")
-    except OSError as e:
-        print(f"Error: {e}")
-    except Exception as e:
-        print(f"Error: {e}")
-
-def mirror_image(input_path, output_path):
-    direction = int(input("Enter \n1.For horizontal flip \n2.For vertical flip: "))
-    try:
-        with Image.open(input_path) as img:
-            if direction == 1:
-                mirror_img = img.transpose(Image.FLIP_LEFT_RIGHT)
-            elif direction == 2:
-                mirror_img = img.transpose(Image.FLIP_TOP_BOTTOM)
-            else:
-                print("Invalid direction specified")
-            mirror_img.save(output_path)
-        print("Image mirrored successfully")
-        return True
-    except OSError as e:
-        print(f"Error: {e}")
-    except Exception as e:
-        print(f"Error: {e}")
-    return False
 
 #extract text from image
 def extract_image_text():
@@ -137,3 +75,62 @@ def clean_up_output_file():
     # Write the cleaned up contents back to the file
     with open("output.txt", "w") as f:
         f.write(file_contents)
+        
+#remove baground
+def remove_background():
+    input_path = input("Enter the input file name: ")
+   
+    output_dir = os.path.dirname(input_path)
+    output_filename = os.path.splitext(os.path.basename(input_path))[0]
+
+    remove_output_path = os.path.join(output_dir, f"not_{output_filename}.png")
+
+    try:
+        with Image.open(input_path) as image_input:
+            output = remove(image_input)
+            output.save(remove_output_path)
+        print("Background removed successfully")
+    except OSError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+#mirror image
+def mirror_image():
+    input_path = input("Enter the input file name: ")
+
+    output_dir = os.path.dirname(input_path)
+    output_filename = os.path.splitext(os.path.basename(input_path))[0]
+    
+    mirror_output_path = os.path.join(output_dir, f"{output_filename}_mirror.png")
+
+    direction = int(input("Enter \n1.For horizontal flip \n2.For vertical flip: "))
+    try:
+        with Image.open(input_path) as img:
+            if direction == 1:
+                mirror_img = ImageOps.mirror(img)
+            elif direction == 2:
+                mirror_img = ImageOps.flip(img)
+            else:
+                print("Invalid direction specified")
+                return
+            mirror_img.save(mirror_output_path)
+        print("Image mirrored successfully")
+    except OSError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+#convert image
+def convert_image_format():
+    input_path = input("Enter the input file name: ")
+    output_dir = os.path.dirname(input_path)
+    output_filename = os.path.splitext(os.path.basename(input_path))[0]
+    convert_output_path = os.path.join(output_dir, f"{output_filename}.jpg")
+    convert_image(input_path, convert_output_path)
+
+def convert_image(input_path: str, output_path: str) -> None:
+    with Image.open(input_path) as im:
+        rgb_im = im.convert('RGB')  # Convert to RGB mode
+        rgb_im.save(output_path)
+    print(f"Conversion from {os.path.splitext(input_path)[1]} to {os.path.splitext(output_path)[1]} successful!")
