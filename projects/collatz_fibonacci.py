@@ -81,3 +81,5 @@ def collatz_fibonacci_menu():
 	elif choice == 2:
 		print("Fibonacci sequence:")
 		fibonacci_sequence()
+		
+collatz_fibonacci_menu()		

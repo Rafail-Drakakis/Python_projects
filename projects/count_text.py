@@ -51,3 +51,5 @@ def count_text_menu():
         count_lines_menu()
     elif choice == 2:
         words()
+
+count_lines_menu()        

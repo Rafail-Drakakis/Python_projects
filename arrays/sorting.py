@@ -1,6 +1,6 @@
 #sorting.py
 import time
-from timing import finish_time
+from other import finish_time
 
 def sort_array(array, sort_algorithm, display_sorted_list):
     algorithm_map = {'1': ('Bubble Sort', bubble_sort), '2': ('Quick Sort', quick_sort),

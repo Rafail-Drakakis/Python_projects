@@ -1,5 +1,5 @@
 #searching.py
-from timing import finish_time
+from other import finish_time
 
 def search_array(array, target_number, search_algorithm):
     algorithm_map = {'1': ('Binary Search', binary_search), '2': ('Linear Search', linear_search)}

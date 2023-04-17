@@ -38,3 +38,5 @@ def converter_menu():
         convert_audio()
     elif choice == 2:
         pdf_to_word()
+
+converter_menu()        
