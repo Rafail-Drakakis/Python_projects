@@ -33,7 +33,7 @@ def pdf_to_word():
 	print(f"Conversion complete. Output file saved as {docx_path}")
 
 def converter_menu():
-    choice = int(input("Enter\n 1.For convert an audio file \n2.For convert a PDF to word: "))
+    choice = int(input("Enter\n1.For convert an audio file \n2.For convert a PDF to word: "))
     if choice == 1:
         convert_audio_menu()
     elif choice == 2:
