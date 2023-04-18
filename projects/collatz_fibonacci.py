@@ -1,6 +1,19 @@
 import matplotlib.pyplot as plt
 
 #fibonacci.py
+def fibonacci_sequence():
+  start = int(input("Give the first number of the range: "))
+  end = int(input("Give the last number of the range: "))
+  
+  # Generate the Fibonacci numbers in the given range
+  fib_range = generate_fibonacci_range(start, end)
+  
+  # Plot the Fibonacci numbers
+  plot_fibonacci_range(fib_range)
+  
+  # Print the Fibonacci numbers as an array
+  print(fib_range)
+
 def fibonacci(n):
   # Base case: return 0 for n = 0 and 1 for n = 1
   if n == 0:
@@ -32,21 +45,12 @@ def plot_fibonacci_range(fib_range):
   # Show the plot
   plt.show()
 
-def fibonacci_sequence():
-  start = int(input("Give the first number of the range: "))
-  end = int(input("Give the last number of the range: "))
-  
-  # Generate the Fibonacci numbers in the given range
-  fib_range = generate_fibonacci_range(start, end)
-  
-  # Plot the Fibonacci numbers
-  plot_fibonacci_range(fib_range)
-  
-  # Print the Fibonacci numbers as an array
-  print(fib_range)
-
-
 #collatz.py
+def collatz_sequence():
+    number = int(input("Give a number: "))
+    sequence = collatz_function(number)
+    collatz_plot(sequence, number)
+
 def collatz_function(number):
     sequence = [number]
     count = 0
@@ -67,19 +71,10 @@ def collatz_plot(sequence, number):
     plt.title(f'Collatz sequence for n = {number}')
     plt.show()
     
-def collatz_function_menu():
-    number = int(input("Give a number: "))
-    sequence, count = collatz_function(number)
-    collatz_plot(sequence, number)
-    
 #main menu
 def collatz_fibonacci_menu():
 	choice = int(input("Enter\n1.For Collatz sequence \n2.For Fibonacci sequence: "))
 	if choice == 1:
-		print("Collatz sequence:")
-		collatz_function_menu()
+		collatz_sequence()
 	elif choice == 2:
-		print("Fibonacci sequence:")
 		fibonacci_sequence()
-		
-collatz_fibonacci_menu()		

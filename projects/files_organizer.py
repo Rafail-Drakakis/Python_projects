@@ -12,7 +12,7 @@ file_types = {}
 
 # Loop through each file and organize them by extension
 for file in files:
-    # Exclude the file_organizer.py file from being sorted
+    # Exclude the file_organizer.py file from being moved
     if file == "files_organizer.py":
         continue
     

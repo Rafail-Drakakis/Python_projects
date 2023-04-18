@@ -34,5 +34,3 @@ def download_playlist_as_mp3(filename):
     print(f'Found {len(urls)} URLs in "{filename}"')
     for url in urls:
         download_video_as_mp3(url)
-
-download_mp3_menu()        
