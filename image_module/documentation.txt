@@ -1,0 +1,15 @@
+extract_image_text('image.png') #Extract text from image.png using the default options and print to console
+
+extract_image_text('image.png', lang='fra', save_to_file=True, output_path='output.txt') #Extract text from image.png using the French language and save to output.txt in the same directory
+
+extract_image_text(save_to_file=True) #Prompt user for image file name and save extracted text to default output file
+
+
+remove_background(input_path='input.png', output_path='output.png') #Example usage: remove the background of 'input.png' and save to 'output.png'
+
+ 
+mirror_image('input_image.jpg', direction=1, output_format='png') #for mirror
+mirror_image('input_image.jpg', direction=2, output_format='png') #for flip
+
+
+convert_image('image.png', 'jpeg') #convert png file to jpeg
