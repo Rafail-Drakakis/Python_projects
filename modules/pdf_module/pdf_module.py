@@ -1,0 +1,97 @@
+from pdf2docx import parse
+from PyPDF2 import PdfMerger, PdfReader, PdfWriter
+from os.path import isfile, splitext
+from pdf2image import convert_from_path
+from pathlib import Path
+
+#pdf_converter.py    
+def pdf_to_word(pdf_path):
+	# Generate the output file name based on the input file name
+	docx_path = pdf_path.replace(".pdf", ".docx")  
+	# Convert the PDF to Word
+	parse(pdf_path, docx_path) 
+	print(f"Conversion complete. Output file saved as {docx_path}")
+
+#pdf_merge.py
+def merge_pdfs(num_files):
+    # Create a PdfMerger object
+    merger = PdfMerger()
+
+    # Loop through each file and add it to the merger
+    for i in range(1, num_files+1):
+        # Prompt the user for the name of the file
+        file_name = input(f"Enter the name of file {i}: ")
+
+        # Make sure the file exists
+        if not isfile(file_name):
+            print(f"{file_name} does not exist.")
+            continue
+
+        # Add the file to the merger
+        with open(file_name, 'rb') as f:
+            merger.append(PdfReader(f))
+
+    # Write the merged PDF to a new file
+    with open('merged_pdf.pdf', 'wb') as f:
+        merger.write(f)
+
+    print("Merged PDF file saved as merged_pdf.pdf")
+
+#pdf_split.py
+def split_pdf(filename, pages):
+    # Combine the page ranges from all arguments into a single list
+    all_pages = []
+    for page_range in pages:
+        if isinstance(page_range, int):
+            all_pages.append(page_range)
+        elif isinstance(page_range, str):
+            start, _, end = page_range.partition('-')
+            if not start.isdigit() or not end.isdigit():
+                raise ValueError(f'Invalid page range: {page_range}')
+            start = int(start)
+            end = int(end)
+            if start > end:
+                raise ValueError(f'Invalid page range: {page_range}')
+            all_pages.extend(range(start, end + 1))
+        else:
+            raise ValueError(f'Invalid page range: {page_range}')
+    
+    # Open the PDF file
+    with open(filename, 'rb') as f:
+        # Create a PDF reader object
+        reader = PdfReader(f)
+        # Get the total number of pages
+        num_pages = len(reader.pages)
+        
+        # Validate the pages argument
+        if not all(1 <= p <= num_pages for p in all_pages):
+            raise ValueError('Invalid page range')
+        
+        # Create a PDF writer object
+        writer = PdfWriter()
+        
+        # Add the specified pages to the writer object
+        for p in all_pages:
+            writer.add_page(reader.pages[p - 1])
+        
+        # Create a new PDF file with the specified pages
+        new_filename = splitext(filename)[0] + '_pages_' + '_'.join(str(p) for p in all_pages) + '.pdf'
+        with open(new_filename, 'wb') as f:
+            writer.write(f)
+        
+        # Print the filename of the new PDF file
+        print(f'New file created: {new_filename}')
+
+def pdf_to_img(filename):
+    # Open the PDF file
+    with open(filename, 'rb') as pdf_file:
+        # Use pdf2image library to convert PDF pages to images
+        images = convert_from_path(Path(pdf_file.name), dpi=1000)
+        
+        # Iterate over each page in the PDF and save as JPG image
+        for idx, img in enumerate(images):
+            img.save(f'page_{idx+1}.jpg', 'JPEG', quality=80)
+        print("PDF converted successfully")
+        
+        # Close the PDF file
+        pdf_file.close()
