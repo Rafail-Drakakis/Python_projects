@@ -15,12 +15,4 @@ def write_combinations_to_file(filename):
         for combination in combinations(range(1, 50), 6):
             f.write(' '.join(str(n) for n in combination) + '\n')
             
-'''
-test the file
-
-test.py
-
-import lotto_numbers
-
-lotto_numbers.time_function_execution(lotto_numbers.write_combinations_to_file, "combinations.txt")
-'''            
+#lotto_numbers.time_function_execution(lotto_numbers.write_combinations_to_file, "combinations.txt")
