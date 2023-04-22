@@ -1,6 +1,6 @@
 import pytesseract
-from PIL import Image, ImageOps
-from rembg import remove
+import PIL
+import rembg
 import os
 
 #extract text from image
@@ -13,7 +13,7 @@ def extract_image_text(image_path=None, lang='eng', save_to_file=False, output_p
         return
     # Load the image using Pillow
     try:
-        img = Image.open(image_path)
+        img = PIL.Image.open(image_path)
     except OSError as e:
         print(f"Error loading image: {e}")
         return
@@ -40,12 +40,21 @@ def remove_background(input_path=None, output_path=None):
         output_dir = os.path.dirname(input_path)
         output_filename, output_ext = os.path.splitext(os.path.basename(input_path))
         output_format = output_ext[1:]
-        output_path = os.path.join(output_dir, f"{output_filename}_with_no_baground.{output_format}")
+        output_path = os.path.join(output_dir, f"{output_filename}_with_no_background.{output_format}")
     try:
-        with Image.open(input_path) as image_input:
-            output = remove(image_input)
-            output.save(output_path)
-        print(f"Background removed successfully")
+        with PIL.Image.open(input_path) as image_input:
+            image_rgba = image_input.convert("RGBA")
+            rgba_data = image_rgba.load()
+            width, height = image_rgba.size
+            for y in range(height):
+                for x in range(width):
+                    r, g, b, a = rgba_data[x, y]
+                    if a == 0:
+                        rgba_data[x, y] = (255, 255, 255, 255)
+            output = PIL.Image.alpha_composite(PIL.Image.new('RGBA', image_rgba.size, (255, 255, 255, 255)), image_rgba)
+            output = output.convert("RGB")
+            output.save(output_path, format=output_format)
+        print("Background removed successfully.")
     except OSError as e:
         print(f"Error: {e}")
     except Exception as e:
@@ -60,14 +69,14 @@ def mirror_image(input_path: str, direction: int, output_dir: str = None, output
         output_dir = os.path.dirname(input_path)
     output_filename = os.path.splitext(os.path.basename(input_path))[0]
     try:
-        with Image.open(input_path) as img:
+        with PIL.Image.open(input_path) as img:
             if direction == 1:
-                mirror_img = ImageOps.mirror(img)
+                mirror_img = PIL.ImageOps.mirror(img)
                 mirror_output_path = os.path.join(output_dir, f"{output_filename}_mirror.{output_format.lower()}")
                 mirror_img.save(mirror_output_path)
                 print(f"Image mirrored successfully")
             elif direction == 2:
-                mirror_img = ImageOps.flip(img)
+                mirror_img = PIL.ImageOps.flip(img)
                 mirror_output_path = os.path.join(output_dir, f"{output_filename}_flip.{output_format.lower()}")
                 mirror_img.save(mirror_output_path)
                 print(f"Image fliped successfully")
@@ -87,7 +96,7 @@ def convert_image(input_path: str, output_format: str) -> None:
     output_dir = os.path.dirname(input_path)
     output_filename = os.path.splitext(os.path.basename(input_path))[0]
     output_path = os.path.join(output_dir, f"{output_filename}.{output_format.lower()}")
-    with Image.open(input_path) as im:
+    with PIL.Image.open(input_path) as im:
         rgb_im = im.convert('RGB')  # Convert to RGB mode
         rgb_im.save(output_path, format=output_format.upper())
     print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")

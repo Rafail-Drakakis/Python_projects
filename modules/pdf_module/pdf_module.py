@@ -1,21 +1,21 @@
-from pdf2docx import parse
-from PyPDF2 import PdfMerger, PdfReader, PdfWriter
-from os.path import isfile, splitext
-from pdf2image import convert_from_path
-from pathlib import Path
+import pdf2docx 
+import PyPDF2 
+import os.path 
+import pdf2image
+import pathlib 
 
 #pdf_converter.py    
 def pdf_to_word(pdf_path):
 	# Generate the output file name based on the input file name
 	docx_path = pdf_path.replace(".pdf", ".docx")  
 	# Convert the PDF to Word
-	parse(pdf_path, docx_path) 
+	pdf2docx.parse(pdf_path, docx_path) 
 	print(f"Conversion complete. Output file saved as {docx_path}")
 
 #pdf_merge.py
 def merge_pdfs(num_files):
     # Create a PdfMerger object
-    merger = PdfMerger()
+    merger = PyPDF2.PdfMerger()
 
     # Loop through each file and add it to the merger
     for i in range(1, num_files+1):
@@ -23,13 +23,13 @@ def merge_pdfs(num_files):
         file_name = input(f"Enter the name of file {i}: ")
 
         # Make sure the file exists
-        if not isfile(file_name):
+        if not os.path.isfile(file_name):
             print(f"{file_name} does not exist.")
             continue
 
         # Add the file to the merger
         with open(file_name, 'rb') as f:
-            merger.append(PdfReader(f))
+            merger.append(PyPDF2.PdfReader(f))
 
     # Write the merged PDF to a new file
     with open('merged_pdf.pdf', 'wb') as f:
@@ -59,7 +59,7 @@ def split_pdf(filename, pages):
     # Open the PDF file
     with open(filename, 'rb') as f:
         # Create a PDF reader object
-        reader = PdfReader(f)
+        reader = PyPDF2.PdfReader(f)
         # Get the total number of pages
         num_pages = len(reader.pages)
         
@@ -68,14 +68,14 @@ def split_pdf(filename, pages):
             raise ValueError('Invalid page range')
         
         # Create a PDF writer object
-        writer = PdfWriter()
+        writer = PyPDF2.PdfWriter()
         
         # Add the specified pages to the writer object
         for p in all_pages:
             writer.add_page(reader.pages[p - 1])
         
         # Create a new PDF file with the specified pages
-        new_filename = splitext(filename)[0] + '_pages_' + '_'.join(str(p) for p in all_pages) + '.pdf'
+        new_filename = os.path.splitext(filename)[0] + '_pages_' + '_'.join(str(p) for p in all_pages) + '.pdf'
         with open(new_filename, 'wb') as f:
             writer.write(f)
         
@@ -86,7 +86,7 @@ def pdf_to_img(filename):
     # Open the PDF file
     with open(filename, 'rb') as pdf_file:
         # Use pdf2image library to convert PDF pages to images
-        images = convert_from_path(Path(pdf_file.name), dpi=1000)
+        images = pdf2image.convert_from_path(pathlib.Path(pdf_file.name), dpi=1000)
         
         # Iterate over each page in the PDF and save as JPG image
         for idx, img in enumerate(images):

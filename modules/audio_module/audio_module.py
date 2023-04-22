@@ -1,8 +1,7 @@
-from moviepy.editor import AudioFileClip
-from pydub import AudioSegment
-from pytube import YouTube
-from os import remove
-from os.path import splitext
+import moviepy.editor
+import pydub
+import pytube
+import os
 
 #audio_converter.py
 def convert_audio(input_path, output_path):
@@ -11,7 +10,7 @@ def convert_audio(input_path, output_path):
     # Get the output file extension
     output_file_ext = output_path.split(".")[-1]
     # Load audio file
-    audio = AudioSegment.from_file(input_path, format=input_file_ext)
+    audio = pydub.AudioSegment.from_file(input_path, format=input_file_ext)
     # Export audio file
     audio.export(output_path, format=output_file_ext)
     print("File converted successfully")
@@ -19,7 +18,7 @@ def convert_audio(input_path, output_path):
 #audio_downloader.py
 def download_audio(url, extension):
     # create a YouTube object with the given URL
-    youtube = YouTube(url)
+    youtube = pytube.YouTube(url)
     # get the audio stream of the video
     video = youtube.streams.filter(only_audio=True).first()
     # get the title of the video
@@ -29,15 +28,15 @@ def download_audio(url, extension):
     # download the video
     video_path = video.download()
     # create the output audio filename by changing the extension of the video filename
-    audio_path = splitext(video_path)[0] + f'.{extension}'
+    audio_path = os.path.splitext(video_path)[0] + f'.{extension}'
     # create a MoviePy audio file clip from the video file
-    clip = AudioFileClip(video_path)
+    clip = moviepy.editor.AudioFileClip(video_path)
     # write the audio clip to the output audio file
     clip.write_audiofile(audio_path)
     # close the clip object
     clip.close()
     # delete the video file
-    remove(video_path)
+    os.remove(video_path)
     # print a message to show that the download is complete
     print(f'Download complete: "{title}.{extension}"')
 
