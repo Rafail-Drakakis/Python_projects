@@ -95,3 +95,18 @@ def pdf_to_img(filename):
         
         # Close the PDF file
         pdf_file.close()
+        
+def main():
+    pdf_to_word("sample.pdf")
+    merge_pdfs(2) 
+    split_pdf("sample.pdf", [7,"2-5"]) 
+    pdf_to_img("sample.pdf")
+    choice = input("Do you want to delete the files? (yes/no) ")
+    if choice == "yes":
+      os.remove("sample_pages_7_2_3_4_5.pdf")
+      os.remove("merged_pdf.pdf")
+      os.remove("sample.docx")
+      for index in range(1, 11):
+          os.remove(f'page_{index}.jpg')
+        
+main()                

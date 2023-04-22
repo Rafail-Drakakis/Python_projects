@@ -100,3 +100,18 @@ def convert_image(input_path: str, output_format: str) -> None:
         rgb_im = im.convert('RGB')  # Convert to RGB mode
         rgb_im.save(output_path, format=output_format.upper())
     print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
+
+#test.py    
+def main():
+  extract_image_text('image.png') #Extract text from image.png using the default options and print to terminal
+  remove_background(input_path='image.png') #remove the background of 'image.png'
+  mirror_image('image.png', direction=1)  #for mirror an image
+  mirror_image('image.png', direction=2)  #for flip an image
+  convert_image('image.png', 'jpeg') #convert png file to jpeg
+  choice = input("Do yo want to delete the files? (yes/no) ")
+  if choice == "yes":
+    os.remove("image_flip.png") 
+    os.remove("image_mirror.png")
+    os.remove("image_with_no_background.png")
+    
+main()
