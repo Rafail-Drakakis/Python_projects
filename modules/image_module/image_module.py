@@ -108,10 +108,9 @@ def main():
   mirror_image('image.png', direction=1)  #for mirror an image
   mirror_image('image.png', direction=2)  #for flip an image
   convert_image('image.png', 'jpeg') #convert png file to jpeg
-  choice = input("Do yo want to delete the files? (yes/no) ")
-  if choice == "yes":
-    os.remove("image_flip.png") 
-    os.remove("image_mirror.png")
-    os.remove("image_with_no_background.png")
+  os.remove("image.jpeg")
+  os.remove("image_flip.png") 
+  os.remove("image_mirror.png")
+  os.remove("image_with_no_background.png")
     
 main()
