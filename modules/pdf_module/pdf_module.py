@@ -108,4 +108,4 @@ def main():
     for index in range(1, 11):
         os.remove(f'page_{index}.jpg')
         
-main()                
+#main()                
