@@ -13,15 +13,16 @@ def pdf_to_word(pdf_path):
 	print(f"Conversion complete. Output file saved as {docx_path}")
 
 #pdf_merge.py
-def merge_pdfs(num_files):
+def merge_pdfs(*file_names):
+    # If file_names is a list, extract its elements
+    if len(file_names) == 1 and isinstance(file_names[0], list):
+        file_names = file_names[0]
+
     # Create a PdfMerger object
     merger = PyPDF2.PdfMerger()
 
     # Loop through each file and add it to the merger
-    for i in range(1, num_files+1):
-        # Prompt the user for the name of the file
-        file_name = input(f"Enter the name of file {i}: ")
-
+    for i, file_name in enumerate(file_names, start=1):
         # Make sure the file exists
         if not os.path.isfile(file_name):
             print(f"{file_name} does not exist.")
@@ -98,7 +99,7 @@ def pdf_to_img(filename):
         
 def main():
     pdf_to_word("sample.pdf")
-    merge_pdfs(2) 
+    merge_pdfs("sample.pdf","sample.pdf") 
     split_pdf("sample.pdf", [7,"2-5"]) 
     pdf_to_img("sample.pdf")
     os.remove("sample_pages_7_2_3_4_5.pdf")
