@@ -3,7 +3,6 @@ import PIL
 import rembg
 import os
 
-#extract text from image
 def extract_image_text(image_path=None, lang='eng', save_to_file=False, output_path=None):
     if image_path is None:
         image_path = input("Enter the name of the image file: ")
@@ -32,7 +31,6 @@ def extract_image_text(image_path=None, lang='eng', save_to_file=False, output_p
     else:
         print(text)
         
-#remove baground
 def remove_background(input_path=None, output_path=None):
     if input_path is None:
         input_path = input("Enter the input file name: ")
@@ -60,7 +58,6 @@ def remove_background(input_path=None, output_path=None):
     except Exception as e:
         print(f"Error: {e}")
 
-#mirror image
 def mirror_image(input_path: str, direction: int, output_dir: str = None, output_format: str = 'png') -> None:
     if not os.path.isfile(input_path):
         print(f"Error: {input_path} does not exist")
@@ -88,7 +85,6 @@ def mirror_image(input_path: str, direction: int, output_dir: str = None, output
     except Exception as e:
         print(f"Error: {e}")
 
-#convert image
 def convert_image(input_path: str, output_format: str) -> None:
     if not os.path.exists(input_path):
         print(f"Error: file '{input_path}' does not exist.")
@@ -100,13 +96,12 @@ def convert_image(input_path: str, output_format: str) -> None:
         rgb_im = im.convert('RGB')  # Convert to RGB mode
         rgb_im.save(output_path, format=output_format.upper())
     print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
-
-#test.py    
+ 
 def main():
   extract_image_text('image.png') #Extract text from image.png using the default options and print to terminal
   remove_background(input_path='image.png') #remove the background of 'image.png'
-  mirror_image('image.png', direction=1)  #for mirror an image
-  mirror_image('image.png', direction=2)  #for flip an image
+  mirror_image('image.png', direction=1)  #mirror an image
+  mirror_image('image.png', direction=2)  #flip an image
   convert_image('image.png', 'jpeg') #convert png file to jpeg
   os.remove("image.jpeg")
   os.remove("image_flip.png") 
