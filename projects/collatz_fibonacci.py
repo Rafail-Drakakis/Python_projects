@@ -9,7 +9,7 @@ def fibonacci_sequence(start, end):
   plot_fibonacci_range(fib_range)
   
   # Print the Fibonacci numbers as an array
-  print(fib_range)
+  print(f'Fibonacci numbers from {start} to {end}: ', fib_range)
 
 def fibonacci(n):
   # Base case: return 0 for n = 0 and 1 for n = 1
@@ -45,6 +45,7 @@ def plot_fibonacci_range(fib_range):
 #collatz.py
 def collatz_sequence(number):
   sequence = collatz_function(number)
+  print(f'Collatz sequence starting from {number}: ', sequence)
   collatz_plot(sequence, number)
 
 def collatz_function(number):
