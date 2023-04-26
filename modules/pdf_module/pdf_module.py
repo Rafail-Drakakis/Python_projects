@@ -1,8 +1,7 @@
 import pdf2docx, pdf2image, img2pdf
 import PIL, PyPDF2, pathlib
 import os.path
-
-#pdf_converter.py    
+   
 def pdf_to_word(pdf_path):
 	# Generate the output file name based on the input file name
 	docx_path = pdf_path.replace(".pdf", ".docx")  
@@ -10,7 +9,6 @@ def pdf_to_word(pdf_path):
 	pdf2docx.parse(pdf_path, docx_path) 
 	print(f"Conversion complete. Output file saved as {docx_path}")
 
-#pdf_merge.py
 def merge_pdfs(*file_names):
     # If file_names is a list, extract its elements
     if len(file_names) == 1 and isinstance(file_names[0], list):
@@ -31,7 +29,6 @@ def merge_pdfs(*file_names):
         merger.write(f)
     print("Merged PDF file saved as merged_pdf.pdf")
 
-#pdf_split.py
 def split_pdf(filename, pages):
     # Combine the page ranges from all arguments into a single list
     all_pages = []
@@ -97,8 +94,7 @@ def image_to_pdf(*image_paths, pdf_path="output.pdf"):
         image.close()
     # output
     print("Successfully made pdf file")
-
-#main          
+        
 def main():
     pdf_to_word("sample.pdf")
     merge_pdfs("sample.pdf","sample.pdf") 
