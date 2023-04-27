@@ -10,9 +10,12 @@ def pdf_to_word(pdf_path):
 	print(f"Conversion complete. Output file saved as {docx_path}")
 
 def merge_pdfs(*file_names):
-    # If file_names is a list, extract its elements
-    if len(file_names) == 1 and isinstance(file_names[0], list):
-        file_names = file_names[0]
+    if len(file_names) == 1:
+        if isinstance(file_names[0], list):
+            file_names = file_names[0]
+        elif file_names[0].endswith('.txt'):
+            with open(file_names[0], 'r') as f:
+                file_names = f.read().splitlines()
     # Create a PdfMerger object
     merger = PyPDF2.PdfMerger()
     # Loop through each file and add it to the merger
