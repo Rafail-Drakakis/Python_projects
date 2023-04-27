@@ -11,3 +11,8 @@ count_text.count_words("test.txt")
 import get_fact
 
 get_fact.get_fact(5)
+
+import write_filenames_to_txt, os
+
+write_filenames_to_txt.write_filenames_to_txt("filenames.txt")
+os.remove("filenames.txt")
