@@ -44,11 +44,11 @@ def plot_fibonacci_range(fib_range):
 
 #collatz.py
 def collatz_sequence(number):
-  sequence = collatz_function(number)
+  sequence = collatz(number)
   print(f'Collatz sequence starting from {number}: ', sequence)
-  collatz_plot(sequence, number)
+  plot_collatz_range(sequence, number)
 
-def collatz_function(number):
+def collatz(number):
     sequence = [number]
     count = 0
     while number != 1:
@@ -60,7 +60,7 @@ def collatz_function(number):
         sequence.append(number)
     return sequence
 
-def collatz_plot(sequence, number):
+def plot_collatz_range(sequence, number):
     x_range = range(len(sequence))
     plt.plot(x_range, sequence, 'b.-')  # Use a blue line with dots for the plot
     plt.xlabel('Step')

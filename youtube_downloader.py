@@ -5,19 +5,17 @@ def download_from_file():
     if not os.path.isfile(file_path):
         print(f"File '{file_path}' does not exist.")
         return
-    try:
+    else:
         with open(file_path, 'r') as file:
             for line in file:
                 link = line.strip()
                 download_link(link)
-    except IOError as e:
-        print(f"Error reading file: {e}")
 
 def download_link(link):
     choice = int(input("Choose an option\n1. Download video\n2. Download audio\nEnter your choice: "))
     terminal_command = ""
     if choice == 1:
-        terminal_command = f'yt-dlp -f bv*[height=1080]+ba {link}'
+        terminal_command = f'yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]" {link}'
     elif choice == 2:
         terminal_command = f'yt-dlp -x --audio-format mp3 {link}'
     else:
