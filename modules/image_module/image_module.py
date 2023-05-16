@@ -3,6 +3,9 @@ import PIL
 import rembg
 import os
 
+def extract_multiple_images_text(filename, )
+    
+    
 def extract_image_text(image_path=None, lang='eng', save_to_file=False, output_path=None):
     if image_path is None:
         image_path = input("Enter the name of the image file: ")

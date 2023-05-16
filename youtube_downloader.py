@@ -18,24 +18,16 @@ def download_link(link):
         terminal_command = f'yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]" {link}'
     elif choice == 2:
         terminal_command = f'yt-dlp -x --audio-format mp3 {link}'
-    else:
-        print("Invalid choice. Skipping download.")
-        return
     print(terminal_command)  # Print the command
     os.system(terminal_command)
 
 def main():
     while True:
-        choice = int(input("Enter\n1. To download from a text file\n2. To download a link\n3. To exit: "))        
+        choice = int(input("Enter\n1. To download from a text file\n2. To download a link: "))        
         if choice == 1:
             download_from_file()
         elif choice == 2:
             link = input("Enter the link you want to download: ")
             download_link(link)
             break
-        elif choice == 3:
-            break
-        else:
-            print("Invalid choice. Please try again.")
-
 main()

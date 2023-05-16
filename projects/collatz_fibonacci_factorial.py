@@ -67,3 +67,28 @@ def plot_collatz_range(sequence, number):
     plt.ylabel('Value')
     plt.title(f'Collatz sequence for n = {number}')
     plt.show()
+
+#factorial.py
+def factorial_number(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial_number(n - 1)
+
+def plot_factorial(n):
+    numbers = list(range(n+1))
+    factorials = [factorial_number(num) for num in numbers]
+
+    plt.plot(numbers, factorials, 'b-o')
+    plt.xlabel('Incrementing Numbers')
+    plt.ylabel('Factorial')
+    plt.title('Factorial Graph')
+    plt.grid(True)
+    plt.show()
+
+def factorial_sequence(n):
+  result = factorial_number(n)
+  # Displaying the factorial
+  print(f"The factorial of {n} is {result}")
+  # Plotting the factorial graph
+  plot_factorial(n)
