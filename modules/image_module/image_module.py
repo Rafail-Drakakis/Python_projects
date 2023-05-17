@@ -88,15 +88,15 @@ def convert_image(input_path: str, output_format: str) -> None:
     print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
  
 def main():
-  extract_multiple_images_text("text_from_images.txt")
-  remove_background(input_path='image.png') #remove the background of 'image.png'
-  mirror_image('image.png', direction=1)  #mirror an image
-  mirror_image('image.png', direction=2)  #flip an image
-  convert_image('image.png', 'jpeg') #convert png file to jpeg
-  os.remove("image.jpeg")
-  os.remove("image_flip.png") 
-  os.remove("image_mirror.png")
-  os.remove("image_with_no_background.png")
-  os.remove("text_from_images.txt")
+    extract_multiple_images_text("text_from_images.txt")
+    remove_background('image.png') # Remove the background of 'image.png'
+    mirror_image('image.png', direction = 1) # Mirror the image horizontally
+    mirror_image('image.png', direction = 2) # Flip the image vertically
+    convert_image('image.png', 'jpeg') # Convert png file to jpeg
+    os.remove("image.jpeg") 
+    os.remove("image_flip.png") 
+    os.remove("image_mirror.png")
+    os.remove("image_with_no_background.png")
+    os.remove("text_from_images.txt")
     
-main() #test function
+main() # Test function
