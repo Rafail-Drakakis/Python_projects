@@ -11,7 +11,7 @@ def download_from_file(file_path):
                 download_link(link)
 
 def download_link(link):
-    choice = int(input("Choose an option\n1. Download video\n2. Download audio\nEnter your choice: "))
+    choice = int(input("Choose an option\n1. Download video\n2. Download audio: "))
     if choice == 1:
         terminal_command = f'yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]" {link}'
     elif choice == 2:
