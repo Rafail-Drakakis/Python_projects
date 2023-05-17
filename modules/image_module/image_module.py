@@ -3,36 +3,23 @@ import PIL
 import rembg
 import os
 
-def extract_multiple_images_text(filename, )
-    
-    
-def extract_image_text(image_path=None, lang='eng', save_to_file=False, output_path=None):
-    if image_path is None:
-        image_path = input("Enter the name of the image file: ")
-    # Check that the image file exists
-    if not os.path.exists(image_path):
-        print(f"Error: {image_path} does not exist")
-        return
-    # Load the image using Pillow
-    try:
-        img = PIL.Image.open(image_path)
-    except OSError as e:
-        print(f"Error loading image: {e}")
-        return
-    # Convert the image to grayscale
-    img = img.convert('L')
-    # Use pytesseract to extract text from the image
-    text = pytesseract.image_to_string(img, lang=lang)
+def extract_multiple_images_text(filenames_file):
+    image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
 
-    # Print or save the extracted text
-    if save_to_file:
-        if output_path is None:
-            output_path = os.path.splitext(image_path)[0] + ".txt"
-        with open(output_path, 'w') as f:
-            f.write(text)
-        print(f"Text saved to {output_path}")
-    else:
-        print(text)
+    with open(filenames_file, "w") as output_file:
+        for entry in os.scandir(os.getcwd()):
+            if entry.is_file() and any(entry.name.lower().endswith(ext) for ext in image_extensions):
+                image_path = entry.path
+                try:
+                    img = PIL.Image.open(image_path)
+                    img = img.convert('L')
+                    text = pytesseract.image_to_string(img, lang='eng')
+                    output_file.write(entry.name + "\n")
+                    output_file.write(text + "\n")
+                except (OSError, pytesseract.TesseractError) as e:
+                    print(f"Error processing image {entry.name}: {e}")
+
+    print(f'Text extracted and saved to {filenames_file} file.')
         
 def remove_background(input_path=None, output_path=None):
     if input_path is None:
@@ -101,7 +88,7 @@ def convert_image(input_path: str, output_format: str) -> None:
     print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
  
 def main():
-  extract_image_text('image.png') #Extract text from image.png using the default options and print to terminal
+  extract_multiple_images_text("text_from_images.txt")
   remove_background(input_path='image.png') #remove the background of 'image.png'
   mirror_image('image.png', direction=1)  #mirror an image
   mirror_image('image.png', direction=2)  #flip an image
@@ -110,5 +97,6 @@ def main():
   os.remove("image_flip.png") 
   os.remove("image_mirror.png")
   os.remove("image_with_no_background.png")
+  os.remove("text_from_images.txt")
     
-main()
+main() #test function
