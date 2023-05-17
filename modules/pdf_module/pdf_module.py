@@ -1,53 +1,7 @@
 import pdf2docx, pdf2image, img2pdf
 import PIL, PyPDF2, pathlib
 import os
-   
-def pdf_to_word(*pdf_paths):
-    for pdf_path in pdf_paths:
-        # Generate the output file name based on the input file name
-        docx_path = pdf_path.replace(".pdf", ".docx")  
-        # Convert the PDF to Word
-        pdf2docx.parse(pdf_path, docx_path) 
-        print(f"Conversion complete. Output file saved as {docx_path}")
 
-def merge_pdfs(*file_names):
-    if len(file_names) == 1:
-        if isinstance(file_names[0], list):
-            file_names = file_names[0]
-        elif file_names[0].endswith('.txt'):
-            with open(file_names[0], 'r') as f:
-                file_names = f.read().splitlines()
-    # Create a PdfMerger object
-    merger = PyPDF2.PdfMerger()
-    # Loop through each file and add it to the merger
-    for i, file_name in enumerate(file_names, start=1):
-        # Make sure the file exists
-        if not os.path.isfile(file_name):
-            print(f"{file_name} does not exist.")
-            continue
-        # Add the file to the merger
-        with open(file_name, 'rb') as f:
-            merger.append(PyPDF2.PdfReader(f))
-    # Write the merged PDF to a new file
-    with open('merged_pdf.pdf', 'wb') as f:
-        merger.write(f)
-    print("Merged PDF file saved as merged_pdf.pdf")
-
-def image_to_pdf(*image_paths, pdf_path="output.pdf"):
-    # creating list of image objects
-    images = [PIL.Image.open(image_path) for image_path in image_paths]
-    # converting images to chunks using img2pdf
-    pdf_bytes = img2pdf.convert([image.filename for image in images])
-    # opening or creating pdf file
-    with open(pdf_path, "wb") as file:
-        # writing pdf files with chunks
-        file.write(pdf_bytes)
-    # closing image files
-    for image in images:
-        image.close()
-    # output
-    print("Successfully made pdf file")
-    
 def split_pdf(filename, pages):
     # Combine the page ranges from all arguments into a single list
     all_pages = []
@@ -87,7 +41,45 @@ def split_pdf(filename, pages):
         # Print the filename of the new PDF file
         print(f'New file created: {new_filename}')
 
-def pdf_to_img(filename):
+def merge_pdfs(*file_names):
+    if len(file_names) == 1:
+        if isinstance(file_names[0], list):
+            file_names = file_names[0]
+        elif file_names[0].endswith('.txt'):
+            with open(file_names[0], 'r') as f:
+                file_names = f.read().splitlines()
+    # Create a PdfMerger object
+    merger = PyPDF2.PdfMerger()
+    # Loop through each file and add it to the merger
+    for i, file_name in enumerate(file_names, start=1):
+        # Make sure the file exists
+        if not os.path.isfile(file_name):
+            print(f"{file_name} does not exist.")
+            continue
+        # Add the file to the merger
+        with open(file_name, 'rb') as f:
+            merger.append(PyPDF2.PdfReader(f))
+    # Write the merged PDF to a new file
+    with open('merged_pdf.pdf', 'wb') as f:
+        merger.write(f)
+    print("Merged PDF file saved as merged_pdf.pdf")
+
+def image_to_pdf(*image_paths, pdf_path="output.pdf"):
+    # creating list of image objects
+    images = [PIL.Image.open(image_path) for image_path in image_paths]
+    # converting images to chunks using img2pdf
+    pdf_bytes = img2pdf.convert([image.filename for image in images])
+    # opening or creating pdf file
+    with open(pdf_path, "wb") as file:
+        # writing pdf files with chunks
+        file.write(pdf_bytes)
+    # closing image files
+    for image in images:
+        image.close()
+    # output
+    print("Successfully made pdf file")
+
+def pdf_to_image(filename):
     # Open the PDF file
     with open(filename, 'rb') as pdf_file:
         # Use pdf2image library to convert PDF pages to images
@@ -98,11 +90,18 @@ def pdf_to_img(filename):
         print("PDF converted successfully")        
         # Close the PDF file
         pdf_file.close()
+
+def pdf_to_word(*pdf_paths):
+    for pdf_path in pdf_paths:
+        # Generate the output file name based on the input file name
+        docx_path = pdf_path.replace(".pdf", ".docx")  
+        # Convert the PDF to Word
+        pdf2docx.parse(pdf_path, docx_path) 
+        print(f"Conversion complete. Output file saved as {docx_path}")
   
 def main():
     pdf_to_word("sample.pdf")
-    pdf_to_img("sample.pdf")
-    #pdf_to_excel("table.pdf")  #Need implementation
+    pdf_to_image("sample.pdf")
     merge_pdfs("sample.pdf","sample.pdf") 
     split_pdf("sample.pdf", [7,"2-5"]) 
     image_to_pdf("image.png")
