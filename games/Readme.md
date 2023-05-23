@@ -1,5 +1,5 @@
 Games
-This project contains several games such as hangman, labyrinth, rock-paper-scissors, pong and tic tac toe.
+This project contains several games such as hangman, labyrinth, rock-paper-scissors, pong, tic tac toe and Town of Salem.
 
 Installation
 To run these games, you need to have Python 3 installed on your system. If you don't have Python 3 installed, you can download it from the official website: https://www.python.org/downloads/
@@ -8,6 +8,10 @@ You also need to run the following command to run the main.py file normaly.
 pip install random sys pygame
 
 Games
+
+Town of Salem
+The Town of Salem game allows players to participate, each with a specific role: Citizen, Doctor, or Gangster. The player information is loaded dynamically from a file, allowing for customizable usernames and roles. The game consists of day and night phases, where players make decisions and take actions.
+
 Hangman
 The Hangman game randomly chooses a word from a list and you need to guess the word by entering letters. You have six lives, and you lose a life for every incorrect guess. The game ends when you guess the word or run out of lives.
 
