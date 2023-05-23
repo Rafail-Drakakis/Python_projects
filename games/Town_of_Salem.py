@@ -1,5 +1,3 @@
-import random
-
 # List of possible roles
 ROLES = ['Citizen', 'Doctor', 'Gangster']
 
@@ -8,9 +6,7 @@ def initialize_players():
 
     # Read players and roles from a file
     with open("Players.txt", "r") as file:
-        lines = file.readlines()
-
-        for line in lines:
+        for line in file:
             username, role = line.strip().split(" ")
             if role not in ROLES:
                 raise ValueError("Invalid role detected.")
@@ -57,54 +53,6 @@ def print_menu(players, last_lost_player):
             print(f"Last lost player: {index}. {last_lost_player['username']}")
         else:
             print("No player has lost yet.")
-
-def night_phase(players):
-    print("Night phase begins.")
-
-    # Find the gangster player
-    gangster = next((player for player in players if player['role'] == 'Gangster'), None)
-
-    print(f"The gangster is {gangster['username']}.")
-
-    while True:
-        try:
-            target_player_id = int(input("Select a player ID to lose: "))
-            if not 1 <= target_player_id <= len(players):
-                raise ValueError("Invalid player ID.")
-            target_player = players[target_player_id - 1]
-            if target_player['lost']:
-                raise ValueError("Player has already lost.")
-            break
-        except (ValueError, IndexError):
-            print("Invalid player ID. Please enter a valid player ID.")
-
-    # Find the doctor player
-    doctor = next((player for player in players if player['role'] == 'Doctor'), None)
-
-    while True:
-        try:
-            save_player_id = int(input("Select a player ID to save: "))
-            if not 1 <= save_player_id <= len(players):
-                raise ValueError("Invalid player ID.")
-            save_player = players[save_player_id - 1]
-            if save_player['lost']:
-                raise ValueError("Player has already lost.")
-            break
-        except (ValueError, IndexError):
-            print("Invalid player ID. Please enter a valid player ID.")
-
-    if save_player == target_player:
-        print("The doctor saved the player. No player loses tonight.")
-    else:
-        target_player['lost'] = True
-        print(f"{target_player['username']} has lost.")
-
-    # Check if the gangster has lost
-    if target_player['role'] == 'Gangster' and target_player['lost']:
-        print("The gangster is out of the game. Citizens win!")
-        return players, gangster, doctor, target_player, save_player
-
-    return players, gangster, doctor, target_player, save_player
 
 def voting_system(players):
     votes = {}
@@ -166,23 +114,71 @@ def day_phase(players):
         except ValueError as e:
             print(str(e))
 
+def night_phase(players):
+    print("Night phase begins.")
+
+    # Find the gangster player
+    gangster = next((player for player in players if player['role'] == 'Gangster'), None)
+
+    print(f"The gangster is {gangster['username']}.")
+
+    while True:
+        try:
+            target_player_id = int(input("Select a player ID to lose: "))
+            if not 1 <= target_player_id <= len(players):
+                raise ValueError("Invalid player ID.")
+            target_player = players[target_player_id - 1]
+            if target_player['lost']:
+                raise ValueError("Player has already lost.")
+            break
+        except (ValueError, IndexError):
+            print("Invalid player ID. Please enter a valid player ID.")
+
+    # Find the doctor player
+    doctor = next((player for player in players if player['role'] == 'Doctor'), None)
+
+    while True:
+        try:
+            save_player_id = int(input("Select a player ID to save: "))
+            if not 1 <= save_player_id <= len(players):
+                raise ValueError("Invalid player ID.")
+            save_player = players[save_player_id - 1]
+            if save_player['lost']:
+                raise ValueError("Player has already lost.")
+            break
+        except (ValueError, IndexError):
+            print("Invalid player ID. Please enter a valid player ID.")
+
+    if save_player == target_player:
+        print("The doctor saved the player. No player loses tonight.")
+    else:
+        target_player['lost'] = True
+        print(f"{target_player['username']} has lost.")
+
+    # Check if the gangster has lost
+    gangster_lost = target_player['role'] == 'Gangster' and target_player['lost']
+
+    return players, gangster, doctor, target_player, save_player, gangster_lost
+
+
 def game_flow():
     players = initialize_players()
     last_lost_player = None
+    gangster_lost = False
 
     while True:
         print_menu(players, last_lost_player)
-        players, gangster, doctor, target_player, save_player = night_phase(players)
+        players, gangster, doctor, target_player, save_player, gangster_lost = night_phase(players)
 
         # Check if gangster has lost
-        if gangster['lost']:
+        if gangster_lost:
             print("The gangster is out of the game. Citizens win!")
             break
 
         day_phase(players)
 
         # Check if gangster has lost during the day phase
-        if gangster['lost']:
+        if gangster_lost:
             print("The gangster is out of the game. Citizens win!")
             break
 

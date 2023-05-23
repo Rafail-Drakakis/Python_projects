@@ -7,14 +7,16 @@ def rock_paper_scissors():
 
   # Display instructions
   print("Enter a play: rock, paper, or scissors")
+  
+  while True:
+    # Get the player's play
+    player_play = input().lower()
 
-  # Get the player's play
-  player_play = input().lower()
-
-  # Check that the player's play is valid
-  if player_play not in plays:
-    print("Invalid play. Please enter rock, paper, or scissors.")
-    pass
+    # Check that the player's play is valid
+    if player_play not in plays:
+        print("Invalid play. Please enter rock, paper, or scissors.")
+    else:
+        break
 
   # Have the computer choose a play at random
   computer_play = random.choice(plays)
