@@ -1,56 +1,77 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
+
+def plot_logarithm(num):
+    x = np.linspace(1, num, num)  # Generate x-axis values
+    y = np.log10(x)  # Calculate logarithm base 10 of x
+    
+    for i, j in zip(x, y):
+        print(f'({i:.1f}, {j:.2f})')
+    
+    plt.plot(x, y, 'b-o')  # Plot the graph
+    plt.xlabel('Numbers')
+    plt.ylabel('Logarithm (base 10)')
+    plt.title('Graph of Logarithm')
+    plt.grid(True)
+
+    plt.show()
+
+#exponential.py
+def plot_exponential(n):
+    x = np.linspace(0, n, num=100)  # Generate x values from 0 to n
+    y = np.exp(x)                   # Calculate exponential values using numpy's exp function
+
+    # Plot the exponential function with a blue solid line
+    plt.plot(x, y, 'b-')
+
+    # Add circle markers at specific x-values
+    x_markers = np.arange(1, n + 1)  # x-values for markers
+    y_markers = np.exp(x_markers)    # y-values for markers
+    plt.plot(x_markers, y_markers, 'bo')  # Plot markers with blue circles
+
+    # Add labels and legend
+    plt.xlabel('x')
+    plt.ylabel('exponential')
+    plt.grid(True)
+
+    # Calculate and print the exponential values
+    exp_values = [round(math.exp(i), 2) for i in range(1, n + 1)]
+    print(f'exponential values from 1 to {n}: {exp_values}')
+
+    # Show the graph
+    plt.show()
 
 #fibonacci.py
-def fibonacci_sequence(start, end):
-  # Generate the Fibonacci numbers in the given range
-  fib_range = generate_fibonacci_range(start, end)
-  
-  # Plot the Fibonacci numbers
-  plot_fibonacci_range(fib_range)
-  
-  # Print the Fibonacci numbers as an array
-  print(f'Fibonacci numbers from {start} to {end}: ', fib_range)
-
-def fibonacci(n):
-  # Base case: return 0 for n = 0 and 1 for n = 1
-  if n == 0:
-    return 0
-  elif n == 1:
-    return 1
-  # Recursive case: return the sum of the previous two Fibonacci numbers
-  else:
-    return fibonacci(n - 1) + fibonacci(n - 2)
-
-def generate_fibonacci_range(start, end):
-  # Initialize an empty list to store the Fibonacci numbers
-  fib_range = []
-  # Generate the Fibonacci numbers in the given range
-  for n in range(start, end + 1):
-    fib_range.append(fibonacci(n))
-  # Return the list
-  return fib_range
-
-def plot_fibonacci_range(fib_range):
-  # Get the range of x-values
-  x_range = range(len(fib_range))
-  # Plot the Fibonacci numbers as a line and a scatter plot
-  plt.plot(x_range, fib_range, 'b-o')
-  plt.scatter(x_range, fib_range)
-  # Add labels to the x- and y-axes
-  plt.xlabel("n")
-  plt.ylabel("Fibonacci(n)")
-  plt.grid(True)
-  # Show the plot
-  plt.show()
+def plot_fibonacci(start, end):
+    fib_range = []
+    
+    def fibonacci(n):
+        nonlocal fib_range
+        if n == 0:
+            return 0
+        elif n == 1:
+            return 1
+        else:
+            fib = fibonacci(n - 1) + fibonacci(n - 2)
+            fib_range.append(fib)
+            return fib
+    
+    for n in range(start, end + 1):
+        fibonacci(n)
+    
+    x_range = range(len(fib_range))
+    plt.plot(x_range, fib_range, 'b-o')
+    plt.scatter(x_range, fib_range)
+    plt.xlabel("n")
+    plt.ylabel("Fibonacci(n)")
+    plt.grid(True)
+    plt.show()
+    
+    print(f'Fibonacci numbers from {start} to {end}: ', fib_range)
 
 #collatz.py
-def collatz_sequence(number):
-  sequence = collatz(number)
-  print(f'Collatz sequence starting from {number}: ', sequence)
-  plot_collatz_range(sequence, number)
-
-def collatz(number):
+def plot_collatz(number):
     sequence = [number]
     count = 0
     while number != 1:
@@ -60,9 +81,9 @@ def collatz(number):
             number = 3 * number + 1
         count += 1
         sequence.append(number)
-    return sequence
-
-def plot_collatz_range(sequence, number):
+    
+    print(f'Collatz sequence starting from {number}: ', sequence)
+    
     x_range = range(len(sequence))
     plt.plot(x_range, sequence, 'b-o')  # Use a blue line with dots for the plot
     plt.xlabel('Step')
@@ -72,28 +93,28 @@ def plot_collatz_range(sequence, number):
     plt.show()
 
 #factorial.py
-def factorial_number(n):
-    if n == 0:
-        return 1
-    else:
-        return n * factorial_number(n - 1)
-
 def plot_factorial(n):
+    def factorial_number(n):
+        if n == 0:
+            return 1
+        else:
+            return n * factorial_number(n - 1)
+
     numbers = list(range(n+1))
     factorials = [factorial_number(num) for num in numbers]
+    
+    result = factorial_number(n)
+    
+    # Displaying the factorial
+    print(f"The factorial of {n} is {result}")
+    
+    # Plotting the factorial graph
     plt.plot(numbers, factorials, 'b-o')
     plt.xlabel('Incrementing Numbers')
     plt.ylabel('Factorial')
     plt.title('Factorial Graph')
     plt.grid(True)
     plt.show()
-
-def factorial_sequence(n):
-  result = factorial_number(n)
-  # Displaying the factorial
-  print(f"The factorial of {n} is {result}")
-  # Plotting the factorial graph
-  plot_factorial(n)
 
 #Gauss_elimination.py
 def gauss_elimination_recursive(A, verbose):
@@ -323,9 +344,12 @@ def test():
     B = np.array([[7, 8], [9, 10], [11, 12]])
     verbose = 1
     
-    collatz_sequence(5)
-    fibonacci_sequence(1, 5)
-    factorial_sequence(5)
+    plot_logarithm(5)
+    plot_exponential(5)
+    plot_collatz(5)
+    plot_fibonacci(1, 5)
+    plot_factorial(5)
+    
     gauss_elimination_recursive(A, verbose)
     gauss_elimination(A, verbose)
     multiply_matrices(A, B)
