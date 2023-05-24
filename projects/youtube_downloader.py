@@ -7,7 +7,6 @@ def download_from_file(file_path):
     else:
         with open(file_path, 'r') as file:
             for line in file:
-                link = line.strip()  # Remove any leading/trailing whitespaces from the line
                 download_link(link)  # Call the function to download the link
 
 def download_link(link):
