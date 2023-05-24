@@ -342,13 +342,15 @@ def test():
     #constants for testing
     A = np.array([[1, 2, 3], [4, 5, 6]])
     B = np.array([[7, 8], [9, 10], [11, 12]])
-    verbose = 1
     
-    plot_logarithm(5)
-    plot_exponential(5)
-    plot_collatz(5)
-    plot_fibonacci(1, 5)
-    plot_factorial(5)
+    verbose = 1
+    num = 5
+
+    plot_logarithm(num)
+    plot_exponential(num)
+    plot_collatz(num)
+    plot_fibonacci(verbose, num)
+    plot_factorial(num)
     
     gauss_elimination_recursive(A, verbose)
     gauss_elimination(A, verbose)
