@@ -21,35 +21,6 @@ def extract_multiple_images_text(filenames_file):
 
     print(f'Text extracted and saved to {filenames_file} file.')
 
-
-def remove_background(input_path=None, output_path=None):
-    if input_path is None:
-        input_path = input("Enter the input file name: ")
-    if output_path is None:
-        output_dir = os.path.dirname(input_path)
-        output_filename, output_ext = os.path.splitext(os.path.basename(input_path))
-        output_format = output_ext[1:]
-        output_path = os.path.join(output_dir, f"{output_filename}_with_no_background.{output_format}")
-
-    try:
-        with PIL.Image.open(input_path).convert("RGBA") as image_input:
-            width, height = image_input.size
-            rgba_data = image_input.load()
-            for y in range(height):
-                for x in range(width):
-                    r, g, b, a = rgba_data[x, y]
-                    if a == 0:
-                        rgba_data[x, y] = (255, 255, 255, 255)
-            output = PIL.Image.alpha_composite(PIL.Image.new('RGBA', image_input.size, (255, 255, 255, 255)), image_input)
-            output = output.convert("RGB")
-            output.save(output_path, format=output_format)
-        print("Background removed successfully.")
-    except OSError as e:
-        print(f"Error: {e}")
-    except Exception as e:
-        print(f"Error: {e}")
-
-
 def mirror_image(input_path: str, direction: int, output_dir: str = None, output_format: str = 'png') -> None:
     if not os.path.isfile(input_path):
         print(f"Error: {input_path} does not exist")
@@ -98,14 +69,12 @@ def convert_image(input_path: str, output_format: str) -> None:
 
 def main():
     extract_multiple_images_text("text_from_images.txt")
-    remove_background('image.png')  # Remove the background of 'image.png'
     mirror_image('image.png', direction=1)  # Mirror the image horizontally
     mirror_image('image.png', direction=2)  # Flip the image vertically
     convert_image('image.png', 'jpeg')  # Convert png file to jpeg
     os.remove("image.jpeg")
     os.remove("image_flip.png")
     os.remove("image_mirror.png")
-    os.remove("image_with_no_background.png")
     os.remove("text_from_images.txt")
 
 main()  # Test function
