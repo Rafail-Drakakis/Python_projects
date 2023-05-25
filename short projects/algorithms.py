@@ -1,5 +1,58 @@
 import requests
 import time
+import pyshorteners
+import urllib.request
+import os
+import shutil
+
+#file_organizer.py
+def file_organizer():
+    # Get the current working directory
+    directory = os.getcwd()
+
+    # Get all files in the directory
+    files = os.listdir(directory)
+
+    # Create a dictionary to hold the file extensions and their corresponding folders
+    file_types = {}
+
+    # Loop through each file and organize them by extension
+    for file in files:
+        # Exclude the file_organizer.py file from being moved
+        if file == "files_organizer.py":
+            continue
+        
+        # Get the file extension
+        file_extension = os.path.splitext(file)[1]
+
+        # If the file extension doesn't exist in the dictionary, create a new folder for it
+        if file_extension not in file_types:
+            folder_name = file_extension.replace(".", "")
+            folder_path = os.path.join(directory, folder_name)
+            
+            # Check if the folder already exists
+            if not os.path.exists(folder_path):
+                os.mkdir(folder_path)
+            
+            file_types[file_extension] = folder_name
+
+        # Move the file to the corresponding folder
+        src_path = os.path.join(directory, file)
+        dst_path = os.path.join(directory, file_types[file_extension], file)
+        shutil.move(src_path, dst_path)
+
+    print("Files have been organized!")
+
+#link_operator.py
+def link_shortener(link):
+    shortener = pyshorteners.Shortener()
+    short_link = shortener.tinyurl.short(link)
+    print(f"Shortened Link: {short_link}")
+
+def link_opener(link):
+    shortened_url = urllib.request.urlopen(link)
+    real_link = shortened_url.geturl()
+    print(f"Real Link: {real_link}")
 
 #count_lines.py
 def count_lines(filename):
@@ -59,11 +112,34 @@ def lotto_numbers(filename):
     execution_time = end_time - start_time
     print(f"Time taken to execute lotto_numbers: {execution_time:.10f} seconds")
 
+#test.py
 def test():
-	count_lines("test.txt")
-	count_words("test.txt")
-	get_fact(5)
-	#lotto_numbers("combinations.txt")
-	#os.remove("combinations.txt")
-    
+    print("Please choose an option\n1. Run file organizer\n2. Run link shortener\n3. Run link opener\n4. Run count lines\n5. Run count words\n6. Run get fact\n7. Create a file with lotto numbers\n8. Exit; ")
+
+    choice = int(input("Enter your choice (1-8): "))
+
+    if choice == 1:
+        file_organizer()
+    elif choice == 2:
+        link = input("Enter the link to shorten: ")
+        link_shortener(link)
+    elif choice == 3:
+        link = input("Enter the shorten link to show the original: ")
+        link_opener(link)
+    elif choice == 4:
+        filename = input("Enter the name of the file to count the lines inside it: ")
+        count_lines(filename)
+    elif choice == 5:
+        filename = input("Enter the name of the file to count the unique words inside it: ")
+        count_words(filename)
+    elif choice == 6:
+        num = int(input("Enter the number to get an intresting fact for it: "))
+        get_fact(num)
+    elif choice == 7:
+        lotto_numbers("combinations.txt")
+    elif choice == 8:
+        print("Exiting the test menu...")
+    else:
+        print("Invalid choice. Please enter a number from 1 to 8")
+
 test()
