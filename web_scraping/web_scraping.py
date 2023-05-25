@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 import urllib.request
 
-# Function to print the elapsed time
+#elapsed_time.py
 def print_elapsed_time(start_time):
     end_time = time.time()
     elapsed_time = round(end_time - start_time, 2)
@@ -77,6 +77,7 @@ def clean_text_file(filename):
     doc.save(doc_file_name)
     os.remove(filename)
 
+#main.py
 def web_scraping():
     # Ask the user for the URL and filename input
     url = input("Enter the URL: ")

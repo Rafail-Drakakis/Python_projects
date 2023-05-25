@@ -66,7 +66,6 @@ def convert_image(input_path: str, output_format: str) -> None:
 
     print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
 
-
 def main():
     extract_multiple_images_text("text_from_images.txt")
     mirror_image('image.png', direction=1)  # Mirror the image horizontally

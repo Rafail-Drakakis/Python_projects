@@ -57,7 +57,7 @@ def lotto_numbers(filename):
     
     end_time = time.time()
     execution_time = end_time - start_time
-    print(f"Time taken to execute write_combinations_to_file: {execution_time:.10f} seconds")
+    print(f"Time taken to execute lotto_numbers: {execution_time:.10f} seconds")
 
 def test():
 	count_lines("test.txt")
