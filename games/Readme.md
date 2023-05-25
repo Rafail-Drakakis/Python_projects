@@ -27,5 +27,8 @@ The Pong game is a two-player game where each player controls a paddle and tries
 Tic Tac Toe
 The Tic Tac Toe game is a two-player game where each player takes turns placing their symbol (X or O) on a 3x3 grid. The game ends when one player gets three of their symbols in a row (horizontally, vertically or diagonally) or when the grid is full and no one has won.
 
+Guessing game
+Computer picks a random number between 1 and 100. The user has 10 attempts to guess the number correctly.
+
 License
 This project is licensed under the MIT License.
