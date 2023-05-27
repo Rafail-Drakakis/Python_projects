@@ -1,11 +1,11 @@
 import os
-import pathlib
 from PIL import Image
 from PyPDF2 import PdfReader, PdfWriter
 import pytesseract
 import img2pdf
 import pdf2docx
 import pdf2image
+
 
 def validate_page_range(page_range):
     if isinstance(page_range, int):
@@ -21,6 +21,7 @@ def validate_page_range(page_range):
         return list(range(start, end + 1))
     else:
         raise ValueError(f'Invalid page range: {page_range}')
+
 
 def split_pdf(filename, pages):
     all_pages = []
@@ -40,8 +41,10 @@ def split_pdf(filename, pages):
             writer.write(new_file)
         print(f'New file created: {new_filename}')
 
+
 def merge_pdfs(output_filename):
-    pdf_files = [entry.name for entry in os.scandir(os.getcwd()) if entry.is_file() and entry.name.lower().endswith('.pdf')]
+    pdf_files = [entry.name for entry in os.scandir(os.getcwd()) if
+                 entry.is_file() and entry.name.lower().endswith('.pdf')]
     merger = PdfWriter()
     for file_name in pdf_files:
         with open(file_name, 'rb') as file:
@@ -50,11 +53,13 @@ def merge_pdfs(output_filename):
         merger.write(file)
     print(f"Merged PDF file saved as {output_filename}")
 
+
 def pdf_to_images(filename):
     images = pdf2image.convert_from_path(filename, dpi=1000)
     for idx, img in enumerate(images):
         img.save(f'page_{idx + 1}.jpg', 'JPEG', quality=80)
     print("PDF converted successfully")
+
 
 def pdf_to_word(*pdf_paths):
     for pdf_path in pdf_paths:
@@ -62,15 +67,18 @@ def pdf_to_word(*pdf_paths):
         pdf2docx.parse(pdf_path, docx_path)
         print(f"Conversion complete. Output file saved as {docx_path}")
 
+
 def image_to_pdf(output_path):
-    image_paths = [entry.name for entry in os.scandir(os.getcwd()) if entry.is_file() and (entry.name.lower().endswith('.jpg') or entry.name.lower().endswith('.png') or entry.name.lower().endswith('.jpeg'))]
-    
+    image_paths = [entry.name for entry in os.scandir(os.getcwd()) if
+                   entry.is_file() and entry.name.lower().endswith(('.jpg', '.png', '.jpeg'))]
+
     pdf_bytes = img2pdf.convert(image_paths)
-    
+
     with open(output_path, "wb") as file:
         file.write(pdf_bytes)
-    
+
     print("Successfully created PDF file")
+
 
 def extract_image_text(image_path, output_file):
     try:
@@ -81,16 +89,17 @@ def extract_image_text(image_path, output_file):
     except (OSError, pytesseract.TesseractError) as e:
         print(f"Error processing image {os.path.basename(image_path)}: {e}")
 
+
 def extract_multiple_images_text(output_file_path):
     image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
-    cwd = os.getcwd()
 
     with open(output_file_path, "w") as output_file:
-        for entry in os.scandir(cwd):
+        for entry in os.scandir(os.getcwd()):
             if entry.is_file() and any(entry.name.lower().endswith(ext) for ext in image_extensions):
                 extract_image_text(entry.path, output_file)
 
     print(f'Text extracted and saved to {output_file_path} file.')
+
 
 def mirror_image(input_path, direction, output_dir=None, output_format='png'):
     if not os.path.isfile(input_path):
@@ -121,6 +130,7 @@ def mirror_image(input_path, direction, output_dir=None, output_format='png'):
     except Exception as e:
         print(f"Error: {e}")
 
+
 def convert_image(input_path, output_format):
     if not os.path.exists(input_path):
         print(f"Error: file '{input_path}' does not exist.")
@@ -134,14 +144,15 @@ def convert_image(input_path, output_format):
         rgb_im = im.convert('RGB')
         rgb_im.save(output_path, format=output_format.upper())
 
-    print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")  
+    print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
+
 
 def main():
     extract_multiple_images_text("text_from_images.txt")
     mirror_image('image.png', direction=1)
     mirror_image('image.png', direction=2)
     convert_image('image.png', 'jpeg')
-    
+
     os.remove("image.jpeg")
     os.remove("image_flip.png")
     os.remove("image_mirror.png")
@@ -160,4 +171,6 @@ def main():
         os.remove(f'page_{index}.jpg')
     os.remove("output.pdf")
 
-main()
+
+if __name__ == "__main__":
+    main()
