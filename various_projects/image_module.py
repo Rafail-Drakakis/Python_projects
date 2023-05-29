@@ -2,7 +2,7 @@ import img2pdf, pytesseract
 from PIL import Image
 import os
 
-def image_to_pdf(output_path):
+def images_to_pdf(output_path):
     image_paths = [entry.name for entry in os.scandir(os.getcwd()) if
                    entry.is_file() and entry.name.lower().endswith(('.jpg', '.png', '.jpeg'))]
     pdf_bytes = img2pdf.convert(image_paths)

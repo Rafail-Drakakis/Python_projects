@@ -1,4 +1,4 @@
-import image_module, pdf_module
+import image_module, pdf_module, excel_module
 import plot, Gauss_elimination, Gauss_elimination_recursive, numerical_analysis
 import os, numpy as np
 
@@ -10,7 +10,7 @@ def test():
     verbose = 1
     num = 5
         
-    choice = int(input("Please choose an option\n1. Test the plotting functions\n2. Test the mathematical functions\n3. Test image module\n4. Test pdf module\n5. Exit: "))
+    choice = int(input("Please choose an option\n1. Test the plotting functions\n2. Test the mathematical functions\n3. Test image module\n4. Test pdf module\n5. Test excel module\n6. Exit: "))
     
     if choice == 1:
         print("\n=== Plotting Functions ===\n1. Plot logarithm\n2. Plot Fibonacci\n3. Plot exponential\n4. Plot Collatz\n5. Plot Fibonacci\n6. Plot factorial: ")
@@ -54,12 +54,13 @@ def test():
         image_module.mirror_image('image.png', direction=1)
         image_module.mirror_image('image.png', direction=2)
         image_module.convert_image('image.png', 'jpeg')
-        image_module.image_to_pdf("output.pdf")
+        image_module.images_to_pdf("output.pdf")
 
         os.remove("image.jpeg")
         os.remove("image_flip.png")
         os.remove("image_mirror.png")
         os.remove("text_from_images.txt")
+        os.remove("output.pdf")
     
     elif choice == 4:
         pdf_module.pdf_to_word("sample.pdf")
@@ -75,6 +76,10 @@ def test():
         os.remove("output.pdf")
     
     elif choice == 5:
+        excel_module.process_pdf("table.pdf")
+        os.remove("table.xlsx")
+
+    elif choice == 6:
         print("Exiting the menu...")
 
 test()
