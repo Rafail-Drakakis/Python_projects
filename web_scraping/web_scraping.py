@@ -156,6 +156,8 @@ def web_scraping():
     print("2. Download files from a website")
     
     choice = int(input("Enter your choice: "))
+    while(choice > 2 or choice < 1):
+        choice = int(input("Enter 1 or 2: "))
     url = input("Enter the URL: ")
 
     if choice == 1:
