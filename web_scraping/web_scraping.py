@@ -1,6 +1,6 @@
 import sys, os, re
 import urllib, urllib3
-import warnings, requests
+import warnings,shutil, requests
 import bs4, docx, PyPDF2
 import zipfile, tarfile, gzip
 
@@ -15,13 +15,15 @@ def collect_filenames(directory, filetype):
             if file.endswith(filetype):
                 file_list.append(file)
     
+    sorted_file_list = sorted(set(file_list)) #sort the files to appear correctly
+    
     with open('file_list.txt', 'w') as output_file:
-        for file in file_list:
+        for file in sorted_file_list:
             output_file.write(file + '\n')
 
 def merge_pdfs(output_filename, folder_name):
     pdf_directory = os.path.join(os.getcwd(), folder_name)
-    text_file = 'pdf_filenames.txt'
+    text_file = 'file_list.txt'
     merged_pdf = output_filename
     filenames = []
 
@@ -30,11 +32,18 @@ def merge_pdfs(output_filename, folder_name):
 
     merger = PyPDF2.PdfMerger()
     for filename in filenames:
-        merger.append(filename)
-    merger.write(output_filename)
-    merger.close()
+        filepath = os.path.join(pdf_directory, filename)
+        if os.path.isfile(filepath):
+            merger.append(filepath)
+        else:
+            print(f"Warning: File not found - {filepath}")
 
-    print("PDF merging complete!")
+    if len(merger.pages) > 0:
+        merger.write(output_filename)
+        merger.close()
+        print("PDF merging complete!")
+    else:
+        print("No PDF files found for merging.")
 
 def download_files_from_website(url, folder_name):
     if not url.startswith("http://") and not url.startswith("https://"):
@@ -56,7 +65,7 @@ def download_files_from_website(url, folder_name):
                     with open(file_name, 'wb') as file:
                         file.write(file_response.content)
 
-#scrape.py
+#scrape_data.py
 def scrape_text_to_file(url, folder_name):
     response = requests.get(url)
     if response.status_code != 200:
@@ -92,7 +101,7 @@ def scrape_image_to_file(url, folder_name):
         except Exception as e:
             print(f'Error downloading {img_url}: {str(e)}')
 
-#clean.py
+#clean_text.py
 def replace_chars(text):
     chars_to_replace = [f"[{i}]" for i in range(1, 100)]
     for char in chars_to_replace:
@@ -120,6 +129,7 @@ def clean_text_file(filename):
     doc.save(doc_file_name)
     os.remove(filename)
 
+#clean_folder.py
 def clean_up_folder(folder_path):
     for root, dirs, files in os.walk(folder_path):
         for file in files:
@@ -153,6 +163,41 @@ def clean_up_folder(folder_path):
 
                 os.remove(file_path)
 
+#file_organizer.py
+def file_organizer(directory):
+    # Get all files in the directory
+    files = os.listdir(directory)
+
+    # Create a dictionary to hold the file extensions and their corresponding folders
+    file_types = {}
+
+    # Loop through each file and organize them by extension
+    for file in files:
+        # Exclude the file_organizer.py file from being moved
+        if file == "merged.pdf":
+            continue
+        
+        # Get the file extension
+        file_extension = os.path.splitext(file)[1]
+
+        # If the file extension doesn't exist in the dictionary, create a new folder for it
+        if file_extension not in file_types:
+            folder_name = file_extension.replace(".", "")
+            folder_path = os.path.join(directory, folder_name)
+            
+            # Check if the folder already exists
+            if not os.path.exists(folder_path):
+                os.mkdir(folder_path)
+            
+            file_types[file_extension] = folder_name
+
+        # Move the file to the corresponding folder
+        src_path = os.path.join(directory, file)
+        dst_path = os.path.join(directory, file_types[file_extension], file)
+        shutil.move(src_path, dst_path)
+
+    print("Files have been organized!")
+
 #main.py
 def web_scraping():
     print("=== Web Scraping Menu ===")
@@ -166,6 +211,7 @@ def web_scraping():
     
     url = input("Enter the URL: ")
     folder_name = input("Enter the name of the folder you want to save the files: ")
+    directory = os.path.join(os.getcwd(), folder_name)
 
     if choice == 1:
         scrape_text_to_file(url, folder_name)
@@ -175,10 +221,13 @@ def web_scraping():
         print(f'The {folder_name} folder has been successfully created.')
     elif choice == 2:
         download_files_from_website(url, folder_name)
-        collect_filenames(os.path.join(os.getcwd(), folder_name),".pdf") #getting the names of all PDF files
+        collect_filenames(directory, ".pdf")
         merge_true = input("Do you want to get a merged PDF? ")
         if merge_true == "yes":
             merge_pdfs("merged.pdf", folder_name)
-        clean_up_folder(os.path.join(os.getcwd(), folder_name))
+            os.rename(os.path.join(os.getcwd(), "merged.pdf"), os.path.join(directory, "merged.pdf"))
+        clean_up_folder(directory)
+        os.remove("file_list.txt")
+        file_organizer(directory)
 
 web_scraping()
