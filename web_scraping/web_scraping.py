@@ -17,8 +17,8 @@ def collect_pdf_filenames(directory):
     file.close()
     return file
 
-def merge_pdfs(output_filename):
-    pdf_directory = os.path.join(os.getcwd(), 'downloads')
+def merge_pdfs(output_filename, folder_name):
+    pdf_directory = os.path.join(os.getcwd(), folder_name)
     text_file = 'pdf_filenames.txt'
     merged_pdf = output_filename
     filenames = []
@@ -34,24 +34,28 @@ def merge_pdfs(output_filename):
 
     print("PDF merging complete!")
 
-def download_files_from_website(url):
+def download_files_from_website(url, folder_name):
+    if not url.startswith("http://") and not url.startswith("https://"):
+        url = "http://" + url
+
     response = requests.get(url, verify=False)
     soup = bs4.BeautifulSoup(response.content, 'html.parser')
     a_tags = soup.find_all('a')
-    save_dir = os.path.join(os.getcwd(), 'downloads')
+    save_dir = os.path.join(os.getcwd(), folder_name)
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     for tag in a_tags:
-        file_url = urllib.parse.urljoin(url, tag['href'])
-        file_name = os.path.join(save_dir, file_url.split('/')[-1])
-        if '.' in file_name and file_url != url:
-            file_response = requests.get(file_url, allow_redirects=True, verify=False)
-            if file_response.status_code == 200:
-                with open(file_name, 'wb') as file:
-                    file.write(file_response.content)
+        if 'href' in tag.attrs:
+            file_url = urllib.parse.urljoin(url, tag['href'])
+            file_name = os.path.join(save_dir, file_url.split('/')[-1])
+            if '.' in file_name and file_url != url and file_url.startswith(("http://", "https://")):
+                file_response = requests.get(file_url, allow_redirects=True, verify=False)
+                if file_response.status_code == 200:
+                    with open(file_name, 'wb') as file:
+                        file.write(file_response.content)
 
 #scrape.py
-def scrape_text_to_file(url, filename):
+def scrape_text_to_file(url, folder_name):
     response = requests.get(url)
     if response.status_code != 200:
         print('Error: Failed to get the web page')
@@ -62,18 +66,18 @@ def scrape_text_to_file(url, filename):
         print('Error: Failed to extract the main text')
         sys.exit(1)
     main_text = replace_chars(main_text)
-    os.makedirs(filename, exist_ok=True)
-    with open(f"{filename}/{filename}.txt", 'w', encoding='utf-8') as f:
+    os.makedirs(folder_name, exist_ok=True)
+    with open(f"{folder_name}/{folder_name}.txt", 'w', encoding='utf-8') as f:
         f.write(main_text)
-    clean_text_file(f"{filename}/{filename}.txt")
+    clean_text_file(f"{folder_name}/{folder_name}.txt")
 
-def scrape_image_to_file(url, filename):
+def scrape_image_to_file(url, folder_name):
     response = requests.get(url)
     if response.status_code != 200:
         print('Error: Failed to get the web page')
         sys.exit(1)
     soup = bs4.BeautifulSoup(response.content, 'html.parser')
-    os.makedirs(filename, exist_ok=True)
+    os.makedirs(folder_name, exist_ok=True)
     for img in soup.find_all('img'):
         img_url = img.get('src')
         if not img_url:
@@ -81,7 +85,7 @@ def scrape_image_to_file(url, filename):
         try:
             img_name = img_url.split('/')[-1]
             img_name = img_name.split('.')[0] + '.jpg'
-            img_path = os.path.join(filename, img_name)
+            img_path = os.path.join(folder_name, img_name)
             urllib.request.urlretrieve(img_url, img_path)
         except Exception as e:
             print(f'Error downloading {img_url}: {str(e)}')
@@ -120,9 +124,8 @@ def clean_up_folder(folder_path):
             file_path = os.path.join(root, file)
 
             # Delete files with .html extension
-            if file.endswith(".html"):
+            if file.endswith(".html") or file.endswith(".php"):
                 os.remove(file_path)
-                print(f"Deleted file: {file_path}")
 
             # Unzip files with supported extensions
             elif file.endswith((".zip", ".tgz", ".gz")):
@@ -158,19 +161,22 @@ def web_scraping():
     choice = int(input("Enter your choice: "))
     while(choice > 2 or choice < 1):
         choice = int(input("Enter 1 or 2: "))
+    
     url = input("Enter the URL: ")
+    folder_name = input("Enter the name of the folder you want to save the files: ")
 
     if choice == 1:
-        filename = input("Enter the filename: ")
-        scrape_text_to_file(url, filename)
+        scrape_text_to_file(url, folder_name)
         images_true = input("Do you want to include the images? ")
         if images_true == 'yes':
-            scrape_image_to_file(url, filename)
-        print(f'The {filename} folder has been successfully created.')
+            scrape_image_to_file(url, folder_name)
+        print(f'The {folder_name} folder has been successfully created.')
     elif choice == 2:
-        download_files_from_website(url)
-        collect_pdf_filenames(os.path.join(os.getcwd(), 'downloads'))
-        merge_pdfs("merged.pdf")
-        clean_up_folder(os.path.join(os.getcwd(), 'downloads'))
+        download_files_from_website(url, folder_name)
+        collect_pdf_filenames(os.path.join(os.getcwd(), folder_name))
+        merge_true = input("Do you want to get a merged PDF? ")
+        if merge_true == "yes":
+            merge_pdfs("merged.pdf", folder_name)
+        clean_up_folder(os.path.join(os.getcwd(), folder_name))
 
 web_scraping()
