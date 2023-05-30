@@ -1,17 +1,54 @@
-import time
-import sys
-import os
-import re
-import docx
-import requests
-from bs4 import BeautifulSoup
-import urllib.request
+import time, sys, os, re
+import urllib, urllib3
+import urllib.parse, urllib.request
+import warnings, glob, requests
+import bs4, docx
+import pdf2docx, pdf2image, PyPDF2
+import os, zipfile, tarfile, gzip
 
-#elapsed_time.py
-def print_elapsed_time(start_time):
-    end_time = time.time()
-    elapsed_time = round(end_time - start_time, 2)
-    print(f"Elapsed time: {elapsed_time} seconds")
+# Disable InsecureRequestWarning
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+#site_downloader.py
+def collect_pdf_filenames(directory):
+    pdf_files = glob.glob(os.path.join(directory, '*.pdf'))
+    file = open('pdf_filenames.txt', 'w')
+    file.write('\n'.join(pdf_files))
+    file.close()
+    return file
+
+def merge_pdfs(output_filename):
+    pdf_directory = os.path.join(os.getcwd(), 'downloads')
+    text_file = 'pdf_filenames.txt'
+    merged_pdf = output_filename
+    filenames = []
+
+    with open(text_file, 'r') as file:
+        filenames = file.read().splitlines()
+
+    merger = PyPDF2.PdfMerger()
+    for filename in filenames:
+        merger.append(filename)
+    merger.write(output_filename)
+    merger.close()
+
+    print("PDF merging complete!")
+
+def download_files_from_website(url):
+    response = requests.get(url, verify=False)
+    soup = bs4.BeautifulSoup(response.content, 'html.parser')
+    a_tags = soup.find_all('a')
+    save_dir = os.path.join(os.getcwd(), 'downloads')
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    for tag in a_tags:
+        file_url = urllib.parse.urljoin(url, tag['href'])
+        file_name = os.path.join(save_dir, file_url.split('/')[-1])
+        if '.' in file_name and file_url != url:
+            file_response = requests.get(file_url, allow_redirects=True, verify=False)
+            if file_response.status_code == 200:
+                with open(file_name, 'wb') as file:
+                    file.write(file_response.content)
 
 #scrape.py
 def scrape_text_to_file(url, filename):
@@ -19,7 +56,7 @@ def scrape_text_to_file(url, filename):
     if response.status_code != 200:
         print('Error: Failed to get the web page')
         sys.exit(1)
-    soup = BeautifulSoup(response.content, 'html.parser')
+    soup = bs4.BeautifulSoup(response.content, 'html.parser')
     main_text = soup.get_text(separator='\n')
     if not main_text:
         print('Error: Failed to extract the main text')
@@ -35,7 +72,7 @@ def scrape_image_to_file(url, filename):
     if response.status_code != 200:
         print('Error: Failed to get the web page')
         sys.exit(1)
-    soup = BeautifulSoup(response.content, 'html.parser')
+    soup = bs4.BeautifulSoup(response.content, 'html.parser')
     os.makedirs(filename, exist_ok=True)
     for img in soup.find_all('img'):
         img_url = img.get('src')
@@ -77,17 +114,61 @@ def clean_text_file(filename):
     doc.save(doc_file_name)
     os.remove(filename)
 
+def clean_up_folder(folder_path):
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+
+            # Delete files with .html extension
+            if file.endswith(".html"):
+                os.remove(file_path)
+                print(f"Deleted file: {file_path}")
+
+            # Unzip files with supported extensions
+            elif file.endswith((".zip", ".tgz", ".gz")):
+                if file.endswith(".zip"):
+                    with zipfile.ZipFile(file_path, 'r') as zip_ref:
+                        zip_ref.extractall(root)
+                elif file.endswith((".tgz", ".tar.gz")):
+                    try:
+                        with tarfile.open(file_path, 'r:gz') as tar_ref:
+                            tar_ref.extractall(root)
+                    except tarfile.ReadError:
+                        print(f"Skipping file: {file_path} (Not a valid tar file)")
+                        continue
+                elif file.endswith(".gz"):
+                    new_file_path = file_path[:-3]  # Remove .gz extension
+                    try:
+                        with gzip.open(file_path, 'rb') as gzip_ref:
+                            with open(new_file_path, 'wb') as output_file:
+                                output_file.write(gzip_ref.read())
+                    except (gzip.BadGzipFile, OSError):
+                        print(f"Skipping file: {file_path} (Not a valid gzip file)")
+                        continue
+
+                os.remove(file_path)
+                print(f"Unzipped and deleted file: {file_path}")
+
 #main.py
 def web_scraping():
-    # Ask the user for the URL and filename input
+    print("=== Web Scraping Menu ===")
+    print("1. Scrape data from a website")
+    print("2. Download files from a website")
+    
+    choice = int(input("Enter your choice: "))
     url = input("Enter the URL: ")
-    filename = input("Enter the filename: ")
-    start_time = time.time() # Start the timer
-    scrape_text_to_file(url, filename)
-    choice = input("Do you want to include the images? (yes/no) ")
-    if choice == 'yes':
-        scrape_image_to_file(url, filename)
-    print(f'The {filename} folder has been successfully created.')
-    print_elapsed_time(start_time) # Print the elapsed time
+
+    if choice == 1:
+        filename = input("Enter the filename: ")
+        scrape_text_to_file(url, filename)
+        images_true = input("Do you want to include the images? ")
+        if images_true == 'yes':
+            scrape_image_to_file(url, filename)
+        print(f'The {filename} folder has been successfully created.')
+    elif choice == 2:
+        download_files_from_website(url)
+        collect_pdf_filenames(os.path.join(os.getcwd(), 'downloads'))
+        merge_pdfs("merged.pdf")
+        clean_up_folder(os.path.join(os.getcwd(), 'downloads'))
 
 web_scraping()
