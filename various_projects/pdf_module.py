@@ -1,6 +1,6 @@
 import pdf2image, pdf2docx
-from PyPDF2 import PdfReader, PdfWriter
-import os
+import PyPDF2
+import os, glob
 
 def validate_page_range(page_range):
     if isinstance(page_range, int):
@@ -23,28 +23,17 @@ def split_pdf(filename, pages):
         all_pages.extend(validate_page_range(page_range))
 
     with open(filename, 'rb') as file:
-        reader = PdfReader(file)
+        reader = PyPDF2.PdfReader(file)
         num_pages = len(reader.pages)
         if not all(1 <= p <= num_pages for p in all_pages):
             raise ValueError('Invalid page range')
-        writer = PdfWriter()
+        writer = PyPDF2.PdfWriter()
         for p in all_pages:
             writer.add_page(reader.pages[p - 1])
         new_filename = f'{os.path.splitext(filename)[0]}_pages_{"_".join(str(p) for p in all_pages)}.pdf'
         with open(new_filename, 'wb') as new_file:
             writer.write(new_file)
         print(f'New file created: {new_filename}')
-
-def merge_pdfs(output_filename):
-    pdf_files = [entry.name for entry in os.scandir(os.getcwd()) if
-                 entry.is_file() and entry.name.lower().endswith('.pdf')]
-    merger = PdfWriter()
-    for file_name in pdf_files:
-        with open(file_name, 'rb') as file:
-            merger.append(PdfReader(file))
-    with open(output_filename, 'wb') as file:
-        merger.write(file)
-    print(f"Merged PDF file saved as {output_filename}")
 
 def pdf_to_images(filename):
     images = pdf2image.convert_from_path(filename, dpi=1000)
@@ -57,3 +46,27 @@ def pdf_to_word(*pdf_paths):
         docx_path = pdf_path.replace(".pdf", ".docx")
         pdf2docx.parse(pdf_path, docx_path)
         print(f"Conversion complete. Output file saved as {docx_path}")
+
+def collect_pdf_filenames(directory):
+    pdf_files = glob.glob(os.path.join(directory, '*.pdf'))
+    file = open('pdf_filenames.txt', 'w')
+    file.write('\n'.join(pdf_files))
+    file.close()
+    return file
+
+def merge_pdfs(output_filename):
+    pdf_directory = os.getcwd()
+    text_file = 'pdf_filenames.txt'
+    merged_pdf = output_filename
+    filenames = []
+
+    with open(text_file, 'r') as file:
+        filenames = file.read().splitlines()
+
+    merger = PyPDF2.PdfMerger()
+    for filename in filenames:
+        merger.append(filename)
+    merger.write(output_filename)
+    merger.close()
+
+    print("PDF merging complete!")

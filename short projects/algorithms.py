@@ -1,8 +1,9 @@
+import glob
+import os
 import requests
 import time
 import pyshorteners
 import urllib.request
-import os
 import shutil
 
 #file_organizer.py
@@ -112,9 +113,28 @@ def lotto_numbers(filename):
     execution_time = end_time - start_time
     print(f"Time taken to execute lotto_numbers: {execution_time:.10f} seconds")
 
+#collect_filenames.py
+def collect_filenames(file_type):
+    directory = os.getcwd()
+    files = glob.glob(os.path.join(directory, '*' + file_type))
+    
+    with open('file_names.txt', 'w') as file:
+        file.write('\n'.join(files))
+    print("filenames extracted succesfully")
+    return files
+
 #test.py
 def test():
-    print("Please choose an option\n1. Run file organizer\n2. Run link shortener\n3. Run link opener\n4. Run count lines\n5. Run count words\n6. Run get fact\n7. Create a file with lotto numbers\n8. Exit; ")
+    print("Please choose an option")
+    print("1. Run file organizer")
+    print("2. Run link shortener")
+    print("3. Run link opener")
+    print("4. Run count lines")
+    print("5. Run count words ")
+    print("6. Run get fact")
+    print("7. Create a file with lotto numbers")
+    print("8. collect all the filenames of a specific extension")
+    print("9.Exit ")
 
     choice = int(input("Enter your choice (1-8): "))
 
@@ -138,6 +158,10 @@ def test():
     elif choice == 7:
         lotto_numbers("combinations.txt")
     elif choice == 8:
+        file_type = input("What type are the files you want to extract? ")
+        collect_filenames(file_type)
+        os.remove("file_names.txt")
+    elif choice == 9:
         print("Exiting the test menu...")
     else:
         print("Invalid choice. Please enter a number from 1 to 8")

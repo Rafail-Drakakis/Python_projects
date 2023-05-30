@@ -65,16 +65,17 @@ def test():
     elif choice == 4:
         pdf_module.pdf_to_word("sample.pdf")
         pdf_module.pdf_to_images("sample.pdf")
-        pdf_module.merge_pdfs("merged.pdf")
+        pdf_module.collect_pdf_filenames(os.getcwd())
+        pdf_module.merge_pdfs('merged.pdf')
         pdf_module.split_pdf("sample.pdf", [7, "2-5"])
 
         os.remove("sample_pages_7_2_3_4_5.pdf")
-        os.remove("merged.pdf")
         os.remove("sample.docx")
         for index in range(1, 11):
             os.remove(f'page_{index}.jpg')
-        os.remove("output.pdf")
-    
+        os.remove("merged.pdf")
+        os.remove("pdf_filenames.txt")
+
     elif choice == 5:
         excel_module.process_pdf("table.pdf")
         os.remove("table.xlsx")
