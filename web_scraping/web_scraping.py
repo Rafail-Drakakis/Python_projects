@@ -1,21 +1,23 @@
-import time, sys, os, re
+import sys, os, re
 import urllib, urllib3
-import urllib.parse, urllib.request
-import warnings, glob, requests
-import bs4, docx
-import pdf2docx, pdf2image, PyPDF2
-import os, zipfile, tarfile, gzip
+import warnings, requests
+import bs4, docx, PyPDF2
+import zipfile, tarfile, gzip
 
 # Disable InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 #site_downloader.py
-def collect_pdf_filenames(directory):
-    pdf_files = glob.glob(os.path.join(directory, '*.pdf'))
-    file = open('pdf_filenames.txt', 'w')
-    file.write('\n'.join(pdf_files))
-    file.close()
-    return file
+def collect_filenames(directory, filetype):
+    file_list = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(filetype):
+                file_list.append(file)
+    
+    with open('file_list.txt', 'w') as output_file:
+        for file in file_list:
+            output_file.write(file + '\n')
 
 def merge_pdfs(output_filename, folder_name):
     pdf_directory = os.path.join(os.getcwd(), folder_name)
@@ -123,7 +125,7 @@ def clean_up_folder(folder_path):
         for file in files:
             file_path = os.path.join(root, file)
 
-            # Delete files with .html extension
+            # Delete files with .html and .php extensions
             if file.endswith(".html") or file.endswith(".php"):
                 os.remove(file_path)
 
@@ -150,7 +152,6 @@ def clean_up_folder(folder_path):
                         continue
 
                 os.remove(file_path)
-                print(f"Unzipped and deleted file: {file_path}")
 
 #main.py
 def web_scraping():
@@ -159,6 +160,7 @@ def web_scraping():
     print("2. Download files from a website")
     
     choice = int(input("Enter your choice: "))
+    
     while(choice > 2 or choice < 1):
         choice = int(input("Enter 1 or 2: "))
     
@@ -173,7 +175,7 @@ def web_scraping():
         print(f'The {folder_name} folder has been successfully created.')
     elif choice == 2:
         download_files_from_website(url, folder_name)
-        collect_pdf_filenames(os.path.join(os.getcwd(), folder_name))
+        collect_filenames(os.path.join(os.getcwd(), folder_name),".pdf") #getting the names of all PDF files
         merge_true = input("Do you want to get a merged PDF? ")
         if merge_true == "yes":
             merge_pdfs("merged.pdf", folder_name)
