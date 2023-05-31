@@ -4,8 +4,12 @@ import os, numpy as np
 
 def test():
     #Arrays for testing
-    A = np.array([[1, 2, 3], [4, 5, 6]])
-    B = np.array([[7, 8], [9, 10], [11, 12]])
+    A = np.array([[1, 2, 3], 
+                  [4, 5, 6]])
+    B = np.array([[7, 8, 4], 
+                  [9, 10, 6], 
+                  [11, 12, 17]])
+    
     #Variables for testing
     verbose = 1
     num = 5
@@ -16,38 +20,35 @@ def test():
         print("\n=== Plotting Functions ===\n1. Plot logarithm\n2. Plot Fibonacci\n3. Plot exponential\n4. Plot Collatz\n5. Plot Fibonacci\n6. Plot factorial: ")
         
         plot_choice = int(input("Enter the function number to test (1-6): "))
-        try:
-            plot_choice = int(plot_choice)
-            if plot_choice == 1:
-                plot.plot_logarithm(num)
-            elif plot_choice == 2:
-                plot.plot_fibonacci(verbose, num)
-            elif plot_choice == 3:
-                plot.plot_exponential(num)
-            elif plot_choice == 4:
-                plot.plot_collatz(num)
-            elif plot_choice == 5:
-                plot.plot_fibonacci(0, num)
-            elif plot_choice == 6:
-                plot.plot_factorial(num)
-        except ValueError:
-            print("Invalid input!")
-    
+        
+        if plot_choice == 1:
+            plot.plot_logarithm(num)
+        elif plot_choice == 2:
+            plot.plot_fibonacci(verbose, num)
+        elif plot_choice == 3:
+            plot.plot_exponential(num)
+        elif plot_choice == 4:
+            plot.plot_collatz(num)
+        elif plot_choice == 5:
+            plot.plot_fibonacci(0, num)
+        elif plot_choice == 6:
+            plot.plot_factorial(num)
+
     elif choice == 2:
-        print("\n=== Mathematical Functions ===\n1. Gauss elimination (recursive)\n2. Gauss elimination\n3. Multiply matrices\n4. LDU decomposition")
-        math_choice = int(input("Enter the function number to test (1-4): "))
-        try:
-            math_choice = int(math_choice)
-            if math_choice == 1:
-                Gauss_elimination_recursive.gauss_elimination_recursive(A, verbose)
-            elif math_choice == 2:
-                Gauss_elimination.gauss_elimination(A, verbose)
-            elif math_choice == 3:
-                numerical_analysis.multiply_matrices(A, B)
-            elif math_choice == 4:
-                numerical_analysis.ldu(A)
-        except ValueError:
-            print("Invalid input!")
+        print("\n=== Mathematical Functions ===\n1. Gauss elimination (recursive)\n2. Gauss elimination\n3. Multiply matrices\n4. LDU decomposition\n5. Find the determinant of matrixes: ")
+        
+        math_choice = int(input("Enter the function number to test: "))
+        
+        if math_choice == 1:
+            Gauss_elimination_recursive.gauss_elimination_recursive(A, verbose)
+        elif math_choice == 2:
+            Gauss_elimination.gauss_elimination(A, verbose)
+        elif math_choice == 3:
+            numerical_analysis.multiply_matrices(A, B) # or you can use, print("Matrixes multiplied are:\n", np.matmul(A, B))
+        elif math_choice == 4:
+            numerical_analysis.ldu(A)
+        elif math_choice == 5:
+            print("Determinant of matrix B, is:\n", np.linalg.det(B))
     
     elif choice == 3:
         image_module.extract_multiple_images_text("text_from_images.txt")
