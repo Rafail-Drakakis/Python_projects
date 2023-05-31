@@ -44,7 +44,7 @@ def test():
         elif math_choice == 2:
             Gauss_elimination.gauss_elimination(A, verbose)
         elif math_choice == 3:
-            numerical_analysis.multiply_matrices(A, B) # or you can use, print("Matrixes multiplied are:\n", np.matmul(A, B))
+            print("Matrixes multiplied are:\n", np.matmul(A, B)) # or you can use, numerical_analysis.multiply_matrices(A, B) (if you want to use the module)
         elif math_choice == 4:
             numerical_analysis.ldu(A)
         elif math_choice == 5:
