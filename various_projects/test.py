@@ -54,13 +54,11 @@ def test():
         image_module.mirror_image('image.png', direction=1)
         image_module.mirror_image('image.png', direction=2)
         image_module.convert_image('image.png', 'jpeg')
-        image_module.images_to_pdf("output.pdf")
 
         os.remove("image.jpeg")
         os.remove("image_flip.png")
         os.remove("image_mirror.png")
         os.remove("text_from_images.txt")
-        os.remove("output.pdf")
     
     elif choice == 4:
         pdf_module.pdf_to_word("sample.pdf")

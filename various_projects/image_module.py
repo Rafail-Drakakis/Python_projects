@@ -2,14 +2,6 @@ import img2pdf, pytesseract
 from PIL import Image
 import os
 
-def images_to_pdf(output_path):
-    image_paths = [entry.name for entry in os.scandir(os.getcwd()) if
-                   entry.is_file() and entry.name.lower().endswith(('.jpg', '.png', '.jpeg'))]
-    pdf_bytes = img2pdf.convert(image_paths)
-    with open(output_path, "wb") as file:
-        file.write(pdf_bytes)
-    print("Successfully created PDF file")
-
 def extract_image_text(image_path, output_file):
     try:
         with Image.open(image_path).convert('L') as img:
