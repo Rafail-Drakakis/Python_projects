@@ -38,7 +38,7 @@ def file_organizer():
         shutil.move(src_path, dst_path)
     
 #link_operator.py
-def link_shortner(link, choice):
+def link_shortner(link):
     return pyshorteners.Shortener().tinyurl.short(link)
 
 #count_lines.py
@@ -101,18 +101,18 @@ def collect_filenames(extension):
     return file
 
 def main():
-    print("files have been organized", file_organizer())
-    print("shortend link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI", 1))
+    print("short link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI"))
     print("Number of lines in the file:", count_lines("test.txt"))
     print(get_fact(5))
     print(f'Time taken to execute lotto_numbers: {lotto_numbers("combinations.txt"):.10f} seconds')
+    print("files have been organized", file_organizer())
 
-    word_counts = count_words("test.txt")
     print("Unique words in the file: ")
+    word_counts = count_words("test.txt")
     for word in word_counts:
         print(word, word_counts[word])
     
     collect_filenames('py')
-    print("files have been collected")
+    print("filenames have been collected")
 
-main()    
+main()

@@ -1,1 +1,0 @@
-/home/rafail/Downloads/Github/Python_projects/short projects/algorithms.py
