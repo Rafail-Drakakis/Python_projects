@@ -178,7 +178,8 @@ def main():
                   [9, 10, 6], 
                   [11, 12, 17]])
 
-    print("Matrixes multiplied are:\n", multiply_matrices(A, B))
+    print("Matrixes multiplied are:\n", multiply_matrices(A, B)) #or print("Matrixes multiplied are:\n", np.matmul(A, B))
+    
     P, L, D, U = ldu(A)
     print("Matrix P is:\n", P, "\nMatrix L is:\n", L, "\nMatrix D is:\n", D, "\nMatrix U is:\n", U) 
 

@@ -1,5 +1,4 @@
-import glob, os, time, shutil
-import requests, pyshorteners, urllib.request
+import glob, os, time, shutil, requests, pyshorteners, urllib.request
 
 #file_organizer.py
 def file_organizer():
@@ -104,15 +103,14 @@ def main():
     print("short link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI"))
     print("Number of lines in the file:", count_lines("test.txt"))
     print(get_fact(5))
-    print(f'Time taken to execute lotto_numbers: {lotto_numbers("combinations.txt"):.10f} seconds')
-    print("files have been organized", file_organizer())
-
     print("Unique words in the file: ")
     word_counts = count_words("test.txt")
     for word in word_counts:
         print(word, word_counts[word])
-    
     collect_filenames('py')
     print("filenames have been collected")
-
+    os.remove("filenames.txt")
+    #print(f'Time taken to execute lotto_numbers: {lotto_numbers("combinations.txt"):.10f} seconds')
+    #print("files have been organized", file_organizer())
+    
 main()

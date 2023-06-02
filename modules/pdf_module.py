@@ -1,6 +1,4 @@
-import pdf2image, pdf2docx
-import PyPDF2
-import os, glob
+import pdf2image, pdf2docx, PyPDF2, os, glob
 
 def validate_page_range(page_range):
     if isinstance(page_range, int):
@@ -30,7 +28,7 @@ def split_pdf(filename, pages):
         writer = PyPDF2.PdfWriter()
         for p in all_pages:
             writer.add_page(reader.pages[p - 1])
-        new_filename = f'{os.path.splitext(filename)[0]}_pages_{"_".join(str(p) for p in all_pages)}.pdf'
+        new_filename = "new_file.pdf"
         with open(new_filename, 'wb') as new_file:
             writer.write(new_file)
         print(f'New file created: {new_filename}')

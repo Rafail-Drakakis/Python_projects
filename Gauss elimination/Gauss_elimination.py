@@ -162,9 +162,11 @@ def gauss_elimination_recursive(A, verbose):
 def main():
     A = np.array([[1, 2, 3], 
                   [4, 5, 6]])    
-    verbose = 1
+    
+    #gauss_elimination_iterative(A,1)
+    #gauss_elimination_recursive(A,1)
 
-    gauss_elimination_iterative(A,verbose)
-    gauss_elimination_recursive(A,verbose)
+    print("Gauss-Iterative", gauss_elimination_iterative(A,0))
+    print("Gauss-Recursive", gauss_elimination_recursive(A,0))
 
 main()

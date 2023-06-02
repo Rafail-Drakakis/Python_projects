@@ -65,70 +65,6 @@ def download_files_from_website(url, folder_name):
                     with open(file_name, 'wb') as file:
                         file.write(file_response.content)
 
-#scrape_data.py
-def scrape_text_to_file(url, folder_name):
-    response = requests.get(url)
-    if response.status_code != 200:
-        print('Error: Failed to get the web page')
-        sys.exit(1)
-    soup = bs4.BeautifulSoup(response.content, 'html.parser')
-    main_text = soup.get_text(separator='\n')
-    if not main_text:
-        print('Error: Failed to extract the main text')
-        sys.exit(1)
-    main_text = replace_chars(main_text)
-    os.makedirs(folder_name, exist_ok=True)
-    with open(f"{folder_name}/{folder_name}.txt", 'w', encoding='utf-8') as f:
-        f.write(main_text)
-    clean_text_file(f"{folder_name}/{folder_name}.txt")
-
-def scrape_images_to_file(url, folder_name):
-    response = requests.get(url)
-    if response.status_code != 200:
-        print('Error: Failed to get the web page')
-        sys.exit(1)
-    soup = bs4.BeautifulSoup(response.content, 'html.parser')
-    os.makedirs(folder_name, exist_ok=True)
-    for img in soup.find_all('img'):
-        img_url = img.get('src')
-        if not img_url:
-            continue
-        try:
-            img_name = img_url.split('/')[-1]
-            img_name = img_name.split('.')[0] + '.jpg'
-            img_path = os.path.join(folder_name, img_name)
-            urllib.request.urlretrieve(img_url, img_path)
-        except Exception as e:
-            print(f'Error downloading {img_url}: {str(e)}')
-
-#clean_text.py
-def replace_chars(text):
-    chars_to_replace = [f"[{i}]" for i in range(1, 100)]
-    for char in chars_to_replace:
-        text = text.replace(char, ' ')
-    text = text.replace('\t', '   ')  # Replace tab with three spaces
-    return text
-
-def clean_text_file(filename):
-    if not os.path.isfile(filename):
-        print(f'Error: {filename} does not exist')
-        sys.exit(1)
-    with open(filename, 'r', encoding='utf-8') as f:
-        text = f.read()
-    # Replace multiple consecutive new lines with a single new line and add three spaces instead of new line
-    text = re.sub(r'\n+', '   ', text.strip())
-    # Replace 3 or more spaces with 2 spaces
-    text = re.sub(r' {3,}', '  ', text)
-    doc = docx.Document()
-    doc.add_paragraph(text, style='Normal')
-    style = doc.styles['Normal']
-    font = style.font
-    font.name = 'Times New Roman'
-    font.size = docx.shared.Pt(12)
-    doc_file_name = os.path.splitext(filename)[0] + '.docx'
-    doc.save(doc_file_name)
-    os.remove(filename)
-
 #clean_folder.py
 def clean_up_folder(folder_path):
     for root, dirs, files in os.walk(folder_path):
@@ -197,17 +133,76 @@ def file_organizer(directory):
         shutil.move(src_path, dst_path)
 
     print("Files have been organized!")
+    
+#scrape_data.py
+def scrape_text_to_file(url, folder_name):
+    response = requests.get(url)
+    if response.status_code != 200:
+        print('Error: Failed to get the web page')
+        sys.exit(1)
+    soup = bs4.BeautifulSoup(response.content, 'html.parser')
+    main_text = soup.get_text(separator='\n')
+    if not main_text:
+        print('Error: Failed to extract the main text')
+        sys.exit(1)
+    main_text = replace_chars(main_text)
+    os.makedirs(folder_name, exist_ok=True)
+    with open(f"{folder_name}/{folder_name}.txt", 'w', encoding='utf-8') as f:
+        f.write(main_text)
+    clean_text_file(f"{folder_name}/{folder_name}.txt")
+
+def scrape_images_to_file(url, folder_name):
+    response = requests.get(url)
+    if response.status_code != 200:
+        print('Error: Failed to get the web page')
+        sys.exit(1)
+    soup = bs4.BeautifulSoup(response.content, 'html.parser')
+    os.makedirs(folder_name, exist_ok=True)
+    for img in soup.find_all('img'):
+        img_url = img.get('src')
+        if not img_url:
+            continue
+        try:
+            img_name = img_url.split('/')[-1]
+            img_name = img_name.split('.')[0] + '.jpg'
+            img_path = os.path.join(folder_name, img_name)
+            urllib.request.urlretrieve(img_url, img_path)
+        except Exception as e:
+            print(f'Error downloading {img_url}: {str(e)}')
+
+#clean_text.py
+def replace_chars(text):
+    chars_to_replace = [f"[{i}]" for i in range(1, 100)]
+    for char in chars_to_replace:
+        text = text.replace(char, ' ')
+    text = text.replace('\t', '   ')  # Replace tab with three spaces
+    return text
+
+def clean_text_file(filename):
+    if not os.path.isfile(filename):
+        print(f'Error: {filename} does not exist')
+        sys.exit(1)
+    with open(filename, 'r', encoding='utf-8') as f:
+        text = f.read()
+    # Replace multiple consecutive new lines with a single new line and add three spaces instead of new line
+    text = re.sub(r'\n+', '   ', text.strip())
+    # Replace 3 or more spaces with 2 spaces
+    text = re.sub(r' {3,}', '  ', text)
+    doc = docx.Document()
+    doc.add_paragraph(text, style='Normal')
+    style = doc.styles['Normal']
+    font = style.font
+    font.name = 'Times New Roman'
+    font.size = docx.shared.Pt(12)
+    doc_file_name = os.path.splitext(filename)[0] + '.docx'
+    doc.save(doc_file_name)
+    os.remove(filename)
 
 #main.py
 def web_scraping():
-    print("=== Web Scraping Menu ===")
-    print("0. To exit")
-    print("1. To scrape text and images from a website")
-    print("2. To download files from a website")
+    choice = int(input("=== Web Scraping Menu ===\n1. To scrape text and images from a website\n2. To download files from a website: "))
 
-    choice = int(input("Enter your choice: "))
-    
-    if choice == 0:
+    if choice > 2 or choice < 1:
         exit(1)
 
     url = input("Enter the URL: ")
@@ -220,6 +215,7 @@ def web_scraping():
         if images_true == 'yes':
             scrape_images_to_file(url, folder_name)
         print(f'The {folder_name} folder has been successfully created.')
+    
     elif choice == 2:
         download_files_from_website(url, folder_name)
         collect_filenames(directory, ".pdf")
