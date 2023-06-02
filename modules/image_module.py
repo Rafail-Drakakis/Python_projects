@@ -58,3 +58,10 @@ def convert_image(input_path, output_format):
         rgb_im = im.convert('RGB')
         rgb_im.save(output_path, format=output_format.upper())
     print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
+
+# testing function (with an existing image.png file)
+def test():
+    extract_multiple_images_text("text_from_images.txt")
+    mirror_image('image.png', direction = 1)
+    mirror_image('image.png', direction = 2)
+    convert_image('image.png', 'jpeg')

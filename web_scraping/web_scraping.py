@@ -1,6 +1,6 @@
 import sys, os, re
 import urllib, urllib3
-import warnings,shutil, requests
+import warnings, shutil, requests
 import bs4, docx, PyPDF2
 import zipfile, tarfile, gzip
 
@@ -15,7 +15,7 @@ def collect_filenames(directory, filetype):
             if file.endswith(filetype):
                 file_list.append(file)
     
-    sorted_file_list = sorted(set(file_list)) #sort the files to appear correctly
+    sorted_file_list = sorted(set(file_list)) # sort the files to appear correctly
     
     with open('file_list.txt', 'w') as output_file:
         for file in sorted_file_list:
@@ -82,7 +82,7 @@ def scrape_text_to_file(url, folder_name):
         f.write(main_text)
     clean_text_file(f"{folder_name}/{folder_name}.txt")
 
-def scrape_image_to_file(url, folder_name):
+def scrape_images_to_file(url, folder_name):
     response = requests.get(url)
     if response.status_code != 200:
         print('Error: Failed to get the web page')
@@ -173,7 +173,7 @@ def file_organizer(directory):
 
     # Loop through each file and organize them by extension
     for file in files:
-        # Exclude the file_organizer.py file from being moved
+        # Exclude the target file from being moved
         if file == "merged.pdf":
             continue
         
@@ -201,14 +201,15 @@ def file_organizer(directory):
 #main.py
 def web_scraping():
     print("=== Web Scraping Menu ===")
-    print("1. Scrape data from a website")
-    print("2. Download files from a website")
-    
+    print("0. To exit")
+    print("1. To scrape text and images from a website")
+    print("2. To download files from a website")
+
     choice = int(input("Enter your choice: "))
     
-    while(choice > 2 or choice < 1):
-        choice = int(input("Enter 1 or 2: "))
-    
+    if choice == 0:
+        exit(1)
+
     url = input("Enter the URL: ")
     folder_name = input("Enter the name of the folder you want to save the files: ")
     directory = os.path.join(os.getcwd(), folder_name)
@@ -217,7 +218,7 @@ def web_scraping():
         scrape_text_to_file(url, folder_name)
         images_true = input("Do you want to include the images? ")
         if images_true == 'yes':
-            scrape_image_to_file(url, folder_name)
+            scrape_images_to_file(url, folder_name)
         print(f'The {folder_name} folder has been successfully created.')
     elif choice == 2:
         download_files_from_website(url, folder_name)

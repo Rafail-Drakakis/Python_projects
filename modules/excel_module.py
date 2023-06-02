@@ -101,3 +101,5 @@ def process_pdf(input_pdf_path):
         os.remove(temp_excel_path)
         if os.path.exists(merged_excel_path):
             os.remove(merged_excel_path)
+
+process_pdf("table.pdf")            

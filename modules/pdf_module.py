@@ -47,16 +47,15 @@ def pdf_to_word(*pdf_paths):
         pdf2docx.parse(pdf_path, docx_path)
         print(f"Conversion complete. Output file saved as {docx_path}")
 
-def collect_pdf_filenames(directory):
-    pdf_files = glob.glob(os.path.join(directory, '*.pdf'))
-    file = open('pdf_filenames.txt', 'w')
-    file.write('\n'.join(pdf_files))
-    file.close()
+def collect_filenames(extension):
+    files = glob.glob(os.path.join(os.getcwd(), f'*.{extension}'))
+    with open('filenames.txt', 'w') as file:
+        file.write('\n'.join(files))
     return file
 
 def merge_pdfs(output_filename):
     pdf_directory = os.getcwd()
-    text_file = 'pdf_filenames.txt'
+    text_file = 'filenames.txt'
     merged_pdf = output_filename
     filenames = []
 
@@ -69,4 +68,12 @@ def merge_pdfs(output_filename):
     merger.write(output_filename)
     merger.close()
 
-    print("PDF merging complete!")
+    print("PDF merging complete")
+
+def main():
+    pdf_to_word("sample.pdf")
+    pdf_to_images("sample.pdf")
+    collect_filenames('pdf')
+    merge_pdfs('merged.pdf')
+    split_pdf("sample.pdf", [7, "2-5"])
+main()    
