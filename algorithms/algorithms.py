@@ -99,17 +99,35 @@ def collect_filenames(extension):
         file.write('\n'.join(files))
     return file
 
+def merge_files_by_extension(extension):
+    merged_file_name = "merged" + extension
+    files = [file for file in os.listdir() if file.endswith(extension)]
+
+    with open(merged_file_name, "w") as merged_file:
+        for file_name in files:
+            with open(file_name, "r") as file:
+                merged_file.write("// " + file_name + "\n")
+                merged_file.write(file.read())
+                merged_file.write("\n")
+
+    return merged_file_name
+
 def main():
     print("short link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI"))
     print("Number of lines in the file:", count_lines("test.txt"))
     print(get_fact(5))
     print("Unique words in the file: ")
+    
     word_counts = count_words("test.txt")
     for word in word_counts:
         print(word, word_counts[word])
+    
     collect_filenames('py')
     print("filenames have been collected")
     os.remove("filenames.txt")
+    
+    print("Merged file created", merge_files_by_extension(".py"))
+
     #print(f'Time taken to execute lotto_numbers: {lotto_numbers("combinations.txt"):.10f} seconds')
     #print("files have been organized", file_organizer())
     
