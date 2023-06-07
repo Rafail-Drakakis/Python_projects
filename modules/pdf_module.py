@@ -4,20 +4,25 @@ def validate_page_range(page_range):
     if isinstance(page_range, int):
         return [page_range]
     elif isinstance(page_range, str):
-        start, _, end = page_range.partition('-')
-        if not start.isdigit() or not end.isdigit():
-            raise ValueError(f'Invalid page range: {page_range}')
-        start = int(start)
-        end = int(end)
-        if start > end:
-            raise ValueError(f'Invalid page range: {page_range}')
-        return list(range(start, end + 1))
+        if '-' in page_range:
+            start, end = page_range.split('-')
+            if not start.isdigit() or not end.isdigit():
+                raise ValueError(f'Invalid page range: {page_range}')
+            start = int(start)
+            end = int(end)
+            if start > end:
+                raise ValueError(f'Invalid page range: {page_range}')
+            return list(range(start, end + 1))
+        else:
+            if not page_range.isdigit():
+                raise ValueError(f'Invalid page range: {page_range}')
+            return [int(page_range)]
     else:
         raise ValueError(f'Invalid page range: {page_range}')
 
-def split_pdf(filename, pages):
+def split_pdf(filename, page_ranges):
     all_pages = []
-    for page_range in pages:
+    for page_range in page_ranges:
         all_pages.extend(validate_page_range(page_range))
 
     with open(filename, 'rb') as file:
@@ -31,25 +36,26 @@ def split_pdf(filename, pages):
         new_filename = "new_file.pdf"
         with open(new_filename, 'wb') as new_file:
             writer.write(new_file)
-        print(f'New file created: {new_filename}')
+        return new_filename
 
 def pdf_to_images(filename):
     images = pdf2image.convert_from_path(filename, dpi=1000)
     for idx, img in enumerate(images):
         img.save(f'page_{idx + 1}.jpg', 'JPEG', quality=80)
-    print("PDF converted successfully")
 
 def pdf_to_word(*pdf_paths):
+    docx_paths = []
     for pdf_path in pdf_paths:
         docx_path = pdf_path.replace(".pdf", ".docx")
         pdf2docx.parse(pdf_path, docx_path)
-        print(f"Conversion complete. Output file saved as {docx_path}")
+        docx_paths.append(docx_path)
 
 def collect_filenames(extension):
     files = glob.glob(os.path.join(os.getcwd(), f'*.{extension}'))
-    with open('filenames.txt', 'w') as file:
+    target_file = "filenames.txt"
+    with open(target_file, 'w') as file:
         file.write('\n'.join(files))
-    return file
+    return target_file
 
 def merge_pdfs(output_filename):
     pdf_directory = os.getcwd()
@@ -66,12 +72,11 @@ def merge_pdfs(output_filename):
     merger.write(output_filename)
     merger.close()
 
-    print("PDF merging complete")
-
-def main():
+def main():    
     pdf_to_word("sample.pdf")
     pdf_to_images("sample.pdf")
     collect_filenames('pdf')
     merge_pdfs('merged.pdf')
-    split_pdf("sample.pdf", [7, "2-5"])
-main()    
+    split_pdf("merged.pdf", ("2", "5", "10-11"))
+
+main()

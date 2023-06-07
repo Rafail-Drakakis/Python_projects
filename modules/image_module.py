@@ -1,67 +1,69 @@
-import img2pdf, pytesseract
-from PIL import Image
-import os
+import img2pdf, pytesseract, os, PIL
 
-def extract_image_text(image_path, output_file):
+def extract_image_text(image_path):
     try:
-        with Image.open(image_path).convert('L') as img:
+        with PIL.Image.open(image_path).convert('L') as img:
             text = pytesseract.image_to_string(img, lang='eng')
-            output_file.write(os.path.basename(image_path) + "\n")
-            output_file.write(text + "\n")
+            return text
     except (OSError, pytesseract.TesseractError) as e:
-        print(f"Error processing image {os.path.basename(image_path)}: {e}")
+        return f"Error processing image {os.path.basename(image_path)}: {e}"
+        return None
 
 def extract_multiple_images_text(output_file_path):
     image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
 
+    texts = []
+    for entry in os.scandir(os.getcwd()):
+        if entry.is_file() and any(entry.name.lower().endswith(ext) for ext in image_extensions):
+            text = extract_image_text(entry.path)
+            if text is not None:
+                texts.append(os.path.basename(entry.path) + "\n" + text + "\n")
+
     with open(output_file_path, "w") as output_file:
-        for entry in os.scandir(os.getcwd()):
-            if entry.is_file() and any(entry.name.lower().endswith(ext) for ext in image_extensions):
-                extract_image_text(entry.path, output_file)
-    print(f'Text extracted and saved to {output_file_path} file.')
+        output_file.writelines(texts)
+
+    return output_file_path
 
 def mirror_image(input_path, direction, output_dir=None, output_format='png'):
     if not os.path.isfile(input_path):
-        print(f"Error: {input_path} does not exist")
-        return
+        return f"Error: {input_path} does not exist"
     if output_dir is None:
         output_dir = os.path.dirname(input_path)
     output_filename = os.path.splitext(os.path.basename(input_path))[0]
     try:
-        with Image.open(input_path) as img:
+        with PIL.Image.open(input_path) as img:
             if direction == 1:
-                mirror_img = img.transpose(Image.FLIP_LEFT_RIGHT)
+                mirror_img = img.transpose(PIL.Image.FLIP_LEFT_RIGHT)
                 mirror_output_path = os.path.join(output_dir, f"{output_filename}_mirror.{output_format.lower()}")
                 mirror_img.save(mirror_output_path)
-                print(f"Image mirrored successfully")
+                return mirror_output_path
             elif direction == 2:
-                mirror_img = img.transpose(Image.FLIP_TOP_BOTTOM)
+                mirror_img = img.transpose(PIL.Image.FLIP_TOP_BOTTOM)
                 mirror_output_path = os.path.join(output_dir, f"{output_filename}_flip.{output_format.lower()}")
                 mirror_img.save(mirror_output_path)
-                print(f"Image flipped successfully")
+                return mirror_output_path
             else:
-                print("Invalid direction specified")
-                return
+                return "Invalid direction specified"
     except OSError as e:
-        print(f"Error: {e}")
+        return f"Error: {e}"
     except Exception as e:
-        print(f"Error: {e}")
+        return f"Error: {e}"
 
 def convert_image(input_path, output_format):
     if not os.path.exists(input_path):
-        print(f"Error: file '{input_path}' does not exist.")
-        return
+        return f"Error: file '{input_path}' does not exist."
     output_dir = os.path.dirname(input_path)
     output_filename = os.path.splitext(os.path.basename(input_path))[0]
     output_path = os.path.join(output_dir, f"{output_filename}.{output_format.lower()}")
-    with Image.open(input_path) as im:
+    with PIL.Image.open(input_path) as im:
         rgb_im = im.convert('RGB')
         rgb_im.save(output_path, format=output_format.upper())
-    print(f"Conversion from {os.path.splitext(input_path)[1][1:].upper()} to {output_format.upper()}")
+    return output_path
 
-# testing function (with an existing image.png file)
 def test():
-    extract_multiple_images_text("text_from_images.txt")
-    mirror_image('image.png', direction = 1)
-    mirror_image('image.png', direction = 2)
-    convert_image('image.png', 'jpeg')
+    print("Text extracted and saved to", extract_multiple_images_text("text_from_images.txt"))
+    print("Image mirrored successfully", mirror_image('image.png', direction=1))
+    print("Image flipped successfully", mirror_image('image.png', direction=2))
+    print("Image converted successfully", convert_image('image.png', 'jpeg'))
+
+test()        
