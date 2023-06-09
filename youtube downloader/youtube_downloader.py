@@ -7,7 +7,7 @@ def download_from_file(file_path):
     else:
         with open(file_path, 'r') as file:
             for line in file:
-                download_link(link)  # Call the function to download the link
+                download_link(line)  # Call the function to download the link
 
 def download_link(link):
     choice = int(input("Choose an option\n1. Download video\n2. Download audio: "))  # Prompt the user to choose an option
