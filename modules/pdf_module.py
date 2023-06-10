@@ -51,7 +51,7 @@ def pdf_to_word(*pdf_paths):
         docx_paths.append(docx_path)
 
 def collect_filenames(extension):
-    files = glob.glob(os.path.join(os.getcwd(), f'*.{extension}'))
+    files = sorted(glob.glob(os.path.join(os.getcwd(), f'*.{extension}')))
     target_file = "filenames.txt"
     with open(target_file, 'w') as file:
         file.write('\n'.join(files))
@@ -73,10 +73,10 @@ def merge_pdfs(output_filename):
     merger.close()
 
 def main():    
-    pdf_to_word("sample.pdf")
-    pdf_to_images("sample.pdf")
+    #pdf_to_word("sample.pdf")
+    #pdf_to_images("sample.pdf")
     collect_filenames('pdf')
-    merge_pdfs('merged.pdf')
-    split_pdf("merged.pdf", ("2", "5", "10-11"))
+    #merge_pdfs('merged.pdf')
+    #split_pdf("merged.pdf", ("2", "5", "10-11"))
 
 main()
