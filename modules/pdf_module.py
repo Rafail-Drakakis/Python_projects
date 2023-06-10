@@ -73,10 +73,10 @@ def merge_pdfs(output_filename):
     merger.close()
 
 def main():    
-    #pdf_to_word("sample.pdf")
-    #pdf_to_images("sample.pdf")
+    pdf_to_word("sample.pdf")
+    pdf_to_images("sample.pdf")
     collect_filenames('pdf')
-    #merge_pdfs('merged.pdf')
-    #split_pdf("merged.pdf", ("2", "5", "10-11"))
+    merge_pdfs('merged.pdf')
+    split_pdf("merged.pdf", ("2", "5", "10-11"))
 
 main()
