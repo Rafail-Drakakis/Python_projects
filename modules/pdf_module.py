@@ -77,6 +77,6 @@ def main():
     pdf_to_images("sample.pdf")
     collect_filenames('pdf')
     merge_pdfs('merged.pdf')
-    split_pdf("merged.pdf", ("2", "5", "10-11"))
+    split_pdf("sample.pdf", ["1"])
 
 main()
