@@ -66,4 +66,4 @@ def test():
     print("Image flipped successfully", mirror_image('image.png', direction=2))
     print("Image converted successfully", convert_image('image.png', 'jpeg'))
 
-test()        
+test()
