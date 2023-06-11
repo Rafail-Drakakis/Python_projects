@@ -50,8 +50,7 @@ def convert_pdf(*pdf_paths):
             docx_paths.append(docx_path)
 
 def merge_pdf_files(output_filename):
-    extension = os.path.splitext(output_filename)[1][1:]  # Get extension from the given file path
-    files = sorted(glob.glob(os.path.join(os.getcwd(), f'*.{extension}')))
+    files = sorted(glob.glob(os.path.join(os.getcwd(), f'*.pdf')))
     target_file = "filenames.txt"
 
     with open(target_file, 'w') as file:
