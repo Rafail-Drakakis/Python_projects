@@ -116,14 +116,13 @@ def main():
     print("short link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI"))
     print("Number of lines in the file:", count_lines("test.txt"))
     print(get_fact(5))
-    print("Unique words in the file: ")
     
+    print("Unique words in the file: ")
     word_counts = count_words("test.txt")
     for word in word_counts:
         print(word, word_counts[word])
     
-    collect_filenames('py')
-    print("filenames have been collected")
+    print("filenames have been collected", collect_filenames('py'))
     os.remove("filenames.txt")
     
     print("Merged file created", merge_files_by_extension(".py"))

@@ -60,10 +60,10 @@ def convert_image(input_path, output_format):
         rgb_im.save(output_path, format=output_format.upper())
     return output_path
 
-def test():
-    print("Text extracted and saved to", extract_multiple_images_text("text_from_images.txt"))
-    print("Image mirrored successfully", mirror_image('image.png', direction=1))
-    print("Image flipped successfully", mirror_image('image.png', direction=2))
-    print("Image converted successfully", convert_image('image.png', 'jpeg'))
+def main():
+    #extract_multiple_images_text("text_from_images.txt")
+    #mirror_image('image.png', direction=1)
+    #mirror_image('image.png', direction=2)
+    #convert_image('image.png', 'jpeg')
 
-test()
+main()
