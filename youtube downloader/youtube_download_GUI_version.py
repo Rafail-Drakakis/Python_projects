@@ -1,4 +1,5 @@
 import tkinter as tk, os
+from tkinter import filedialog
 
 def download_audio(link_entry):
     title.configure(text=link_entry.get(), fg="white")
@@ -11,7 +12,7 @@ def download_video(link_entry):
     os.system(terminal_command)
 
 def download_from_file(file_type, download_func):
-    file_path = tk.filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+    file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
     if file_path:
         with open(file_path, 'r') as file:
             for line in file:
