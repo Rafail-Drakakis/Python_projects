@@ -18,7 +18,6 @@ def validate_link(link):
 def download_audio(link_entry):
     link = link_entry.get()
     if validate_link(link):
-        title.configure(text=link, fg="white")
         terminal_command = f'yt-dlp -x --audio-format mp3 {link}'
         try:
             os.system(terminal_command)
@@ -28,7 +27,6 @@ def download_audio(link_entry):
 def download_video(link_entry):
     link = link_entry.get()
     if validate_link(link):
-        title.configure(text=link, fg="white")
         terminal_command = f'yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]" {link}'
         try:
             os.system(terminal_command)
