@@ -61,9 +61,9 @@ def convert_image(input_path, output_format):
     return output_path
 
 def main():
-    #extract_multiple_images_text("text_from_images.txt")
-    #mirror_image('image.png', direction=1)
-    #mirror_image('image.png', direction=2)
-    #convert_image('image.png', 'jpeg')
-
+    extract_multiple_images_text("text_from_images.txt")
+    mirror_image('image.png', direction=1)
+    mirror_image('image.png', direction=2)
+    convert_image('image.png', 'jpeg')
+    
 main()
