@@ -1,4 +1,5 @@
 import os, glob, PyPDF2, pdf2image, pdf2docx
+import tabula, openpyxl, os, tempfile, pandas as pd
 
 def split_pdf(filename, page_ranges):
     all_pages = []
@@ -75,8 +76,6 @@ def merge_pdf_files(output_filename):
 
     if os.path.exists(target_file):
         os.remove(target_file)
-
-import tabula, openpyxl, os, tempfile, pandas as pd
 
 def convert_pdf_to_excel(input_pdf_path, output_excel_path):
     # Convert PDF to Excel

@@ -1,28 +1,21 @@
 import img2pdf, pytesseract, os, PIL
 
-def extract_image_text(image_path):
-    try:
-        with PIL.Image.open(image_path).convert('L') as img:
-            text = pytesseract.image_to_string(img, lang='eng')
-            return text
-    except (OSError, pytesseract.TesseractError) as e:
-        return f"Error processing image {os.path.basename(image_path)}: {e}"
-        return None
-
-def extract_multiple_images_text(output_file_path):
-    image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
-
+def extract_images_to_text(image_paths, output_file_path):
     texts = []
-    for entry in os.scandir(os.getcwd()):
-        if entry.is_file() and any(entry.name.lower().endswith(ext) for ext in image_extensions):
-            text = extract_image_text(entry.path)
-            if text is not None:
-                texts.append(os.path.basename(entry.path) + "\n" + text + "\n")
+    for image_path in image_paths:
+        try:
+            with PIL.Image.open(image_path).convert('L') as img:
+                text = pytesseract.image_to_string(img, lang='eng')
+                if text:
+                    texts.append(os.path.basename(image_path) + "\n" + text + "\n")
+        except (OSError, pytesseract.TesseractError) as e:
+            texts.append(f"Error processing image {os.path.basename(image_path)}: {e}\n")
 
     with open(output_file_path, "w") as output_file:
         output_file.writelines(texts)
 
     return output_file_path
+
 
 def mirror_image(input_path, direction, output_dir=None, output_format='png'):
     if not os.path.isfile(input_path):
@@ -60,10 +53,26 @@ def convert_image(input_path, output_format):
         rgb_im.save(output_path, format=output_format.upper())
     return output_path
 
+def images_to_pdf(images, pdf_name):
+    try:
+        # create a new pdf file
+        pdf_images = []
+        for image in images:
+            img = PIL.Image.open(image)
+            pdf_images.append(img)
+
+        if pdf_images:
+            pdf_images[0].save(pdf_name, "PDF", resolution=100.0, save_all=True, append_images=pdf_images[1:])
+        else:
+            print("Error: No images found.")
+    except Exception as e:
+        print("Error: Failed to convert images to PDF.\nError:", str(e))
+
 def main():
-    extract_multiple_images_text("text_from_images.txt")
+    extract_images_to_text(["image.png"], 'output.pdf')
     mirror_image('image.png', direction=1)
     mirror_image('image.png', direction=2)
     convert_image('image.png', 'jpeg')
+    images_to_pdf(["image.png"], 'output.pdf')
     
 main()
