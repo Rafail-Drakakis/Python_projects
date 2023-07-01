@@ -1,6 +1,7 @@
 import glob, os, time, shutil, requests, pyshorteners, urllib.request, speech_recognition
 from moviepy.editor import VideoFileClip
 
+#audio_to_text.py
 def convert_video_to_text(input_filename, output_filename):
     # Convert video to audio
     video = VideoFileClip(input_filename)
@@ -125,6 +126,7 @@ def collect_filenames(extension):
         file.write('\n'.join(files))
     return file
 
+#merge_files.py
 def merge_files_by_extension(extension):
     merged_file_name = "merged" + extension
     files = [file for file in os.listdir() if file.endswith(extension)]
@@ -138,6 +140,7 @@ def merge_files_by_extension(extension):
 
     return merged_file_name
 
+#test.py
 def main():
     print("short link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI"))
     print("Number of lines in the file:", count_lines("test.txt"))
@@ -157,4 +160,5 @@ def main():
 
     #print(f'Time taken to execute lotto_numbers: {lotto_numbers("combinations.txt"):.10f} seconds')
     #print("files have been organized", file_organizer())
+    
 main()
