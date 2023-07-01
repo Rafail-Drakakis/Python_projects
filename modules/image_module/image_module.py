@@ -69,7 +69,7 @@ def images_to_pdf(images, pdf_name):
         print("Error: Failed to convert images to PDF.\nError:", str(e))
 
 def main():
-    extract_images_to_text(["image.png"], 'output.pdf')
+    extract_images_to_text(["image.png"], 'output.txt')
     mirror_image('image.png', direction=1)
     mirror_image('image.png', direction=2)
     convert_image('image.png', 'jpeg')
