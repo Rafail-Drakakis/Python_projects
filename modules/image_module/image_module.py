@@ -46,7 +46,7 @@ def convert_image(input_path, output_format):
     if not os.path.exists(input_path):
         return f"Error: file '{input_path}' does not exist."
     output_dir = os.path.dirname(input_path)
-    output_filename = os.path.splitext(os.path.basename(input_path))[0]
+    output_filename = input("Enter the output filename: ")
     output_path = os.path.join(output_dir, f"{output_filename}.{output_format.lower()}")
     with PIL.Image.open(input_path) as im:
         rgb_im = im.convert('RGB')
