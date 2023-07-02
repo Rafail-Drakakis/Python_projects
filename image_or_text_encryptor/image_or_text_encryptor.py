@@ -1,5 +1,6 @@
 from PIL import Image
-import numpy as np, os
+import numpy as np
+import os
 
 def hide_message_in_png(image_filename, message_to_hide, key, encoded_image):
     try:
@@ -216,7 +217,7 @@ def main():
         elif choice == 2:
             try:
                 encoded_image = input("Enter the encoded image filename: ")
-                if not os.path.isfile(encrypted_image):
+                if not os.path.isfile(encoded_image):
                     print("File not found.")
                     return
                 key = input("Enter the key: ")
