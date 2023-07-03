@@ -2,55 +2,42 @@ import os, glob, PyPDF2, pdf2image, pdf2docx
 import tabula, openpyxl, os, tempfile, pandas as pd
 import img2pdf, pytesseract, PIL
 
-def split_pdf(filename, page_ranges):
-    """
-    The `split_pdf` function takes a PDF file and a list of page ranges as input, and creates a new PDF
-    file containing only the specified pages.
-
-    :param filename: The `filename` parameter is the name of the PDF file that you want to split. It
-    should be a string representing the file path or file name of the PDF file
-    :param page_ranges: The `page_ranges` parameter is a list of page ranges that specify which pages to
-    extract from the PDF file. Each page range can be specified in one of the following formats:
-    """
-    try:
-        all_pages = []
-        for page_range in page_ranges:
-            if isinstance(page_range, int):
-                all_pages.append(page_range)
-            elif isinstance(page_range, str):
-                if '-' in page_range:
-                    start, end = page_range.split('-')
-                    if not start.isdigit() or not end.isdigit():
-                        raise ValueError(f'Invalid page range: {page_range}')
-                    start = int(start)
-                    end = int(end)
-                    if start > end:
-                        raise ValueError(f'Invalid page range: {page_range}')
-                    all_pages.extend(range(start, end + 1))
-                else:
-                    if not page_range.isdigit():
-                        raise ValueError(f'Invalid page range: {page_range}')
-                    all_pages.append(int(page_range))
-            else:
+def validate_page_range(page_range):
+    if isinstance(page_range, int):
+        return [page_range]
+    elif isinstance(page_range, str):
+        if '-' in page_range:
+            start, end = page_range.split('-')
+            if not start.isdigit() or not end.isdigit():
                 raise ValueError(f'Invalid page range: {page_range}')
+            start = int(start)
+            end = int(end)
+            if start > end:
+                raise ValueError(f'Invalid page range: {page_range}')
+            return list(range(start, end + 1))
+        else:
+            if not page_range.isdigit():
+                raise ValueError(f'Invalid page range: {page_range}')
+            return [int(page_range)]
+    else:
+        raise ValueError(f'Invalid page range: {page_range}')
 
-        with open(filename, 'rb') as file:
-            reader = PyPDF2.PdfReader(file)
-            num_pages = len(reader.pages)
-            if not all(1 <= p <= num_pages for p in all_pages):
-                raise ValueError('Invalid page range')
-            writer = PyPDF2.PdfWriter()
-            for p in all_pages:
-                writer.add_page(reader.pages[p - 1])
-            with open("new_file.pdf", 'wb') as new_file:
-                writer.write(new_file)
-    
-    except FileNotFoundError as e:
-        print(f"Error: File not found. {e}")
-    except ValueError as e:
-        print(f"Error: {e}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+
+def split_pdf(filename, page_ranges, output_filename):
+    all_pages = []
+    for page_range in page_ranges:
+        all_pages.extend(validate_page_range(page_range))
+
+    with open(filename, 'rb') as file:
+        reader = PyPDF2.PdfReader(file)
+        num_pages = len(reader.pages)
+        if not all(1 <= p <= num_pages for p in all_pages):
+            raise ValueError('Invalid page range')
+        writer = PyPDF2.PdfWriter()
+        for p in all_pages:
+            writer.add_page(reader.pages[p - 1])
+        with open(output_filename, 'wb') as new_file:
+            writer.write(new_file)
 
 def convert_pdf(*pdf_paths):
     """
@@ -365,46 +352,186 @@ def images_to_pdf(images, pdf_name):
     except Exception as e:
         print("Error: Failed to convert images to PDF.\nError:", str(e))
 
+def split_pdf_menu():    
+    """
+    The `split_pdf_menu` function prompts the user to enter a PDF filename, page ranges, and an output
+    filename, and then calls the `split_pdf` function to split the PDF into separate files based on the
+    specified page ranges.
+    """
+    filename = input("Enter the PDF filename: ")
+    while not os.path.isfile(filename):
+        print("Invalid file name. Please try again.")
+        filename = input("Enter the PDF filename: ")
+        
+    page_ranges = input("Enter the page ranges (comma-separated): ").split(",")
+    while True:
+        try:
+            if all(validate_page_range(range) for range in page_ranges):
+                break
+        except ValueError as error:
+            print(f"Error: {str(error)}")
+        page_ranges = input("Error. Enter the page ranges (comma-separated): ").split(",")
+
+    output_filename = input("Enter the output filename: ")
+    while not output_filename.endswith('.pdf'):
+        print("Invalid output filename. Please choose a different output filename.")
+        output_filename = input("Enter the output filename: ")
+
+    split_pdf(filename, page_ranges, output_filename)
+
+def extract_images_to_text_menu():
+    """
+    The function `extract_images_to_text_menu()` prompts the user to enter an image path and an output
+    file path, and then calls the `extract_images_to_text()` function with the provided paths.
+    """
+    image_path = input("Enter the image path: ")
+        
+    while not os.path.isfile(image_path):
+        print("Invalid image path. Please try again.")
+        image_path = input("Enter the image path: ")
+
+    output_file_path = input("Enter the output file path: ")
+        
+    while not output_file_path.endswith(('.png', '.jpg', '.jpeg')):
+        print("Invalid output filename. Please choose a different output filename.")
+        output_file_path = input("Enter the output filename: ")
+
+    extract_images_to_text([image_path], output_file_path)
+
+def mirror_image_menu():
+    """
+    The `mirror_image_menu` function prompts the user to enter an image path and a direction, and then
+    calls the `mirror_image` function with the provided inputs.
+    """
+    image_path = input("Enter the image path: ")
+    while not os.path.isfile(image_path):
+        print("Invalid image path. Please try again.")
+        image_path = input("Enter the image path: ")
+        
+    direction = int(input("Enter the direction (1 for left-right mirror, 2 for top-bottom mirror): "))
+    while not (direction == 1 or direction == 2):
+        direction = int(input("Enter the direction (1 for left-right mirror, 2 for top-bottom mirror): "))
+
+    mirror_image(image_path, direction)
+
+def convert_image_menu():
+    """
+    The function `convert_image_menu` prompts the user to enter an image path and output format,
+    validates the inputs, and then calls the `convert_image` function with the provided inputs.
+    """
+    image_path = input("Enter the image path: ")
+                
+    while not os.path.isfile(image_path):
+        print("Invalid image path. Please try again.")
+        image_path = input("Enter the image path: ")
+
+    output_format = input("Enter the output format: ")
+                    
+    while not output_format.endswith(('.png', '.jpg', '.jpeg')):
+        print("Invalid output filename. Please choose a different output format.")
+        output_format = input("Enter the output format: ")
+            
+    convert_image(image_path, output_format)
+
+def images_to_pdf_menu():
+    """
+    The function `images_to_pdf_menu()` prompts the user to enter a list of image paths, validates the
+    paths, prompts for a PDF name, validates the name, and then calls the `images_to_pdf()` function
+    with the valid image paths and PDF name.
+    """
+    image_paths = input("Enter the image paths (comma-separated): ").split(",")
+    valid_image_paths = []
+
+    for image_path in image_paths:
+        while not os.path.isfile(image_path.strip()):
+            print(f"Invalid image path: {image_path.strip()}. Please try again.")
+            image_path = input("Enter the image path: ")
+        valid_image_paths.append(image_path.strip())
+
+    pdf_name = input("Enter the PDF name: ")
+    while not output_format.endswith(('.pdf')):
+        print("Invalid PDF name. Please choose a different output format.")
+        output_format = input("Enter the output format: ")
+
+    images_to_pdf(valid_image_paths, pdf_name)
+
+def merge_pdf_files_menu():
+    """
+    The function `merge_pdf_files_menu` prompts the user to enter an output PDF filename and choose
+    whether to specify individual PDF files or merge all PDF files in a directory, and then calls the
+    `merge_pdf_files` function accordingly.
+    """
+    output_filename = input("Enter the output PDF filename: ")
+    while not output_filename.endswith(('.pdf')):
+        print("Invalid PDF name. Please choose a different output format.")
+        output_filename = input("Enter the output filename: ")
+        
+    all_files = int(input("Press 1 to specify the pdf files or 2 to merge all of them in the directory: "))
+    while all_files not in [1, 2] or not isinstance(all_files, int):
+        all_files = input("Error! Press 1 to specify the PDF files or 2 to merge all of them in the directory: ")
+        try:
+            all_files = int(all_files)
+        except ValueError:
+            all_files = None
+
+    if all_files == 1:
+        merge_pdf_files(output_filename, all_files=False)
+    elif all_files == 2:
+        merge_pdf_files(output_filename, all_files=True)
+
+def convert_pdf_menu():
+    """
+    The function `convert_pdf_menu()` prompts the user to enter a list of PDF paths, validates the
+    paths, and then calls the `convert_pdf()` function with the valid paths as arguments.
+    """
+    pdf_paths = input("Enter the PDF paths (comma-separated): ").split(",")
+    valid_pdf_paths = []
+
+    for pdf_path in pdf_paths:
+        while not os.path.isfile(pdf_path.strip()):
+            print(f"Invalid pdf path: {pdf_path.strip()}. Please try again.")
+            pdf_path = input("Enter the pdf path: ")
+        valid_pdf_paths.append(pdf_path.strip())
+        
+    convert_pdf(*valid_pdf_paths)
+
+def convert_pdf_to_excel_menu():
+    """
+    The function `convert_pdf_to_excel_menu()` prompts the user to enter a PDF file path, validates the
+    path, and then calls the `convert_pdf_to_excel()` function.
+    """
+    input_pdf_path = input("Enter the input PDF path: ")
+    
+    while not os.path.isfile(input_pdf_path.strip()):
+        print(f"Invalid PDF path: {input_pdf_path.strip()}. Please try again.")
+        input_pdf_path = input("Enter the PDF path: ")
+
+    convert_pdf_to_excel(input_pdf_path)
+
 def menu():
     """
-    The `menu()` function displays a menu of options and performs different actions based on the user's
-    choice.
+    The menu function takes user input to select a specific task and then calls the corresponding
+    sub-menu function.
     """
-    choice = int(input("1.Extract Images to Text\n2.Mirror Image\n3.Convert Image\n4.Convert Images to PDF\n5.Merge PDF Files\n6.Convert PDF to Images or Word\n7.Split PDF\n8.Convert PDF to Excel\nEnter your choice: "))
-
-    if choice == 1:
-        image_path = input("Enter the image path: ")
-        output_file_path = input("Enter the output file path: ")
-        extract_images_to_text([image_path], output_file_path)
-    elif choice == 2:
-        image_path = input("Enter the image path: ")
-        direction = int(input("Enter the direction (1 for left-right mirror, 2 for top-bottom mirror): "))
-        mirror_image(image_path, direction)
-    elif choice == 3:
-        image_path = input("Enter the image path: ")
-        output_format = input("Enter the output format: ")
-        convert_image(image_path, output_format)
-    elif choice == 4:
-        image_paths = input("Enter the image paths (comma-separated): ").split(",")
-        pdf_name = input("Enter the PDF name: ")
-        images_to_pdf(image_paths, pdf_name)
-    elif choice == 5:
-        output_filename = input("Enter the output PDF filename: ")
-        all_files = int(input("Press 1 to specify the pdf files or 2 to merge all of them in the directory: "))
-        if all_files == 1:
-            merge_pdf_files(output_filename, all_files = False)
-        elif all_files == 2:
-            merge_pdf_files(output_filename, all_files = True)
-    elif choice == 6:
-        pdf_paths = input("Enter the PDF paths (comma-separated): ").split(",")
-        convert_pdf(*pdf_paths)
-    elif choice == 7:
-        filename = input("Enter the PDF filename: ")
-        page_ranges = input("Enter the page ranges (comma-separated): ").split(",")
-        split_pdf(filename, page_ranges)
-    elif choice == 8:
-        input_pdf_path = input("Enter the input PDF path: ")
-        output_excel_path = input("Enter the output Excel path: ")
-        convert_pdf_to_excel(input_pdf_path, output_excel_path)
+    try:
+        choice = int(input("1.Extract Images to Text\n2.Mirror Image\n3.Convert Image\n4.Convert Images to PDF\n5.Merge PDF Files\n6.Convert PDF to Images or Word\n7.Split PDF\n8.Convert PDF to Excel\nEnter your choice: "))
+        if choice == 1:
+            extract_images_to_text_menu()
+        elif choice == 2:
+            mirror_image_menu()
+        elif choice == 3:
+            convert_image_menu()
+        elif choice == 4:
+            images_to_pdf_menu()
+        elif choice == 5:
+            merge_pdf_files_menu()
+        elif choice == 6:
+            convert_pdf_menu()
+        elif choice == 7:
+            split_pdf_menu()
+        elif choice == 8:
+            convert_pdf_to_excel_menu()
+    except ValueError:
+        choice = None
 
 menu()
