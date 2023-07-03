@@ -176,6 +176,59 @@ def merge_files_by_extension(merged_file_name, extension):
 
     return merged_file
 
+# Menu functions
+def merge_menu():
+    """
+    The `merge_menu` function allows the user to choose different options for merging files, including
+    entering filenames directly, specifying a file to read filenames from, or including all files in a
+    directory with a specified extension.
+    """
+    choice = int(input("Choose an option:\n1. Enter filenames directly\n2. Specify a file to read filenames from\n3. To include all files in this directory with a specified extension: "))
+
+    if choice == 1:
+        files = [file.strip() for file in input("Enter the file names to merge (separated by commas): ").split(",")]
+    elif choice == 2:
+        filename = input("Enter the filename which contains the files: ")
+        files = get_filenames_from_file(filename)
+    elif choice == 3:
+        extension = input("Enter the file extension (e.g., mp4, mp3, wav): ")
+        files = collect_filenames(extension)
+        os.remove("filenames.txt")
+
+    if files:
+        output_filename = input("Enter the output file name: ")
+        merge_video_or_audio_files(files, output_filename)
+    else:
+        print("No files to merge.")
+        exit(0)
+        
+def convert_menu():
+    """
+    The `convert_menu` function allows the user to choose between collecting filenames from the current
+    directory or entering them manually, converts video files to text, merges the resulting text files,
+    and optionally removes the individual text files after merging.
+    """
+    choice = int(input("Enter \n1 to collect filenames from the current directory\n2 to enter filenames manually: "))
+    
+    if choice == 1:
+        extension = input("Enter the extension you want: ")
+        filenames = collect_filenames(extension)
+    elif choice == 2:
+        filenames = input("Enter the filenames (separated by commas): ").split(",")
+    else:
+        print("Invalid choice.")
+        exit(0)
+
+    convert_video_to_text(filenames)
+    merged_file = merge_files_by_extension("merged", ".txt")
+
+    remove_txt_files = input("Do you want to remove the text files after merging (yes/no)? ")
+        
+    if remove_txt_files.lower() == "yes":
+        for file in os.listdir():
+            if file.endswith(".txt") and file != merged_file:
+                os.remove(file)
+
 def main():
     """
     The main function allows the user to either merge video/audio files or convert them to text, based
@@ -184,45 +237,8 @@ def main():
     merge_or_convert = int(input("1. To merge video/audio\n2. To convert video/audio to text: "))
     
     if merge_or_convert == 1:
-        choice = int(input("Choose an option:\n1. Enter filenames directly\n2. Specify a file to read filenames from\n3. To include all files in this directory with a specified extension: "))
-
-        if choice == 1:
-            files = [file.strip() for file in input("Enter the file names to merge (separated by commas): ").split(",")]
-        elif choice == 2:
-            filename = input("Enter the filename which contains the files: ")
-            files = get_filenames_from_file(filename)
-        elif choice == 3:
-            extension = input("Enter the file extension (e.g., mp4, mp3, wav): ")
-            files = collect_filenames(extension)
-            os.remove("filenames.txt")
-
-        if files:
-            output_filename = input("Enter the output file name: ")
-            merge_video_or_audio_files(files, output_filename)
-        else:
-            print("No files to merge.")
-            exit(0)
-    
+        merge_menu()
     elif merge_or_convert == 2:
-        choice = int(input("Enter \n1 to collect filenames from the current directory\n2 to enter filenames manually: "))
+        convert_menu()
         
-        if choice == 1:
-            extension = input("Enter the extension you want: ")
-            filenames = collect_filenames(extension)
-        elif choice == 2:
-            filenames = input("Enter the filenames (separated by commas): ").split(",")
-        else:
-            print("Invalid choice.")
-            exit(0)
-
-        convert_video_to_text(filenames)
-        merged_file = merge_files_by_extension("merged", ".txt")
-
-        remove_txt_files = input("Do you want to remove the text files after merging (yes/no)? ")
-        
-        if remove_txt_files.lower() == "yes":
-            for file in os.listdir():
-                if file.endswith(".txt") and file != merged_file:
-                    os.remove(file)
-
 main()

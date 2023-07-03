@@ -1,5 +1,6 @@
-import tkinter as tk, subprocess, yt_dlp
+import tkinter as tk
 from tkinter import messagebox, filedialog
+import subprocess, yt_dlp
 
 def validate_link(link):
     """

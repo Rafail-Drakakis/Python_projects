@@ -292,121 +292,202 @@ def decrypt_text(ciphertext, key):
             decrypted_text += char
     return decrypted_text
 
-def main():
+def get_valid_choice():
     """
-    The main function provides a menu for various image and text encryption and decryption operations,
-    allowing the user to choose an option and perform the desired operation.
-    :return: The main function does not explicitly return any value.
+    The function `get_valid_choice()` prompts the user to enter a number from 1 to 8 and returns the
+    choice if it is valid, otherwise it displays an error message and returns None.
+    :return: the user's choice as an integer if it is a valid choice (between 1 and 8), and it is
+    returning None if the user's input is not a valid choice.
     """
     try:
         choice = int(input("Menu:\n1. Hide a message in an image\n2. Decode a message from an image\n3. Hide a file in an image\n4. Decode a file from an image\n5. Encrypt a text file\n6. Decrypt a text file\n7. Encrypt text\n8. Decrypt text: "))
         if choice not in [1, 2, 3, 4, 5, 6, 7, 8]:
             print("Invalid choice. Please enter a number from 1 to 8.")
-            return
-
-        if choice in [1, 3]:
-            image_filename = input("Enter the image filename: ")
-            if not os.path.isfile(image_filename):
-                print("Image file not found.")
-                return
-
-        if choice == 1:
-            try:
-                message_to_hide = input("Enter the message to hide: ")
-                key = input("Enter the key: ")
-                encoded_image = input("Enter the encoded image filename: ")
-                success = hide_message_in_png(image_filename, message_to_hide, key, encoded_image)
-                if success:
-                    print("Message hidden successfully.")
-            except Exception as e:
-                print("An error occurred:", str(e))
-
-        elif choice == 2:
-            try:
-                encoded_image = input("Enter the encoded image filename: ")
-                if not os.path.isfile(encoded_image):
-                    print("File not found.")
-                    return
-                key = input("Enter the key: ")
-                decoded_message = decode_message_from_png(encoded_image, key)
-                print("Decoded message:", decoded_message)
-            except Exception as e:
-                print("An error occurred:", str(e))
-
-        elif choice == 3:
-            try:
-                hidden_file = input("Enter the file to hide: ")
-                if not os.path.isfile(hidden_file):
-                    print("File not found.")
-                    return
-                key = input("Enter the key: ")
-                encoded_image = input("Enter the encoded image filename: ")
-                success = hide_file_in_png(image_filename, hidden_file, key, encoded_image)
-                if success:
-                    print("File hidden successfully.")
-            except Exception as e:
-                print("An error occurred:", str(e))
-
-        elif choice == 4:
-            try:
-                encoded_image = input("Enter the encoded image filename: ")
-                if not os.path.isfile(encoded_image):
-                    print("File not found.")
-                    return
-                decoded_file = input("Enter the decoded file filename: ")
-                success = decode_file_from_png(encoded_image, decoded_file)
-                if success:
-                    print(f"File decoded and saved as {decoded_file}")
-            except Exception as e:
-                print("An error occurred:", str(e))
-
-        elif choice == 5:
-            try:
-                input_file = input("Enter the input file to encrypt: ")
-                if not os.path.isfile(input_file):
-                    print("File not found.")
-                    return
-                encrypted_output_file = input("Enter the encrypted output file filename: ")
-                key = input("Enter the encryption key: ")
-                success = encrypt_text_file(input_file, key, encrypted_output_file)
-                if success:
-                    print(f"Text file {input_file} encrypted and saved as {encrypted_output_file}")
-            except Exception as e:
-                print("An error occurred:", str(e))
-
-        elif choice == 6:
-            try:
-                encrypted_file = input("Enter the encrypted file to decrypt: ")
-                if not os.path.isfile(encrypted_file):
-                    print("File not found.")
-                    return
-                decrypted_output_file = input("Enter the decrypted output file filename: ")
-                key = input("Enter the decryption key: ")
-                success = decrypt_text_file(encrypted_file, key, decrypted_output_file)
-                if success:
-                    print(f"Text file {encrypted_file} decrypted and saved as {decrypted_output_file}")
-            except Exception as e:
-                print("An error occurred:", str(e))
-
-        elif choice == 7:
-            try:
-                plaintext = input("Enter the text to encrypt: ")
-                key = input("Enter the encryption key: ")
-                encrypted_text = encrypt_text(plaintext, key)
-                print("Encrypted text:", encrypted_text)
-            except Exception as e:
-                print("An error occurred:", str(e))
-
-        elif choice == 8:
-            try:
-                ciphertext = input("Enter the text to decrypt: ")
-                key = input("Enter the decryption key: ")
-                decrypted_text = decrypt_text(ciphertext, key)
-                print("Decrypted text:", decrypted_text)
-            except Exception as e:
-                print("An error occurred:", str(e))
-    
+            return None
+        return choice
     except ValueError:
         print("Invalid choice. Please enter a number from 1 to 8.")
+        return None
+
+#Menu functions
+
+def hide_message_in_png_menu():
+    """
+    The function `hide_message_in_png_menu` prompts the user to enter an image filename, a message to
+    hide, a key, and an encoded image filename, and then calls the `hide_message_in_png` function to
+    hide the message in the image using steganography.
+    :return: nothing.
+    """
+    try:
+        image_filename = input("Enter the image filename: ")
+        if not os.path.isfile(image_filename):
+            print("Image file not found.")
+            return
+        message_to_hide = input("Enter the message to hide: ")
+        key = input("Enter the key: ")
+        encoded_image = input("Enter the encoded image filename: ")
+        success = hide_message_in_png(image_filename, message_to_hide, key, encoded_image)
+        if success:
+            print("Message hidden successfully.")
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def decode_message_from_png_menu():
+    """
+    The function prompts the user to enter an encoded image filename and a key, then decodes a message
+    from the PNG image using the provided key and prints the decoded message.
+    :return: nothing.
+    """
+    try:
+        encoded_image = input("Enter the encoded image filename: ")
+        if not os.path.isfile(encoded_image):
+            print("File not found.")
+            return
+        key = input("Enter the key: ")
+        decoded_message = decode_message_from_png(encoded_image, key)
+        print("Decoded message:", decoded_message)
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def hide_file_in_png_menu():
+    """
+    The function `hide_file_in_png_menu` prompts the user to enter an image filename, a file to hide, a
+    key, and an encoded image filename, and then calls the `hide_file_in_png` function to hide the file
+    in the PNG image using steganography.
+    :return: nothing.
+    """
+    try:
+        image_filename = input("Enter the image filename: ")
+        if not os.path.isfile(image_filename):
+            print("Image file not found.")
+            return
+        hidden_file = input("Enter the file to hide: ")
+        if not os.path.isfile(hidden_file):
+            print("File not found.")
+            return
+        key = input("Enter the key: ")
+        encoded_image = input("Enter the encoded image filename: ")
+        success = hide_file_in_png(image_filename, hidden_file, key, encoded_image)
+        if success:
+            print("File hidden successfully.")
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def decode_file_from_png_menu():
+    """
+    The function prompts the user to enter the filenames of an encoded image and a decoded file, then
+    attempts to decode the image and save the result as the specified file.
+    :return: nothing.
+    """
+    try:
+        encoded_image = input("Enter the encoded image filename: ")
+        if not os.path.isfile(encoded_image):
+            print("File not found.")
+            return
+        decoded_file = input("Enter the decoded file filename: ")
+        success = decode_file_from_png(encoded_image, decoded_file)
+        if success:
+            print(f"File decoded and saved as {decoded_file}")
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def encrypt_text_file_menu():
+    """
+    The function `encrypt_text_file_menu()` prompts the user to enter an input file, an output file
+    name, and an encryption key, and then calls the `encrypt_text_file()` function to encrypt the input
+    file using the provided key and save the encrypted text to the output file.
+    :return: nothing.
+    """
+    try:
+        input_file = input("Enter the input file to encrypt: ")
+        if not os.path.isfile(input_file):
+            print("File not found.")
+            return
+        encrypted_output_file = input("Enter the encrypted output file filename: ")
+        key = input("Enter the encryption key: ")
+        success = encrypt_text_file(input_file, key, encrypted_output_file)
+        if success:
+            print(f"Text file {input_file} encrypted and saved as {encrypted_output_file}")
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def decrypt_text_file_menu():
+    """
+    The function `decrypt_text_file_menu()` prompts the user to enter an encrypted file, a decryption
+    key, and a filename for the decrypted output file, and then calls the `decrypt_text_file()` function
+    to decrypt the file using the provided key.
+    :return: nothing.
+    """
+    try:
+        encrypted_file = input("Enter the encrypted file to decrypt: ")
+        if not os.path.isfile(encrypted_file):
+            print("File not found.")
+            return
+        decrypted_output_file = input("Enter the decrypted output file filename: ")
+        key = input("Enter the decryption key: ")
+        success = decrypt_text_file(encrypted_file, key, decrypted_output_file)
+        if success:
+            print(f"Text file {encrypted_file} decrypted and saved as {decrypted_output_file}")
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def encrypt_text_menu():
+    """
+    The function `encrypt_text_menu()` prompts the user to enter a plaintext and encryption key, then
+    calls the `encrypt_text()` function to encrypt the plaintext using the key, and finally prints the
+    encrypted text.
+    """
+    try:
+        plaintext = input("Enter the text to encrypt: ")
+        key = input("Enter the encryption key: ")
+        encrypted_text = encrypt_text(plaintext, key)
+        print("Encrypted text:", encrypted_text)
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def decrypt_text_menu():
+    """
+    The function `decrypt_text_menu` prompts the user to enter a ciphertext and a decryption key, then
+    calls the `decrypt_text` function to decrypt the text and prints the decrypted text.
+    """
+    try:
+        ciphertext = input("Enter the text to decrypt: ")
+        key = input("Enter the decryption key: ")
+        decrypted_text = decrypt_text(ciphertext, key)
+        print("Decrypted text:", decrypted_text)
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+def process_choice(choice):
+    """
+    The function `process_choice` takes a choice as input and calls the corresponding menu function
+    based on the choice.
+    
+    :param choice: The parameter "choice" is an integer representing the user's choice from a menu
+    """
+    if choice == 1:
+        hide_message_in_png_menu()
+    elif choice == 2:
+        decode_message_from_png_menu()
+    elif choice == 3:
+        hide_file_in_png_menu()
+    elif choice == 4:
+        decode_file_from_png_menu()
+    elif choice == 5:
+        encrypt_text_file_menu()
+    elif choice == 6:
+        decrypt_text_file_menu()
+    elif choice == 7:
+        encrypt_text_menu()
+    elif choice == 8:
+        decrypt_text_menu()
+
+def main():
+    """
+    The main function gets a valid choice from the user and processes it.
+    """
+    choice = get_valid_choice()
+    if choice is not None:
+        process_choice(choice)
 
 main()
