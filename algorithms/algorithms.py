@@ -1,32 +1,6 @@
 import glob, os, time, shutil, requests, pyshorteners, urllib.request, speech_recognition
 from moviepy.editor import VideoFileClip
 
-#audio_to_text.py
-def convert_video_to_text(input_filename, output_filename):
-    # Convert video to audio
-    video = VideoFileClip(input_filename)
-    audio = video.audio
-    audio.write_audiofile("temp.wav", codec='pcm_s16le')  # Save audio to a temporary file
-
-    # Convert audio to text
-    recognizer = speech_recognition.Recognizer()
-
-    with speech_recognition.AudioFile("temp.wav") as audio_file:
-        audio = recognizer.record(audio_file)
-
-    text = recognizer.recognize_google(audio)
-
-    # Save the transcriptions to a text file
-    with open(output_filename, "w") as output_file:
-        output_file.write(text)
-
-    # Clean up temporary file
-    os.remove("temp.wav")
-
-    remove = input("Do you want to remove the original file (yes/no)? ")
-    if remove == "yes":
-        os.remove(input_filename)
-
 #file_organizer.py
 def file_organizer():
     # Get the current working directory
@@ -155,8 +129,6 @@ def main():
     os.remove("filenames.txt")
     
     print("Merged file created", merge_files_by_extension(".py"))
-
-    print("Transcription complete.", convert_video_to_text("Panama_Canal.mp4", "Panama_Canal.txt"))
 
     #print(f'Time taken to execute lotto_numbers: {lotto_numbers("combinations.txt"):.10f} seconds')
     #print("files have been organized", file_organizer())
