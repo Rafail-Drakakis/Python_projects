@@ -2,6 +2,18 @@ import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
 def get_info(mobile_number, filename, is_one):
+    """
+    The function `get_info` takes a mobile number, a filename, and a boolean flag as input, and writes
+    information about the mobile number to the specified file if the number is valid.
+    
+    :param mobile_number: The mobile_number parameter is the phone number that you want to get
+    information about. It should be in a string format
+    :param filename: The `filename` parameter is the name of the file where the information about the
+    mobile number will be saved
+    :param is_one: The parameter "is_one" is a boolean value that determines whether to print a
+    confirmation message after saving the information for the phone number. If "is_one" is True, a
+    confirmation message will be printed. If "is_one" is False, no confirmation message will be printed
+    """
     parsed_number = phonenumbers.parse(mobile_number)
     if phonenumbers.is_valid_number(parsed_number):
         with open(filename, 'a') as file:
@@ -19,6 +31,14 @@ def get_info(mobile_number, filename, is_one):
         print("Invalid mobile number:", mobile_number)
 
 def enter_file_path(filename, file_path):
+    """
+    The function `enter_file_path` reads a file containing phone numbers, calls the `get_info` function
+    for each phone number, and saves the information in the specified file.
+    
+    :param filename: The filename parameter is the name of the file where the information will be saved
+    :param file_path: The file_path parameter is a string that represents the path to the file that
+    contains phone numbers
+    """
     try:
         with open(file_path, 'r') as file:
             phone_numbers = file.read().splitlines()
@@ -29,6 +49,10 @@ def enter_file_path(filename, file_path):
         print('File not found. Please provide a valid file path.')
 
 def main():
+    """
+    The main function allows the user to choose between entering a single phone number or entering the
+    path to a text file, and then prompts for the necessary information based on the user's choice.
+    """
     choice = int(input("1. Enter a single phone number\n2. Enter the path to a text file\n"))
     filename = input("Enter the name of the file you want to save the information: ")
     if choice == 1:

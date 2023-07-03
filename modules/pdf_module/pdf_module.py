@@ -2,6 +2,15 @@ import os, glob, PyPDF2, pdf2image, pdf2docx
 import tabula, openpyxl, os, tempfile, pandas as pd
 
 def split_pdf(filename, page_ranges):
+    """
+    The `split_pdf` function takes a PDF file and a list of page ranges as input, and creates a new PDF
+    file containing only the specified pages.
+    
+    :param filename: The `filename` parameter is the name of the PDF file that you want to split. It
+    should be a string representing the file path or file name of the PDF file
+    :param page_ranges: The `page_ranges` parameter is a list of page ranges that specify which pages to
+    extract from the PDF file. Each page range can be specified in one of the following formats:
+    """
     all_pages = []
     for page_range in page_ranges:
         if isinstance(page_range, int):
@@ -35,6 +44,10 @@ def split_pdf(filename, page_ranges):
             writer.write(new_file)
 
 def convert_pdf(*pdf_paths):
+    """
+    The `convert_pdf` function converts PDF files to either images or Word documents based on the user's
+    input.
+    """
     conversion_option = input("Enter the conversion option (word/images): ")
 
     if conversion_option.lower() == "images":
@@ -51,6 +64,13 @@ def convert_pdf(*pdf_paths):
             docx_paths.append(docx_path)
 
 def merge_pdf_files(output_filename):
+    """
+    The function `merge_pdf_files` merges multiple PDF files into a single PDF file, and optionally
+    deletes the original files.
+    
+    :param output_filename: The `output_filename` parameter is the name of the merged PDF file that will
+    be created. It should be a string representing the desired name of the output file
+    """
     files = sorted(glob.glob(os.path.join(os.getcwd(), f'*.pdf')))
     target_file = "filenames.txt"
 
@@ -78,6 +98,18 @@ def merge_pdf_files(output_filename):
         os.remove(target_file)
 
 def convert_pdf_to_excel(input_pdf_path, output_excel_path):
+    """
+    The function `convert_pdf_to_excel` converts a PDF file into an Excel file by using the `tabula`
+    library in Python.
+    
+    :param input_pdf_path: The input_pdf_path parameter is the file path of the PDF file that you want
+    to convert to Excel. It should be a string that specifies the location of the PDF file on your
+    computer
+    :param output_excel_path: The `output_excel_path` parameter is the file path where you want to save
+    the converted Excel file. It should include the file name and the extension `.xlsx`. For example, if
+    you want to save the file as `converted_data.xlsx` in the current directory, you can set
+    `output_excel
+    """
     # Convert PDF to Excel
     pdf_data_frames = tabula.read_pdf(input_pdf_path, pages='all')
     with pd.ExcelWriter(output_excel_path, engine='openpyxl') as excel_writer:
@@ -85,12 +117,27 @@ def convert_pdf_to_excel(input_pdf_path, output_excel_path):
             df.to_excel(excel_writer, sheet_name=f"Sheet{i+1}", index=False)
 
 def merge_excel_sheets(input_excel_path, output_excel_path):
+    """
+    The function `merge_excel_sheets` merges multiple sheets from an input Excel file into a single
+    sheet and saves it to an output Excel file.
+    
+    :param input_excel_path: The path to the input Excel file that contains the sheets you want to merge
+    :param output_excel_path: The path where the merged Excel sheets will be saved
+    """
     # Merge Excel sheets
     dfs = pd.read_excel(input_excel_path, sheet_name=None)
     merged_data_frame = pd.concat(dfs.values(), ignore_index=True)
     merged_data_frame.to_excel(output_excel_path, index=False)
 
 def shift_empty_cells(output_excel_path):
+    """
+    The function `shift_empty_cells` takes an output Excel file path as input, loads the file, and
+    shifts the values of empty cells to the right, filling them with the values of the non-empty cells
+    in the same row.
+    
+    :param output_excel_path: The `output_excel_path` parameter is the file path of the Excel file that
+    you want to modify. It should be a string that specifies the location of the file on your computer
+    """
     # Load output Excel file
     excel_workbook = openpyxl.load_workbook(output_excel_path)
     for worksheet_name in excel_workbook.sheetnames:
@@ -110,6 +157,13 @@ def shift_empty_cells(output_excel_path):
     excel_workbook.save(output_excel_path)
 
 def flow(input_pdf_path):
+    """
+    The `flow` function takes an input PDF file path, converts it to an Excel file, merges the sheets in
+    the Excel file, and optionally shifts empty cells before saving the final Excel file.
+    
+    :param input_pdf_path: The input_pdf_path parameter is the file path of the PDF file that you want
+    to convert to an Excel file
+    """
     # Define output Excel file path
     output_excel_path = os.path.splitext(input_pdf_path)[0] + ".xlsx"
 
@@ -137,9 +191,13 @@ def flow(input_pdf_path):
             os.remove(merged_excel_path)
 
 def main():
-    #merge_pdf_files("merged.pdf")
-    #convert_pdf("sample.pdf")
-    #split_pdf("sample.pdf", [1,"3-5"])
-    #flow("table.pdf")
+    """
+    The main function performs various operations on PDF files, including merging, converting, and
+    splitting.
+    """
+    merge_pdf_files("merged.pdf")
+    convert_pdf("sample.pdf")
+    split_pdf("sample.pdf", [1,"3-5"])
+    flow("table.pdf")
 
 main()

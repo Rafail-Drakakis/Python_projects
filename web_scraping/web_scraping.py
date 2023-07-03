@@ -9,6 +9,16 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 #site_downloader.py
 def collect_filenames(directory, filetype):
+    """
+    The function `collect_filenames` collects all filenames with a specific filetype in a given
+    directory and writes them to a text file.
+    
+    :param directory: The `directory` parameter is the path to the directory where you want to collect
+    the filenames from. It can be an absolute path or a relative path
+    :param filetype: The `filetype` parameter is a string that specifies the file extension or type you
+    want to collect. For example, if you want to collect all the text files in a directory, you would
+    pass `'txt'` as the `filetype` parameter
+    """
     file_list = []
     for root, dirs, files in os.walk(directory):
         for file in files:
@@ -22,6 +32,13 @@ def collect_filenames(directory, filetype):
             output_file.write(file + '\n')
 
 def merge_pdfs(output_filename, folder_name):
+    """
+    The function `merge_pdfs` merges multiple PDF files from a specified folder into a single PDF file.
+    
+    :param output_filename: The name of the merged PDF file that will be created
+    :param folder_name: The `folder_name` parameter is the name of the folder where the PDF files are
+    located
+    """
     pdf_directory = os.path.join(os.getcwd(), folder_name)
     text_file = 'file_list.txt'
     merged_pdf = output_filename
@@ -46,6 +63,14 @@ def merge_pdfs(output_filename, folder_name):
         print("No PDF files found for merging.")
 
 def download_files_from_website(url, folder_name):
+    """
+    The function `download_files_from_website` downloads files from a given website URL and saves them
+    in a specified folder.
+    
+    :param url: The URL of the website from which you want to download files
+    :param folder_name: The `folder_name` parameter is the name of the folder where the downloaded files
+    will be saved
+    """
     if not url.startswith("http://") and not url.startswith("https://"):
         url = "http://" + url
 
@@ -67,6 +92,13 @@ def download_files_from_website(url, folder_name):
 
 #clean_folder.py
 def clean_up_folder(folder_path):
+    """
+    The `clean_up_folder` function deletes files with .html and .php extensions and unzips files with
+    supported extensions in a given folder path.
+    
+    :param folder_path: The `folder_path` parameter is a string that represents the path to the folder
+    that you want to clean up
+    """
     for root, dirs, files in os.walk(folder_path):
         for file in files:
             file_path = os.path.join(root, file)
@@ -101,6 +133,12 @@ def clean_up_folder(folder_path):
 
 #file_organizer.py
 def file_organizer(directory):
+    """
+    The `file_organizer` function organizes files in a given directory by moving them into folders based
+    on their file extensions.
+    
+    :param directory: The `directory` parameter is the path to the directory where the files are located
+    """
     # Get all files in the directory
     files = os.listdir(directory)
 
@@ -136,6 +174,15 @@ def file_organizer(directory):
     
 #scrape_data.py
 def scrape_text_to_file(url, folder_name):
+    """
+    The function `scrape_text_to_file` scrapes the main text from a web page specified by the `url`
+    parameter, saves it to a text file in a folder specified by the `folder_name` parameter, and
+    performs some cleaning operations on the text before saving it.
+    
+    :param url: The `url` parameter is the URL of the web page you want to scrape the text from
+    :param folder_name: The `folder_name` parameter is the name of the folder where you want to save the
+    text file. It will be used as both the folder name and the file name for the text file
+    """
     response = requests.get(url)
     if response.status_code != 200:
         print('Error: Failed to get the web page')
@@ -152,6 +199,14 @@ def scrape_text_to_file(url, folder_name):
     clean_text_file(f"{folder_name}/{folder_name}.txt")
 
 def scrape_images_to_file(url, folder_name):
+    """
+    The function `scrape_images_to_file` downloads all the images from a given URL and saves them to a
+    specified folder.
+    
+    :param url: The `url` parameter is the URL of the web page from which you want to scrape images
+    :param folder_name: The `folder_name` parameter is the name of the folder where the scraped images
+    will be saved
+    """
     response = requests.get(url)
     if response.status_code != 200:
         print('Error: Failed to get the web page')
@@ -172,6 +227,12 @@ def scrape_images_to_file(url, folder_name):
 
 #clean_text.py
 def replace_chars(text):
+    """
+    The function `replace_chars` replaces certain characters in a given text with spaces.
+    
+    :param text: The `text` parameter is a string that represents the text you want to modify
+    :return: the modified text after replacing certain characters.
+    """
     chars_to_replace = [f"[{i}]" for i in range(1, 100)]
     for char in chars_to_replace:
         text = text.replace(char, ' ')
@@ -179,6 +240,16 @@ def replace_chars(text):
     return text
 
 def clean_text_file(filename):
+    """
+    The function `clean_text_file` takes a filename as input, reads the text from the file, cleans the
+    text by replacing multiple consecutive new lines with a single new line and adding three spaces
+    instead of a new line, replaces three or more spaces with two spaces, creates a new Word document,
+    adds the cleaned text to the document with a specified style, saves the document with a .docx
+    extension, and finally deletes the original text file.
+    
+    :param filename: The `filename` parameter is the name of the text file that you want to clean and
+    convert to a Word document
+    """
     if not os.path.isfile(filename):
         print(f'Error: {filename} does not exist')
         sys.exit(1)
@@ -200,6 +271,11 @@ def clean_text_file(filename):
 
 #main.py
 def web_scraping():
+    """
+    The `web_scraping` function allows users to choose between scraping text and images from a website
+    or downloading files from a website, and performs the corresponding actions based on the user's
+    choice.
+    """
     choice = int(input("=== Web Scraping Menu ===\n1. To scrape text and images from a website\n2. To download files from a website: "))
 
     if choice > 2 or choice < 1:

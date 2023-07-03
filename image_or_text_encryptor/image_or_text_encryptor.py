@@ -3,6 +3,22 @@ import numpy as np
 import os
 
 def hide_message_in_png(image_filename, message_to_hide, key, encoded_image):
+    """
+    The function `hide_message_in_png` takes an image file, a message to hide, a key, and an output file
+    name, and encodes the message into the image using the LSB (Least Significant Bit) technique.
+    
+    :param image_filename: The filename of the image you want to hide the message in
+    :param message_to_hide: The `message_to_hide` parameter is a string that represents the message you
+    want to hide in the PNG image
+    :param key: The "key" parameter is a string that is used to ensure the integrity of the hidden
+    message. It is appended to the end of the message before encoding it into the image. The key is
+    later used to extract the message from the encoded image
+    :param encoded_image: The `encoded_image` parameter is the filename or path where the encoded image
+    will be saved. It is the output file that will contain the original image with the hidden message
+    :return: a boolean value. It returns True if the message was successfully hidden in the image and
+    saved as the encoded image file. It returns False if there was an error, such as the image file not
+    being found or not enough space in the image to hide the message.
+    """
     try:
         image = Image.open(image_filename)
         width, height = image.size
@@ -47,6 +63,19 @@ def hide_message_in_png(image_filename, message_to_hide, key, encoded_image):
         return False
 
 def decode_message_from_png(image_filename, key):
+    """
+    The function `decode_message_from_png` takes an image file and a key as input, decodes a hidden
+    message from the image, and returns the message up to the occurrence of the key.
+    
+    :param image_filename: The image_filename parameter is the name or path of the PNG image file from
+    which you want to decode the message
+    :param key: The `key` parameter in the `decode_message_from_png` function is a string that
+    represents the keyword or phrase that you are looking for in the decoded message. It is used to
+    determine the portion of the decoded message that should be returned. If the `key` is found in the
+    decoded message
+    :return: The function `decode_message_from_png` returns either the decoded message (up to the
+    occurrence of the key) or the string "Couldn't find the message."
+    """
     try:
         image = Image.open(image_filename)
         img_array = np.array(image)
@@ -70,6 +99,21 @@ def decode_message_from_png(image_filename, key):
         return None
 
 def hide_file_in_png(image_filename, file_to_hide, key, encoded_image):
+    """
+    The function `hide_file_in_png` takes an image file, a file to hide, a key, and an encoded image
+    file as input, and hides the file within the image using steganography techniques.
+    
+    :param image_filename: The filename of the image in which you want to hide the file
+    :param file_to_hide: The `file_to_hide` parameter is the name or path of the file that you want to
+    hide within the PNG image
+    :param key: The "key" parameter is a string that is used to encode and decode the hidden file in the
+    image. It is used as a secret key to ensure that only the intended recipient can access the hidden
+    file
+    :param encoded_image: The `encoded_image` parameter is the filename of the resulting image file that
+    will contain the hidden file
+    :return: a boolean value. It returns True if the file hiding process is successful, and False if
+    there is an error or exception occurs during the process.
+    """
     try:
         image = Image.open(image_filename)
         width, height = image.size
@@ -115,6 +159,17 @@ def hide_file_in_png(image_filename, file_to_hide, key, encoded_image):
         return False
 
 def decode_file_from_png(image_filename, decoded_file):
+    """
+    The function `decode_file_from_png` decodes a file from a PNG image and saves it as a separate file.
+    
+    :param image_filename: The image_filename parameter is the name or path of the PNG image file that
+    you want to decode
+    :param decoded_file: The `decoded_file` parameter is the name or path of the file where the decoded
+    data will be saved
+    :return: a string that indicates the status of the decoding process. If the decoding is successful
+    and the file is saved, the function will return a string that says "File decoded and saved as
+    [decoded_file]". If the image file is not found, the function will return None.
+    """
     try:
         image = Image.open(image_filename)
         img_array = np.array(image)
@@ -137,6 +192,18 @@ def decode_file_from_png(image_filename, decoded_file):
         return None
 
 def encrypt_text(plaintext, key):
+    """
+    The `encrypt_text` function takes a plaintext and a key as input, and returns the encrypted text by
+    shifting each alphabetic character in the plaintext based on the corresponding character in the key.
+    
+    :param plaintext: The `plaintext` parameter is the text that you want to encrypt. It can be any
+    string of characters, but only alphabetic characters will be encrypted. Any non-alphabetic
+    characters will remain unchanged in the encrypted text
+    :param key: The "key" parameter is a string that represents the encryption key. It is used to
+    determine the shift value for each character in the plaintext. The length of the key determines how
+    many characters are shifted before wrapping around the alphabet
+    :return: The function `encrypt_text` returns the encrypted text as a string.
+    """
     encrypted_text = ""
     key_length = len(key)
     for i, char in enumerate(plaintext):
@@ -152,6 +219,18 @@ def encrypt_text(plaintext, key):
     return encrypted_text
 
 def encrypt_text_file(file_name, key, output_file):
+    """
+    The function `encrypt_text_file` reads a text file, encrypts its contents using a given key, and
+    writes the encrypted text to an output file.
+    
+    :param file_name: The name of the input text file that you want to encrypt. This should be a string
+    that includes the file extension (e.g., "input.txt")
+    :param key: The "key" parameter is the encryption key that will be used to encrypt the text. It is a
+    string or a number that determines how the text will be scrambled
+    :param output_file: The `output_file` parameter is the name of the file where the encrypted text
+    will be written. It is the file that will be created or overwritten with the encrypted text
+    :return: the FileNotFoundError exception if the file specified by file_name is not found.
+    """
     try:
         with open(file_name, 'r') as file:
             plaintext = file.read()
@@ -164,6 +243,18 @@ def encrypt_text_file(file_name, key, output_file):
         return True
 
 def decrypt_text_file(file_name, key, output_file):
+    """
+    The function `decrypt_text_file` takes a file name, a key, and an output file name as input, reads
+    the contents of the input file, decrypts the text using the provided key, and saves the decrypted
+    text to the output file.
+    
+    :param file_name: The name of the text file that you want to decrypt
+    :param key: The "key" parameter is the encryption key that is used to decrypt the text file. It is a
+    string or a value that is used to reverse the encryption process and obtain the original text
+    :param output_file: The `output_file` parameter is the name of the file where the decrypted text
+    will be saved
+    :return: a string that states the text file has been decrypted and saved as the output file.
+    """
     try:
         with open(file_name, 'r') as file:
             ciphertext = file.read()
@@ -176,6 +267,17 @@ def decrypt_text_file(file_name, key, output_file):
         return None
 
 def decrypt_text(ciphertext, key):
+    """
+    The `decrypt_text` function takes a ciphertext and a key as input and returns the decrypted text
+    using a simple Caesar cipher decryption algorithm.
+    
+    :param ciphertext: The `ciphertext` parameter is the encrypted text that you want to decrypt. It
+    should be a string containing alphabetic characters (both uppercase and lowercase) and possibly
+    other non-alphabetic characters
+    :param key: The "key" parameter is a string that represents the encryption key used to decrypt the
+    ciphertext
+    :return: the decrypted text.
+    """
     decrypted_text = ""
     key_length = len(key)
     for i, char in enumerate(ciphertext):
@@ -191,6 +293,11 @@ def decrypt_text(ciphertext, key):
     return decrypted_text
 
 def main():
+    """
+    The main function provides a menu for various image and text encryption and decryption operations,
+    allowing the user to choose an option and perform the desired operation.
+    :return: The main function does not explicitly return any value.
+    """
     try:
         choice = int(input("Menu:\n1. Hide a message in an image\n2. Decode a message from an image\n3. Hide a file in an image\n4. Decode a file from an image\n5. Encrypt a text file\n6. Decrypt a text file\n7. Encrypt text\n8. Decrypt text: "))
         if choice not in [1, 2, 3, 4, 5, 6, 7, 8]:
