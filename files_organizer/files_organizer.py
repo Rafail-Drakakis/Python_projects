@@ -1,7 +1,7 @@
 import os
 import shutil
-import tkinter as tk
-from tkinter import filedialog
+import tkinter
+from tkinter import filedialog, messagebox
 
 def files_organizer():
     """
@@ -46,15 +46,15 @@ def files_organizer():
         shutil.move(src_path, dst_path)
 
     # Show a message box indicating the files have been organized
-    tk.messagebox.showinfo("Files Organized", "Files have been organized successfully!")
+    messagebox.showinfo("Files Organized", "Files have been organized successfully!")
 
 # Create the main GUI window
-window = tk.Tk()
+window = tkinter.Tk()
 window.title("Files Organizer")
-window.geometry("300x200")
+window.geometry("200x200")
 
 # Create a button to trigger the files_organizer function
-organize_button = tk.Button(window, text="Organize Files", command=files_organizer)
+organize_button = tkinter.Button(window, text="Organize Files", command=files_organizer)
 organize_button.pack(pady=10)
 
 # Run the GUI main loop
