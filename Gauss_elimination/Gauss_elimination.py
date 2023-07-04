@@ -162,18 +162,18 @@ def gauss_elimination_recursive(A, verbose):
 def input_array():
     while True:
         try:
-            dimensions = int(input("Enter the number of dimensions for the array: "))
-            if dimensions <= 0:
-                raise ValueError("Number of dimensions must be greater than 0.")
+            rows = int(input("Enter the number of rows for the array: "))
+            if rows <= 0:
+                raise ValueError("Number of rows must be greater than 0.")
             break
         except ValueError as e:
             print("Invalid input:", str(e))
     
     array = []
-    for i in range(dimensions):
+    for i in range(rows):
         while True:
             try:
-                elements = input(f"Enter the elements for dimension {i + 1}, separated by spaces: ")
+                elements = input(f"Enter the elements for row {i + 1}, separated by spaces: ")
                 elements = elements.split()
                 elements = [int(element) for element in elements]
                 array.append(elements)
