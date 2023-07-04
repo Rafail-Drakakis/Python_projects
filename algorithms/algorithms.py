@@ -1,48 +1,25 @@
-import glob, os, time, shutil, requests, pyshorteners, urllib.request, speech_recognition
-from moviepy.editor import VideoFileClip
-
-#file_organizer.py
-def file_organizer():
-    # Get the current working directory
-    directory = os.getcwd()
-
-    # Get all files in the directory
-    files = os.listdir(directory)
-
-    # Create a dictionary to hold the file extensions and their corresponding folders
-    file_types = {}
-
-    # Loop through each file and organize them by extension
-    for file in files:
-        # Exclude the file_organizer.py file from being moved (assume is the file which contains the code)
-        if file == "files_organizer.py":
-            continue
-        
-        # Get the file extension
-        file_extension = os.path.splitext(file)[1]
-
-        # If the file extension doesn't exist in the dictionary, create a new folder for it
-        if file_extension not in file_types:
-            folder_name = file_extension.replace(".", "")
-            folder_path = os.path.join(directory, folder_name)
-            
-            # Check if the folder already exists
-            if not os.path.exists(folder_path):
-                os.mkdir(folder_path)
-            
-            file_types[file_extension] = folder_name
-
-        # Move the file to the corresponding folder
-        src_path = os.path.join(directory, file)
-        dst_path = os.path.join(directory, file_types[file_extension], file)
-        shutil.move(src_path, dst_path)
+import glob, os, requests, pyshorteners
+from itertools import combinations
     
-#link_operator.py
 def link_shortner(link):
+    """
+    The function "link_shortner" takes a long URL as input and returns a shortened URL using the
+    pyshorteners library.
+    
+    :param link: The link parameter is the URL that you want to shorten
+    :return: a shortened version of the input link using the pyshorteners library.
+    """
     return pyshorteners.Shortener().tinyurl.short(link)
 
-#count_lines.py
 def count_lines(filename):
+    """
+    The function `count_lines` takes a filename as input, opens the file in read mode, reads all the
+    lines into a list, and returns the number of lines in the file.
+    
+    :param filename: The filename parameter is a string that represents the name of the file you want to
+    count the lines of
+    :return: the number of lines in the file.
+    """
     # Open the file in read mode
     with open(filename, 'r') as f:
         # Read all the lines into a list
@@ -50,8 +27,15 @@ def count_lines(filename):
         # Return the number of lines
         return len(lines)
 
-#count_words.py
 def count_words(filename):
+    """
+    The `count_words` function takes a filename as input, reads the file, and returns a dictionary
+    containing the count of each word in the file.
+    
+    :param filename: The filename parameter is a string that represents the name of the file you want to
+    count the words in
+    :return: a dictionary that contains the counts of each word in the file.
+    """
     with open(filename, "r") as f:
         all_words = []
         for line in f:
@@ -71,8 +55,16 @@ def count_words(filename):
         # return the word counts dictionary
         return word_counts
 
-#get_fact.py
 def get_fact(number):
+    """
+    The function `get_fact` takes a number as input, creates a URL string using the number, sends an
+    HTTP GET request to the URL, and returns the response text if the request is successful.
+    
+    :param number: The input parameter "number" is an integer representing the number for which you want
+    to retrieve a fact
+    :return: The function `get_fact` is returning the response text from the HTTP GET request made to
+    the Numbers API.
+    """
     # create a URL string by formatting the input number into the URL
     url = "http://numbersapi.com/{}".format(number)
     # send an HTTP GET request to the URL
@@ -83,54 +75,76 @@ def get_fact(number):
     else: 
         print("An error occurred, code={}".format(r.status_code))
 
-#lotto_numbers.py
 def lotto_numbers(filename):
-    start_time = time.time()
+    """
+    The function "lotto_numbers" generates all possible combinations of 6 numbers from 1 to 49 and
+    writes them to a file specified by the "filename" parameter.
+    
+    :param filename: The filename parameter is the name of the file that will be created to store the
+    generated lotto numbers
+    :return: the filename of the file that was created.
+    """
     with open(filename, 'w') as f:
         for combination in combinations(range(1, 50), 6):
             f.write(' '.join(str(n) for n in combination) + '\n')
-    end_time = time.time()
-    execution_time = end_time - start_time
-    return execution_time
+    return filename
 
-#collect_filenames.py
 def collect_filenames(extension):
+    """
+    The function `collect_filenames` collects all filenames with a given extension in the current
+    directory and writes them to a file called "filenames.txt".
+    
+    :param extension: The "extension" parameter is a string that represents the file extension you want
+    to collect filenames for. For example, if you pass "txt" as the extension, the function will collect
+    all the filenames with the ".txt" extension
+    :return: a file object.
+    """
     files = glob.glob(os.path.join(os.getcwd(), f'*.{extension}'))
     with open('filenames.txt', 'w') as file:
         file.write('\n'.join(files))
     return file
 
-#merge_files.py
 def merge_files_by_extension(extension):
-    merged_file_name = "merged" + extension
+    """
+    The function `merge_files_by_extension` merges all files in the current directory with a given
+    extension into a single file.
+    
+    :param extension: The "extension" parameter is a string that represents the file extension of the
+    files you want to merge. For example, if you want to merge all the text files in a directory, you
+    would pass ".txt" as the extension parameter
+    :return: the name of the merged file.
+    """
+    merged_file_name = f"merged{extension}"
     files = [file for file in os.listdir() if file.endswith(extension)]
 
     with open(merged_file_name, "w") as merged_file:
         for file_name in files:
             with open(file_name, "r") as file:
-                merged_file.write("// " + file_name + "\n")
-                merged_file.write(file.read())
+                merged_file.write(f"// {file_name}\n")
+                for line in file:
+                    merged_file.write(line)
                 merged_file.write("\n")
 
     return merged_file_name
 
-#test.py
 def main():
+    """
+    The main function performs various tasks such as shortening a link, counting lines in a file,
+    getting a factorial, counting unique words in a file, collecting filenames with a specific
+    extension, merging files with a specific extension, generating lotto numbers, and organizing files.
+    """
     print("short link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI"))
     print("Number of lines in the file:", count_lines("test.txt"))
     print(get_fact(5))
-    
     print("Unique words in the file: ")
     word_counts = count_words("test.txt")
     for word in word_counts:
         print(word, word_counts[word])
-    
     print("filenames have been collected", collect_filenames('py'))
     os.remove("filenames.txt")
-    
     print("Merged file created", merge_files_by_extension(".py"))
-
-    #print(f'Time taken to execute lotto_numbers: {lotto_numbers("combinations.txt"):.10f} seconds')
-    #print("files have been organized", file_organizer())
+    os.remove("merged.py")
+    print("lotto numbers are in the file 'combinations.txt' ", lotto_numbers("combinations.txt"))
+    os.remove("combinations.txt")
     
 main()
