@@ -360,10 +360,13 @@ def download_files_from_website():
     text and images from a website or downloading files from a website.
     """
 def web_scraping():
-    choice = int(input("=== Web Scraping Menu ===\n1. To scrape text and images from a website\n2. To download files from a website: "))
-    if choice == 1:
-        scrape_text_and_images()
-    elif choice == 2:
-        download_files_from_website()
+    try:
+        choice = int(input("=== Web Scraping Menu ===\n1. To scrape text and images from a website\n2. To download files from a website: "))
+        if choice == 1:
+            scrape_text_and_images()
+        elif choice == 2:
+            download_files_from_website()
+    except ValueError:
+        choice = None
 
 web_scraping()

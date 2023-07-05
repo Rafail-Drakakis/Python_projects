@@ -3,6 +3,15 @@ import tabula, openpyxl, os, tempfile, pandas as pd
 import img2pdf, pytesseract, PIL
 
 def validate_page_range(page_range):
+    """
+    The `validate_page_range` function takes a page range as input and returns a list of page numbers if
+    the input is valid, otherwise it raises a `ValueError` with an appropriate error message.
+    
+    :param page_range: The `page_range` parameter is the input that represents a range of pages. It can
+    be either an integer or a string. If it is an integer, it is considered as a single page. If it is a
+    string, it can be in the format of "start-end" to represent a
+    :return: The function `validate_page_range` returns a list of integers representing the page range.
+    """
     if isinstance(page_range, int):
         return [page_range]
     elif isinstance(page_range, str):
@@ -22,8 +31,20 @@ def validate_page_range(page_range):
     else:
         raise ValueError(f'Invalid page range: {page_range}')
 
-
 def split_pdf(filename, page_ranges, output_filename):
+    """
+    The function `split_pdf` takes a PDF file, a list of page ranges, and an output filename, and splits
+    the PDF into separate files based on the specified page ranges.
+    
+    :param filename: The filename parameter is the name of the PDF file that you want to split. It
+    should be a string that includes the file extension (e.g., "example.pdf")
+    :param page_ranges: The `page_ranges` parameter is a list of tuples, where each tuple represents a
+    range of pages to be included in the split PDF. Each tuple should contain two integers: the starting
+    page and the ending page of the range. For example, `[(1, 3), (5,
+    :param output_filename: The output_filename parameter is the name of the file that will be created
+    after splitting the PDF. It is the name of the file that will contain the extracted pages from the
+    original PDF file
+    """
     all_pages = []
     for page_range in page_ranges:
         all_pages.extend(validate_page_range(page_range))
