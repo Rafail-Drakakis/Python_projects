@@ -99,10 +99,11 @@ def collect_filenames(extension):
     all the filenames with the ".txt" extension
     :return: a file object.
     """
-    files = glob.glob(os.path.join(os.getcwd(), f'*.{extension}'))
-    with open('filenames.txt', 'w') as file:
+    files = glob.glob(os.path.join(os.getcwd(), f'*{extension}'))
+    target_file = "filenames.txt"
+    with open(target_file, 'w') as file:
         file.write('\n'.join(files))
-    return file
+    return target_file
 
 def merge_files_by_extension(extension):
     """
@@ -138,18 +139,18 @@ def main():
     print(get_fact(5))
     
     print("Number of lines in the file:", count_lines("test.txt"))
-    print("Unique words in the file: ")
+    print("Unique words in the file:")
     word_counts = count_words("test.txt")
     for word in word_counts:
         print(word, word_counts[word])
     
-    print("filenames have been collected", collect_filenames('py'))
+    print("filenames have been collected:", collect_filenames('.py'))
     os.remove("filenames.txt")
     
-    print("Merged file created", merge_files_by_extension(".py"))
+    print("Merged file created:", merge_files_by_extension(".py"))
     os.remove("merged.py")
     
-    print("lotto numbers are in the file 'combinations.txt' ", lotto_numbers("combinations.txt"))
+    print("lotto numbers are in the file:", lotto_numbers("combinations.txt"))
     os.remove("combinations.txt")
     
 main()
