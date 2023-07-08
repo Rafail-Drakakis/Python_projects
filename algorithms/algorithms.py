@@ -131,19 +131,24 @@ def main():
     """
     The main function performs various tasks such as shortening a link, counting lines in a file,
     getting a factorial, counting unique words in a file, collecting filenames with a specific
-    extension, merging files with a specific extension, generating lotto numbers, and organizing files.
+    extension, merging files with a specific extension and generating lotto numbers.
     """
     print("short link:", link_shortner("https://www.youtube.com/watch?v=Un6sYuYTZyI"))
-    print("Number of lines in the file:", count_lines("test.txt"))
+        
     print(get_fact(5))
+    
+    print("Number of lines in the file:", count_lines("test.txt"))
     print("Unique words in the file: ")
     word_counts = count_words("test.txt")
     for word in word_counts:
         print(word, word_counts[word])
+    
     print("filenames have been collected", collect_filenames('py'))
     os.remove("filenames.txt")
+    
     print("Merged file created", merge_files_by_extension(".py"))
     os.remove("merged.py")
+    
     print("lotto numbers are in the file 'combinations.txt' ", lotto_numbers("combinations.txt"))
     os.remove("combinations.txt")
     
