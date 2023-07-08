@@ -48,18 +48,27 @@ def enter_file_path(filename, file_path):
     except FileNotFoundError:
         print('File not found. Please provide a valid file path.')
 
-def main():
-    """
-    The main function allows the user to choose between entering a single phone number or entering the
-    path to a text file, and then prompts for the necessary information based on the user's choice.
-    """
-    choice = int(input("1. Enter a single phone number\n2. Enter the path to a text file\n"))
-    filename = input("Enter the name of the file you want to save the information: ")
-    if choice == 1:
-        mobile_number = input("Enter Phone number with country code (+xx xxxxxxxxx): ")
-        get_info(mobile_number, filename, is_one = True)
-    elif choice == 2:
-        file_path = input("Enter the path to the text file: ")
-        enter_file_path(filename, file_path)
+def get_single_phone_number(filename):
+    mobile_number = input("Enter the phone number with the country code (+xx xxxxxxxxx): ")
+    get_info(mobile_number, filename, is_one=True)
 
+def get_file_phone_numbers(filename):
+    file_path = input("Enter the path to the text file: ")
+    enter_file_path(filename, file_path)
+
+def main():
+    try:
+        choice = int(input("1. Enter a single phone number\n2. Enter the path to a text file: "))
+        if choice == 1:
+            filename = input("Enter the name of the file you want to save the information: ")
+            get_single_phone_number(filename)
+        elif choice == 2:
+            filename = input("Enter the name of the file you want to save the information: ")
+            get_file_phone_numbers(filename)
+        else:
+            print("Invalid choice. Please choose 1 or 2.")
+
+    except ValueError:
+        print("Enter an integer")
+        exit(0)
 main()

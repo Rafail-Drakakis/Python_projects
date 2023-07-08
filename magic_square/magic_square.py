@@ -109,10 +109,12 @@ def validation_check(dimension, choice):
     It is expected to be an integer value
     """
     if dimension <= 0 or dimension > max_dimension:
-        raise ValueError(f"Dimension must be between 1 and {max_dimension}.")
+        print(f"Dimension must be between 1 and {max_dimension}.")
+        exit(0)
 
     if choice == 1 and dimension % 2 == 0:
-        raise ValueError("Dimension must be an odd number.")
+        print("Dimension must be an odd number.")
+        exit(0)
 
 def main():
     """

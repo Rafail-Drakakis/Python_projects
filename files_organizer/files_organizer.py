@@ -48,14 +48,18 @@ def files_organizer():
     # Show a message box indicating the files have been organized
     messagebox.showinfo("Files Organized", "Files have been organized successfully!")
 
-# Create the main GUI window
-window = tkinter.Tk()
-window.title("Files Organizer")
-window.geometry("200x200")
+def main():
+    # Create the main GUI window
+    window = tkinter.Tk()
+    window.title("Files Organizer")
+    window.geometry("200x200")
 
-# Create a button to trigger the files_organizer function
-organize_button = tkinter.Button(window, text="Organize Files", command=files_organizer)
-organize_button.pack(pady=10)
+    # Create a button to trigger the files_organizer function
+    organize_button = tkinter.Button(window, text="Organize Files", command=files_organizer)
+    organize_button.pack(pady=10)
 
-# Run the GUI main loop
-window.mainloop()
+    # Run the GUI main loop
+    window.mainloop()
+
+if __name__ == "main":
+    main()

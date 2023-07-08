@@ -1,4 +1,5 @@
-import random, time
+import random
+import time
 
 #sorting.py
 def sort_array(array, sort_algorithm, display_sorted_list):
@@ -190,9 +191,21 @@ def fill_list():
   # Return the list of input values
   return array
 
+def get_user_choice():
+    try:
+        user_choice = int(input("Enter\n1.To search in an array\n2.To sort an array\n3.To operate in an array with random elements: "))
+        if user_choice not in [1,2,3]:
+            print("Enter 1, 2, or 3")
+            exit()
+        return user_choice
+
+    except ValueError:
+        print("Enter an integer")
+        exit()
+
 #menu.py
 def menu():
-    user_choice = int(input("Enter\n1.To search in an array\n2.To sort an array\n3.To operate in an array with random elements: "))
+    user_choice = get_user_choice()
 
     if user_choice == 1:
         array = fill_list()
@@ -215,4 +228,5 @@ def menu():
         display_sorted_array = input("Display sorted array? [y/n]: ").lower() == "y"
         sort_array(array, sort_algorithm, display_sorted_array)
 
-menu()
+if __name__ == "__main__"
+    menu()

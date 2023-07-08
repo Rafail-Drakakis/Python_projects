@@ -1,6 +1,16 @@
-import os, glob, PyPDF2, pdf2image, pdf2docx
-import tabula, openpyxl, os, tempfile, pandas as pd
-import img2pdf, pytesseract, PIL
+import os
+import glob
+import PyPDF2
+import pdf2image
+import pdf2docx
+import tabula
+import openpyxl
+import os
+import tempfile
+import pandas as pd
+import img2pdf
+import pytesseract
+import PIL
 
 def validate_page_range(page_range):
     """
@@ -536,6 +546,10 @@ def menu():
     """
     try:
         choice = int(input("1.Extract Images to Text\n2.Mirror Image\n3.Convert Image\n4.Convert Images to PDF\n5.Merge PDF Files\n6.Convert PDF to Images or Word\n7.Split PDF\n8.Convert PDF to Excel\nEnter your choice: "))
+        if choice not in [1,2,3,4,5,6,7,8]:
+            print("Enter a number from 1 to 8")
+            exit()
+
         if choice == 1:
             extract_images_to_text_menu()
         elif choice == 2:
@@ -553,6 +567,8 @@ def menu():
         elif choice == 8:
             convert_pdf_to_excel_menu()
     except ValueError:
-        choice = None
+        print("Enter an integer")
+        exit(0)
 
-menu()
+if __name__ == "__main__":
+    menu()

@@ -1,4 +1,7 @@
-import glob, os, requests, pyshorteners
+import glob
+import os
+import requests
+import pyshorteners
 from itertools import combinations
     
 def link_shortner(link):
@@ -152,5 +155,6 @@ def main():
     
     print("lotto numbers are in the file:", lotto_numbers("combinations.txt"))
     os.remove("combinations.txt")
-    
-main()
+
+if __name__ == "__main__":    
+    main()

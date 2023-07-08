@@ -1,8 +1,17 @@
-import sys, os, re
-import urllib, urllib3
-import warnings, shutil, requests
-import bs4, docx, PyPDF2
-import zipfile, tarfile, gzip
+import sys
+import os
+import re
+import urllib
+import urllib3
+import warnings 
+import shutil 
+import requests
+import bs4 
+import docx 
+import PyPDF2
+import zipfile 
+import tarfile 
+import gzip
 
 # Disable InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -366,7 +375,12 @@ def web_scraping():
             scrape_text_and_images()
         elif choice == 2:
             download_files_from_website()
+        else:
+            print("Invalid choice")
+            exit(0)
     except ValueError:
-        choice = None
+        print("Enter an integer")
+        exit(0)
 
-web_scraping()
+if __name__ == "__main__":
+    web_scraping()

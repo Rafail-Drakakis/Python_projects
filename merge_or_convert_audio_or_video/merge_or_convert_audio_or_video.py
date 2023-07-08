@@ -1,8 +1,7 @@
 import os
 import glob
-import moviepy.editor
 import speech_recognition as sr
-from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.editor import VideoFileClip, AudioFileClip, concatenate_audioclips
 
 def merge_video_or_audio_files(files, output_filename):
     """
@@ -208,7 +207,7 @@ def convert_menu():
     directory or entering them manually, converts video files to text, merges the resulting text files,
     and optionally removes the individual text files after merging.
     """
-    choice = int(input("Enter \n1 to collect filenames from the current directory\n2 to enter filenames manually: "))
+    choice = int(input("Enter \n1 to convert all the files in the current directory\n2 to enter filenames manually: "))
     
     if choice == 1:
         extension = input("Enter the extension you want: ")
@@ -229,16 +228,29 @@ def convert_menu():
             if file.endswith(".txt") and file != merged_file:
                 os.remove(file)
 
+def get_user_input():
+    try:
+        choice = int(input("Menu:\n1. To merge audio/video\n2. To convert audio/video to text: "))
+        if choice not in [1, 2]:
+            print("Invalid choice. Please enter 1 or 2")
+            return None
+        return choice
+    except ValueError:
+        print("Invalid choice. Please enter 1 or 2")
+        return None
+    
+
 def main():
     """
     The main function allows the user to either merge video/audio files or convert them to text, based
     on their choice.
     """
-    merge_or_convert = int(input("1. To merge video/audio\n2. To convert video/audio to text: "))
-    
-    if merge_or_convert == 1:
-        merge_menu()
-    elif merge_or_convert == 2:
-        convert_menu()
-        
-main()
+    choice = get_user_input()
+    if choice is not None:
+        if choice == 1:
+            merge_menu()
+        elif choice == 2:
+            convert_menu()
+ 
+if __name__ == "__main__":
+    main()

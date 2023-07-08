@@ -189,4 +189,5 @@ def main():
     plot_fibonacci(1, 5)
     plot_factorial(5)
 
-main()    
+if __name__ == "__main__":
+    main()    
