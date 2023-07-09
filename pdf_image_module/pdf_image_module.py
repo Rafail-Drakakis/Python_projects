@@ -423,7 +423,7 @@ def extract_images_to_text_menu():
 
     output_file_path = input("Enter the output file path: ")
         
-    while not output_file_path.endswith(('.png', '.jpg', '.jpeg')):
+    while not output_file_path.endswith(('.txt')):
         print("Invalid output filename. Please choose a different output filename.")
         output_file_path = input("Enter the output filename: ")
 
