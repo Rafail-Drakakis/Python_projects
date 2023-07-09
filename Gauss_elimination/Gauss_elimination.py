@@ -1,6 +1,18 @@
 import numpy as np
 
 def gauss_elimination_iterative(matrix, verbose):
+    """
+    The function `gauss_elimination_iterative` performs Gaussian elimination on an augmented matrix to
+    solve a system of linear equations iteratively.
+    
+    :param matrix: The matrix parameter is a numpy array representing the augmented matrix A. It should
+    have dimensions (n, n+1), where n is the number of rows in the matrix
+    :param verbose: The `verbose` parameter is an integer that determines whether or not to print the
+    intermediate steps of the Gauss elimination algorithm. If `verbose` is set to 0, no intermediate
+    steps will be printed. If `verbose` is set to 1, the intermediate steps will be printed
+    :return: the solution to the system of linear equations, which is the last column of the matrix
+    after performing Gauss elimination and backward substitution.
+    """
     assert isinstance(matrix, np.ndarray)
     assert isinstance(verbose, int)
 
@@ -55,6 +67,18 @@ def gauss_elimination_iterative(matrix, verbose):
     return matrix[:, num_rows]
 
 def gauss_elimination_recursive(matrix, verbose):
+    """
+    The function `gauss_elimination_recursive` performs Gaussian elimination on an augmented matrix
+    recursively to solve a system of linear equations.
+    
+    :param matrix: The matrix parameter is a numpy array representing an augmented matrix. It should
+    have dimensions (n, n+1), where n is the number of unknowns in the system of equations
+    :param verbose: The `verbose` parameter is an integer that determines whether or not to print
+    intermediate steps and results during the execution of the function. If `verbose` is set to 0, no
+    output will be printed. If `verbose` is set to 1, the function will print the input augmented matrix
+    :return: The function `gauss_elimination_recursive` returns a list of solutions to the system of
+    linear equations represented by the input augmented matrix.
+    """
     assert isinstance(matrix, np.ndarray)
     assert isinstance(verbose, int)
 
@@ -110,6 +134,11 @@ def gauss_elimination_recursive(matrix, verbose):
     return solution
 
 def input_array():
+    """
+    The function `input_array` prompts the user to enter the number of rows for an array and then
+    prompts the user to enter the elements for each row, creating a 2D array.
+    :return: a NumPy array.
+    """
     while True:
         try:
             num_rows = int(input("Enter the number of rows for the array: "))
@@ -134,6 +163,12 @@ def input_array():
     return np.array(array)
 
 def get_verbose_input():
+    """
+    The function `get_verbose_input()` prompts the user to enter either 0 or 1, and returns the input as
+    an integer if it is valid.
+    :return: The function `get_verbose_input` returns the value of the variable `verbose`, which is an
+    integer representing the user's choice of verbosity level.
+    """
     try:
         verbose = int(input("Press \n0.To see only the result\n1.To see all the steps: "))
         if verbose not in [0,1]:

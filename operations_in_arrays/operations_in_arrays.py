@@ -192,16 +192,21 @@ def fill_list():
   return array
 
 def get_user_choice():
-    try:
-        user_choice = int(input("Enter\n1.To search in an array\n2.To sort an array\n3.To operate in an array with random elements: "))
-        if user_choice not in [1,2,3]:
-            print("Enter 1, 2, or 3")
-            exit()
-        return user_choice
+  """
+  The function `get_user_choice` prompts the user to enter a choice between 1, 2, or 3, and returns
+  the user's choice as an integer.
+  :return: the user's choice as an integer.
+  """
+  try:
+    user_choice = int(input("Enter\n1.To search in an array\n2.To sort an array\n3.To operate in an array with random elements: "))
+    if user_choice not in [1,2,3]:
+      print("Enter 1, 2, or 3")
+      exit()
+    return user_choice
 
-    except ValueError:
-        print("Enter an integer")
-        exit()
+  except ValueError:
+    print("Enter an integer")
+    exit(0)
 
 #menu.py
 def menu():
@@ -228,5 +233,5 @@ def menu():
         display_sorted_array = input("Display sorted array? [y/n]: ").lower() == "y"
         sort_array(array, sort_algorithm, display_sorted_array)
 
-if __name__ == "__main__"
+if __name__ == "__main__":
     menu()

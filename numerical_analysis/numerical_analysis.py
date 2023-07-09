@@ -1,6 +1,8 @@
 #This is a file which contains projects implemented in the course of linear algebra in university of Crete the year 2023
 
-import numpy as np, matplotlib.pyplot as plt, math
+import numpy as np
+import matplotlib.pyplot as plt
+import math
 
 #logarithm.py
 def plot_logarithm(num):
@@ -116,6 +118,16 @@ def plot_factorial(n):
 
 #multiply_matrices.py
 def multiply_matrices(A, B):
+    """
+    The function `multiply_matrices` takes two matrices as input and returns their product if they can
+    be multiplied, otherwise it prints an error message and returns an empty matrix.
+    
+    :param A: A is a matrix represented as a list of lists. Each inner list represents a row of the
+    matrix, and the outer list represents the entire matrix. The number of rows in the matrix is given
+    by len(A), and the number of columns in the matrix is given by len(A[0])
+    :param B: The parameter B represents the second matrix in the multiplication operation
+    :return: the result matrix, which is the product of matrices A and B.
+    """
     # Check that matrices can be multiplied
     if len(A[0]) != len(B):
         print("Cannot multiply matrices: dimensions do not match")
@@ -131,6 +143,13 @@ def multiply_matrices(A, B):
     
 #LDU.py
 def ldu(A):
+    """
+    The function ldu performs the LU decomposition of a given matrix A and returns the permutation
+    matrix P, lower triangular matrix L, diagonal matrix D, and upper triangular matrix U.
+    
+    :param A: A is a square matrix of size n x n
+    :return: The function `ldu` returns four matrices: P, L, D, and U.
+    """
     # Declaring the matrices
     n = A.shape[0]
     P = np.eye(n)

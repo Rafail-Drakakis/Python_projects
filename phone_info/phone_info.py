@@ -49,14 +49,32 @@ def enter_file_path(filename, file_path):
         print('File not found. Please provide a valid file path.')
 
 def get_single_phone_number(filename):
+    """
+    The function `get_single_phone_number` prompts the user to enter a phone number with a country code
+    and then calls the `get_info` function with the provided phone number, a filename, and a flag
+    indicating that only one phone number is being processed.
+    
+    :param filename: The filename parameter is the name of the file that contains the phone numbers
+    """
     mobile_number = input("Enter the phone number with the country code (+xx xxxxxxxxx): ")
     get_info(mobile_number, filename, is_one=True)
 
 def get_file_phone_numbers(filename):
+    """
+    The function `get_file_phone_numbers` prompts the user to enter the path to a text file and then
+    calls another function `enter_file_path` with the provided filename and file path as arguments.
+    
+    :param filename: The filename parameter is the name of the file that you want to extract phone
+    numbers from
+    """
     file_path = input("Enter the path to the text file: ")
     enter_file_path(filename, file_path)
 
 def main():
+    """
+    The main function allows the user to choose between entering a single phone number or entering the
+    path to a text file, and then calls the appropriate function based on the user's choice.
+    """
     try:
         choice = int(input("1. Enter a single phone number\n2. Enter the path to a text file: "))
         if choice == 1:
@@ -71,4 +89,6 @@ def main():
     except ValueError:
         print("Enter an integer")
         exit(0)
-main()
+
+if __name__ == "__main__":        
+    main()

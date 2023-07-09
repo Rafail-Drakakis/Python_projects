@@ -6,6 +6,14 @@ import pyshorteners
 from itertools import combinations
 
 def generate_qr_code(url, filename):
+    """
+    The function `generate_qr_code` generates a QR code for a given URL and saves it as an image file.
+    
+    :param url: The `url` parameter is the URL or text that you want to encode into the QR code. It can
+    be any valid URL or text string
+    :param filename: The filename parameter is the name of the file where the generated QR code will be
+    saved. It should include the file extension, such as ".png" or ".jpg"
+    """
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -18,7 +26,7 @@ def generate_qr_code(url, filename):
     image = qr.make_image(fill_color="black", back_color="white")
     image.save(filename)
     
-    print(f"QR code generated and saved as '{filename}'.")
+    return filename
 
 def link_shortner(link):
     """
@@ -175,6 +183,4 @@ def main():
     generate_qr_code("https://www.bbc.com/news/technology-64718842", "qr_code.png")
 
 if __name__ == "__main__":    
-    generate_qr_code("https://www.bbc.com/news/technology-64718842", "qr_code.png")
-
-#    main()
+    main()

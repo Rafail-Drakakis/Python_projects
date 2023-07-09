@@ -490,4 +490,5 @@ def main():
     if choice is not None:
         process_choice(choice)
 
-main()
+if __name__ == "__main__":
+    main()

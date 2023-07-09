@@ -137,4 +137,5 @@ def main():
         validation_check(dimension, choice)
         createMagicSquare(dimension)
 
-main()
+if __name__ == "__main__":
+    main()
