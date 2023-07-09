@@ -7,42 +7,34 @@ import pdf2image
 import pdf2docx
 import tabula
 import openpyxl
-
-def validate_page_range(page_range):
-    if isinstance(page_range, int):
-        return [page_range]
-    elif isinstance(page_range, str):
-        if '-' in page_range:
-            start, end = page_range.split('-')
-            if not start.isdigit() or not end.isdigit():
-                raise ValueError(f'Invalid page range: {page_range}')
-            start = int(start)
-            end = int(end)
-            if start > end:
-                raise ValueError(f'Invalid page range: {page_range}')
-            return list(range(start, end + 1))
-        else:
-            if not page_range.isdigit():
-                raise ValueError(f'Invalid page range: {page_range}')
-            return [int(page_range)]
-    else:
-        raise ValueError(f'Invalid page range: {page_range}')
+from PyPDF2 import PdfReader, PdfWriter
 
 def split_pdf(filename, page_ranges, output_filename):
-    all_pages = []
-    for page_range in page_ranges:
-        all_pages.extend(validate_page_range(page_range))
+    try:
+        pdf = PdfReader(filename)
+        output_pdf = PdfWriter()
 
-    with open(filename, 'rb') as file:
-        reader = PyPDF2.PdfReader(file)
-        num_pages = len(reader.pages)
-        if not all(1 <= p <= num_pages for p in all_pages):
-            raise ValueError('Invalid page range')
-        writer = PyPDF2.PdfWriter()
-        for p in all_pages:
-            writer.add_page(reader.pages[p - 1])
-        with open(output_filename, 'wb') as new_file:
-            writer.write(new_file)
+        for range_string in page_ranges:
+            pages = parse_page_range(range_string)
+            for page_num in pages:
+                output_pdf.add_page(pdf.pages[page_num - 1])
+
+        with open(output_filename, "wb") as output_file:
+            output_pdf.write(output_file)
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+def parse_page_range(range_string):
+    pages = []
+    ranges = range_string.split(",")
+    for rng in ranges:
+        if "-" in rng:
+            start, end = map(int, rng.split("-"))
+            pages.extend(range(start, end + 1))
+        else:
+            pages.append(int(rng))
+    return pages
 
 def merge_pdf_files(output_filename, all_files=True):
     try:

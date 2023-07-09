@@ -12,14 +12,7 @@ def split_pdf_menu():
         filename = input("Enter the PDF filename: ")
 
     page_ranges = input("Enter the page ranges (comma-separated): ").split(",")
-    while True:
-        try:
-            if all(pdf_operations.validate_page_range(range) for range in page_ranges):
-                break
-        except ValueError as error:
-            print(f"Error: {str(error)}")
-        page_ranges = input("Error. Enter the page ranges (comma-separated): ").split(",")
-
+    
     output_filename = input("Enter the output filename: ")
     while not output_filename.endswith('.pdf'):
         print("Invalid output filename. Please choose a different output filename.")
