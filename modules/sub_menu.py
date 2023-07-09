@@ -56,13 +56,9 @@ def convert_image_menu():
     image_path = input("Enter the image path: ")
     while not os.path.isfile(image_path):
         print("Invalid image path. Please try again.")
-        image_path = input("Enter the image path: ")
+        image_path = input("Error! Enter the image path: ")
 
     output_format = input("Enter the output format: ")
-    while not output_format.lower() in ['.png', '.jpg', '.jpeg']:
-        print("Invalid output format. Please choose a different output format.")
-        output_format = input("Enter the output format: ")
-
     image_module.convert_image(image_path, output_format)
 
 def images_to_pdf_menu():
@@ -97,7 +93,7 @@ def merge_pdf_files_menu():
     elif all_files == 2:
         pdf_operations.merge_pdf_files(output_filename, all_files=True)
 
-def convert_pdf_menu():
+def pdf_to_word_menu():
     pdf_paths = input("Enter the PDF paths (comma-separated): ").split(",")
     valid_pdf_paths = []
 
@@ -108,6 +104,18 @@ def convert_pdf_menu():
         valid_pdf_paths.append(pdf_path.strip())
 
     pdf_operations.pdf_to_word(*valid_pdf_paths)
+
+def pdf_to_images_menu():
+    pdf_paths = input("Enter the PDF paths (comma-separated): ").split(",")
+    valid_pdf_paths = []
+
+    for pdf_path in pdf_paths:
+        while not os.path.isfile(pdf_path.strip()):
+            print(f"Invalid PDF path: {pdf_path.strip()}. Please try again.")
+            pdf_path = input("Enter the PDF path: ")
+        valid_pdf_paths.append(pdf_path.strip())
+
+    pdf_operations.pdf_to_images(*valid_pdf_paths)
 
 def convert_pdf_to_excel_menu():
     input_pdf_path = input("Enter the input PDF path: ")

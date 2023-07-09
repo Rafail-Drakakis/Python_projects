@@ -3,8 +3,8 @@ import sub_menu
 
 def menu():
     try:
-        choice = int(input("1. Extract Images to Text\n2. Mirror Image\n3. Convert Image\n4. Convert Images to PDF\n5. Merge PDF Files\n6. Convert PDF to Images or Word\n7. Split PDF\n8. Convert PDF to Excel\nEnter your choice: "))
-        if choice not in [1, 2, 3, 4, 5, 6, 7, 8]:
+        choice = int(input("1. Convert Images to Text\n2. Mirror Image\n3. Convert Image to another image format\n4. Convert Images to PDF\n5. Merge PDF Files\n6. Convert PDF to Word \n7. Convert PDF to Images\n8. Split PDF\n9. Convert PDF to Excel\nEnter your choice: "))
+        if choice not in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
             print("Enter a number from 1 to 8")
             exit()
 
@@ -19,10 +19,12 @@ def menu():
         elif choice == 5:
             sub_menu.merge_pdf_files_menu()
         elif choice == 6:
-            sub_menu.convert_pdf_menu()
+            sub_menu.pdf_to_word_menu()
         elif choice == 7:
-            sub_menu.split_pdf_menu()
+            sub_menu.pdf_to_images_menu()
         elif choice == 8:
+            sub_menu.split_pdf_menu()
+        elif choice == 9:
             sub_menu.convert_pdf_to_excel_menu()
     except ValueError:
         print("Enter an integer")

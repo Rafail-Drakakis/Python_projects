@@ -1,8 +1,9 @@
 #image_module.py
 
 import os
-import PIL
 import pytesseract
+import PIL
+from PIL import Image
 
 def extract_images_to_text(image_paths, output_file_path):
     texts = []
@@ -45,27 +46,32 @@ def mirror_image(input_path, direction, output_dir=None, output_format='png'):
     except Exception as e:
         return f"Error: {e}"
 
-def convert_image(input_path, output_format):
+def convert_image(input_path, output_path):
     try:
-        if not os.path.exists(input_path):
-            raise FileNotFoundError(f"Error: File '{input_path}' does not exist.")
+        # Open the image file
+        image = Image.open(input_path)
 
-        output_dir = os.path.dirname(input_path)
-        output_filename = input("Enter the output filename: ")
-        output_path = os.path.join(output_dir, f"{output_filename}.{output_format.lower()}")
+        # Convert the image to the RGB mode
+        image = image.convert("RGB")
 
-        with PIL.Image.open(input_path) as im:
-            rgb_im = im.convert('RGB')
-            rgb_im.save(output_path, format=output_format.upper())
+        # Create a temporary path to save the image in PNG format
+        temp_path = "temp.png"
 
-        return output_path
-    
-    except FileNotFoundError as e:
-        return f"Error: {e}"
-    except PIL.UnidentifiedImageError as e:
-        return f"Error: Invalid image format. {e}"
+        # Save the image in PNG format
+        image.save(temp_path, "PNG")
+
+        # Load the temporary image
+        temp_image = Image.open(temp_path)
+
+        # Save the temporary image in the desired output format with specified quality
+        temp_image.save(output_path, quality=95)
+
+        # Remove the temporary image file
+        os.remove(temp_path)
+    except FileNotFoundError:
+        print("Input file not found.")
     except Exception as e:
-        return f"An error occurred: {e}"
+        print(f"An error occurred: {e}")
 
 def images_to_pdf(images, pdf_name):
     try:

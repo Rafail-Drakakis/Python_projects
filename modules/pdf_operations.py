@@ -85,10 +85,6 @@ def merge_pdf_files(output_filename, all_files=True):
         print(f"An error occurred: {e}")
 
 def pdf_to_word(*pdf_paths):
-    """
-    The `convert_pdf` function converts PDF files to either images or Word documents based on the user's
-    input.
-    """
     try:
         docx_paths = []
         for pdf_path in pdf_paths:
