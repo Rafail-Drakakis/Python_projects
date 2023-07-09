@@ -1,9 +1,25 @@
+import qrcode
 import glob
 import os
 import requests
 import pyshorteners
 from itertools import combinations
+
+def generate_qr_code(url, filename):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(url)
+    qr.make(fit=True)
     
+    image = qr.make_image(fill_color="black", back_color="white")
+    image.save(filename)
+    
+    print(f"QR code generated and saved as '{filename}'.")
+
 def link_shortner(link):
     """
     The function "link_shortner" takes a long URL as input and returns a shortened URL using the
@@ -156,5 +172,9 @@ def main():
     print("lotto numbers are in the file:", lotto_numbers("combinations.txt"))
     os.remove("combinations.txt")
 
+    generate_qr_code("https://www.bbc.com/news/technology-64718842", "qr_code.png")
+
 if __name__ == "__main__":    
-    main()
+    generate_qr_code("https://www.bbc.com/news/technology-64718842", "qr_code.png")
+
+#    main()
