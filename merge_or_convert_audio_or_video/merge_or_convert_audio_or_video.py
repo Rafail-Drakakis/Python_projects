@@ -1,6 +1,7 @@
 import os
 import glob
 import speech_recognition as sr
+import moviepy.editor
 from moviepy.editor import VideoFileClip, AudioFileClip, concatenate_audioclips
 
 def merge_video_or_audio_files(files, output_filename):
